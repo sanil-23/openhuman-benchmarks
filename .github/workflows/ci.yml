@@ -43,7 +43,7 @@ jobs:
         run: ./bundles/build.sh openhuman
       - name: Build the task image
         run: docker build -t bench-micro:latest micro
-      - name: Verify memory policy and a normal turn without external networking
+      - name: Verify memory policy, normal turns, and DeepSeek reasoning recovery offline
         env:
           OH_LIVE_TEST_BUNDLE: ${{ github.workspace }}/.cache/harness/openhuman
         run: node --test bundles/oh-live.test.mjs

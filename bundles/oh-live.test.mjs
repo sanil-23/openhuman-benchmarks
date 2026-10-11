@@ -9,8 +9,11 @@ import test from 'node:test';
 // It runs an actual core with no external network and no paid model endpoint.
 const bundle = process.env.OH_LIVE_TEST_BUNDLE;
 const root = new URL('../', import.meta.url).pathname;
-for (const smoke of [true, false]) {
-  test(smoke ? 'live memory-off write and recall are refused locally' : 'a dummy credential supports a normal turn without an OS keyring', {
+for (const scenario of ['memory', 'normal', 'reasoning-recovery', 'reasoning-tool-chain']) {
+  const smoke = scenario === 'memory';
+  const recovery = scenario === 'reasoning-recovery';
+  const thinkingChain = scenario === 'reasoning-tool-chain';
+  test(thinkingChain ? 'live DeepSeek reasoning and tool calls replay without disabling thinking' : recovery ? 'live DeepSeek tool recovery keeps reasoning off until the tool chain finishes' : smoke ? 'live memory-off write and recall are refused locally' : 'a dummy credential supports a normal turn without an OS keyring', {
     skip: bundle ? false : 'set OH_LIVE_TEST_BUNDLE to a compiled OpenHuman bundle to run the offline Docker gate',
     timeout: 150_000,
   }, () => {
@@ -29,7 +32,7 @@ for (const smoke of [true, false]) {
         `${root}bundles/adapters/openhuman.sh:/opt/harness/adapter.sh:ro`,
         `${root}bundles/oh-turn.mjs:/opt/harness/oh-turn.mjs:ro`,
         `${root}bundles/oh-memory.mjs:/opt/harness/oh-memory.mjs:ro`,
-        `${root}bundles/fixtures/mock-chat.mjs:/opt/bench/mock.mjs:ro`,
+        `${root}bundles/fixtures/${recovery || thinkingChain ? 'mock-reasoning-recovery.mjs' : 'mock-chat.mjs'}:/opt/bench/mock.mjs:ro`,
         `${task}:/bench/task:ro`, `${results}:/results`,
       ];
       const env = {
@@ -37,6 +40,7 @@ for (const smoke of [true, false]) {
         RESULT_DIR: '/results', PROMPT_FILE: '/bench/task/prompt.txt', WORKDIR: '/work',
         TASK_TIMEOUT_S: '120', DUMMY_API_KEY: 'bench-dummy-key',
         BENCH_MODEL: 'deepseek/deepseek-v4.1-flash', PROXY_URL: 'http://127.0.0.1:18081',
+        MOCK_THINKING_TOOL_CHAIN: thinkingChain ? '1' : '',
         DISABLE_TELEMETRY: '1', DISABLE_AUTOUPDATER: '1',
       };
       const r = spawnSync('docker', [
@@ -49,7 +53,7 @@ for (const smoke of [true, false]) {
       assert.equal(r.status, 0, r.stderr);
       const result = JSON.parse(fs.readFileSync(path.join(results, 'result.json')));
       const log = fs.readFileSync(path.join(results, 'harness.log'), 'utf8');
-      assert.equal(result.exit_code, 0, log);
+      assert.equal(result.exit_code, 0, log + '\n' + r.stdout + '\n' + r.stderr);
       assert.equal(result.check.passed, true);
       const memory = JSON.parse(fs.readFileSync(path.join(results, 'memory-state.json')));
       assert.equal(memory.verified, true);
@@ -66,6 +70,16 @@ for (const smoke of [true, false]) {
       } else {
         assert.ok(calls.length > 0, 'the normal turn must reach the local model');
         assert.ok(calls.some((call) => call.path.endsWith('/chat/completions')), JSON.stringify(calls));
+        if (thinkingChain) {
+          assert.ok(calls.length >= 2);
+          assert.equal(calls[1].effort, 'high');
+          assert.equal(calls[1].reasoning_replayed, true);
+        }
+        if (recovery) {
+          assert.ok(calls.length >= 3, 'exercise reasoning exhaustion, an unreasoned tool call, and its continuation');
+          assert.equal(calls[1].effort, 'none');
+          assert.equal(calls[2].effort, 'none');
+        }
       }
     } finally {
       fs.rmSync(dir, { recursive: true, force: true });
