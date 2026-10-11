@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - '.github/workflows/security-latency.yml'
+      - 'vendor/openhuman'
       - 'profile/Cargo.*'
       - 'profile/build.rs'
       - 'profile/src/bin/security_latency/**'
