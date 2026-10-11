@@ -15,3 +15,7 @@ __pycache__/
 target/
 profile/target/
 onboarding-stress/ONBOARDING-TEST-RESULTS.md
+
+# Security timing raw evidence and isolated worktrees are local-only.
+.security-evidence/
+worktrees/

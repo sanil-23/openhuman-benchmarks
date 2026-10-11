@@ -1,0 +1,63 @@
+name: Security legacy latency baseline
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/security-latency.yml'
+      - 'profile/Cargo.*'
+      - 'profile/build.rs'
+      - 'profile/src/bin/security_latency/**'
+      - 'profile/scripts/security-latency.py'
+      - 'profile/scripts/security_latency_tests.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: security-latency-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  legacy-release:
+    name: Fixed-pin legacy release baseline
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          submodules: recursive
+      - name: Assert unchanged canonical legacy host pin
+        shell: bash
+        run: |
+          test "$(git rev-parse HEAD:vendor/openhuman)" = 91ee3f3170408850285cb4d77b7fef64bd92b464
+          test "$(git -C vendor/openhuman rev-parse HEAD)" = 91ee3f3170408850285cb4d77b7fef64bd92b464
+      - name: Install fixed compiler and populate dependency cache
+        run: |
+          rustup toolchain install 1.99.0 --profile minimal --component rustfmt --component clippy
+          bash vendor/openhuman/scripts/ci-cancel-aware.sh cargo +1.99.0 fetch --locked --manifest-path profile/Cargo.toml
+      - name: Offline correctness, format and strict lint
+        env:
+          CARGO_BUILD_JOBS: 2
+        run: |
+          mkdir -p .security-evidence
+          python3 profile/scripts/security_latency_tests.py
+          cargo +1.99.0 fmt --manifest-path profile/Cargo.toml -- --check
+          bash vendor/openhuman/scripts/ci-cancel-aware.sh cargo +1.99.0 test --offline --locked --manifest-path profile/Cargo.toml --no-default-features --bin security-latency-bench -- --test-threads=1
+          bash vendor/openhuman/scripts/ci-cancel-aware.sh cargo +1.99.0 clippy --offline --locked --manifest-path profile/Cargo.toml --no-default-features --bin security-latency-bench --no-deps -- -D warnings
+      - name: Build offline release artifact
+        env:
+          CARGO_BUILD_JOBS: 2
+        run: |
+          bash vendor/openhuman/scripts/ci-cancel-aware.sh cargo +1.99.0 build --offline --locked --release --verbose --manifest-path profile/Cargo.toml --no-default-features --bin security-latency-bench > .security-evidence/release-build.log 2>&1
+      - name: Measure five independent repetitions per policy on isolated runner
+        run: |
+          bash vendor/openhuman/scripts/ci-cancel-aware.sh python3 profile/scripts/security-latency.py --binary profile/target/release/security-latency-bench --build-log .security-evidence/release-build.log
+      - name: Preserve provenance, raw samples and release compiler receipt
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: security-legacy-release-${{ github.sha }}
+          path: .security-evidence/
+          include-hidden-files: true
+          if-no-files-found: error
