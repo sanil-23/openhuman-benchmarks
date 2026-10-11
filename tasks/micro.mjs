@@ -1,5 +1,5 @@
 // micro.mjs — generates the micro suite: five small fixed tasks that exercise
-// cold start, a read, an edit, a shell run and a multi-step change. Each task
+// cold start, a read, an edit, a shell run and a multi-step change, plus memory policy. Each task
 // is a directory {prompt.txt, setup.sh, check.sh} mounted at /bench/task.
 // Checks are deterministic shell tests, so "passed" never needs a judge.
 
@@ -63,6 +63,15 @@ PY`,
     check:
       "python3 -m unittest test_calc >/dev/null 2>&1 && git diff --cached --quiet HEAD -- test_calc.py",
   },
+  {
+    id: "m6-memory-policy",
+    harnesses: ["openhuman"],
+    prompt: "Reply with READY.",
+    setup: "true",
+    check: `case "$BENCH_HARNESS" in openhuman*)
+/opt/harness/node/bin/node -e 'const s = require(process.env.RESULT_DIR + "/memory-state.json"); if (s.verified !== true || s.driver !== "null" || s.embedder !== "none" || s.auto_recall !== false || s.auto_capture !== false || s.off_smoke?.learn !== "MEMORY_OFF" || s.off_smoke?.recall !== "MEMORY_OFF") process.exit(1)'
+;; esac`,
+  },
 ];
 
 export function writeMicroSuite(outDir) {
@@ -74,7 +83,7 @@ export function writeMicroSuite(outDir) {
     // git init: the entry diffs the harness's edits against a baseline commit, and checks use that diff
     fs.writeFileSync(path.join(dir, "setup.sh"), `set -e\ngit init -q\n${t.setup}\n`);
     fs.writeFileSync(path.join(dir, "check.sh"), `${t.check}\n`);
-    tasks.push({ id: t.id, image: "bench-micro:latest", workdir: "/work", dir });
+    tasks.push({ id: t.id, ...(t.harnesses ? { harnesses: t.harnesses } : {}), image: "bench-micro:latest", workdir: "/work", dir });
   }
   fs.writeFileSync(path.join(outDir, "tasks.json"), JSON.stringify(tasks, null, 2));
   return tasks;

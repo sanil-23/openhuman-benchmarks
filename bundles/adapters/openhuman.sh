@@ -43,8 +43,8 @@ mkdir -p "$OPENHUMAN_WORKSPACE"
 # off here regardless: every peer harness is stateless, each task gets a fresh
 # container, and the lifecycle hooks would recall against an empty engine
 # anyway. The hooks themselves are fail-soft (pre_turn/post_turn/compaction all
-# swallow the error and let the turn run), so only the model-issued tool is
-# dangerous.
+# swallow the error and let the turn run). The benchmark also disables the
+# embedder and both lifecycle hooks, then verifies the runtime state before inference.
 # Web search is off: the bench configures no search provider, so every
 # `web_search_tool` call came back `provider returned HTTP 401`. The model
 # reached for it in 4 of the first 38 Terminal-Bench 2.0 tasks and, until the
@@ -80,12 +80,18 @@ if [ ! -f "$OPENHUMAN_WORKSPACE/config.toml" ]; then
     export OPENHUMAN_SEARCH_PROVIDERS="${OPENHUMAN_SEARCH_PROVIDERS:-tavily:direct}"
     export OPENHUMAN_SEARCH_ENABLED="${OPENHUMAN_SEARCH_ENABLED:-true}"
   fi
-  printf '[memory]\nengine = ""\n\n[search]\nenabled = %s\n\n[runtime]\nreasoning_effort = "%s"\n' "$search_enabled" "${BENCH_REASONING:-high}" > "$OPENHUMAN_WORKSPACE/config.toml"
+  printf 'embeddings_provider = "none"\n\n[memory]\nengine = ""\nembedding_provider = "none"\n\n[memory.recall]\nenabled = false\n\n[memory.conversations]\nenabled = false\n\n[search]\nenabled = %s\n\n[runtime]\nreasoning_effort = "%s"\n' "$search_enabled" "${BENCH_REASONING:-high}" > "$OPENHUMAN_WORKSPACE/config.toml"
 fi
 # The core needs *a* credential before it will run a turn even on a BYOK route;
 # a dummy API key satisfies that without granting any backend access, and
 # inference itself goes to the metering proxy through the per-call route.
 export OPENHUMAN_BACKEND_API_KEY="${OPENHUMAN_BACKEND_API_KEY:-$DUMMY_API_KEY}"
+# Each task has an ephemeral workspace and no OS keyring. Keep credential storage
+# encrypted with a fresh master key unless the caller supplied a key source.
+if [ -z "${OPENHUMAN_KEYRING_MASTER_KEY:-}" ] && [ -z "${OPENHUMAN_KEYRING_MASTER_KEY_FILE:-}" ]; then
+  export OPENHUMAN_KEYRING_MASTER_KEY="$(node -e 'process.stdout.write(require("node:crypto").randomBytes(32).toString("hex"))')"
+fi
+export OPENHUMAN_KEYRING_BACKEND=encrypted_file
 
 # The module loader admits a module directory only if it and every ancestor is
 # owned by the current user or root (tinybus `check_directory`). The bundle is
@@ -131,14 +137,10 @@ export INFERENCE_URL="http://127.0.0.1:18080${BENCH_PROXY_PREFIX:-}/v1"
 # with the container. Scope the filter to our own crates so third-party noise
 # does not bury it, and copy it out beside the other artifacts.
 export RUST_LOG="${RUST_LOG:-warn,openhuman=debug,tinyagents=debug,tinyagents_harness=debug}"
+# Write directly to the mounted result dir so SIGKILL cannot lose the log.
+core_log="${RESULT_DIR:-/results}/core.log"
 /opt/harness/openhuman/openhuman-core run --headless-api --host 127.0.0.1 --port "$OH_PORT" \
-  > "$HOME/core.log" 2>&1 &
+  > "$core_log" 2>&1 &
 core=$!
-# Copy on EVERY exit path, including the kill: a turn that times out or is
-# halted is exactly the one whose log is worth reading.
-save_core_log() {
-  dest="${RESULT_DIR:-/results}"
-  [ -d "$dest" ] && cp "$HOME/core.log" "$dest/core.log" 2>/dev/null || true
-}
-trap 'save_core_log; kill $core $fwd 2>/dev/null || true' EXIT
+trap 'kill $core $fwd 2>/dev/null || true' EXIT
 node /opt/harness/oh-turn.mjs

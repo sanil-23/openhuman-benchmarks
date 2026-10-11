@@ -212,7 +212,7 @@ for (const t of trials.sort()) {
   fs.rmSync(out, { recursive: true, force: true });
   fs.mkdirSync(out, { recursive: true });
   const benchDir = path.join(tdir, "agent", "bench");
-  for (const f of ["harness.log"]) if (fs.existsSync(path.join(benchDir, f))) fs.copyFileSync(path.join(benchDir, f), path.join(out, f));
+  for (const f of ["harness.log", "core.log", "memory-state.json"]) if (fs.existsSync(path.join(benchDir, f))) fs.copyFileSync(path.join(benchDir, f), path.join(out, f));
   fs.copyFileSync(path.join(tdir, "result.json"), path.join(out, "harbor-result.json"));
   for (const f of ["exception.txt", "trial.log"]) if (fs.existsSync(path.join(tdir, f))) fs.copyFileSync(path.join(tdir, f), path.join(out, f));
   if (fs.existsSync(path.join(tdir, "verifier"))) fs.cpSync(path.join(tdir, "verifier"), path.join(out, "verifier"), { recursive: true });
@@ -261,6 +261,7 @@ for (const t of trials.sort()) {
     harbor_exception: exc?.exception_type ?? null,
     n_concurrent: jobConcurrency,
     ...rowMeta,
+    memory: runMeta(root, HARNESS, {}, out).memory,
     started_epoch_ms: epoch(hr.started_at) ?? startedAt,
     ended_epoch_ms: epoch(hr.finished_at) ?? Date.now(),
   });

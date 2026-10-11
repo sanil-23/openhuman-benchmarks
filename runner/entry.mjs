@@ -24,6 +24,9 @@ const timeoutMs = Number(env("TASK_TIMEOUT_S", "1800")) * 1000;
 if (!harness || !taskId) throw new Error("BENCH_HARNESS and BENCH_TASK_ID are required");
 
 fs.mkdirSync(resultDir, { recursive: true });
+// A rerun must never report the earlier attempt's runtime evidence, even if
+// task setup fails before the adapter can boot the core.
+if (harness.startsWith("openhuman")) fs.rmSync(path.join(resultDir, "memory-state.json"), { force: true });
 const log = (m) => process.stderr.write(`[entry ${harness}/${taskId}] ${m}\n`);
 
 // Conda-based SWE-bench images keep the project's deps in a `testbed` env; give

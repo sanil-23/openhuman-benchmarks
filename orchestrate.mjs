@@ -93,6 +93,7 @@ async function main() {
   const tasksFile = path.join(tasksDir, "tasks.json");
   if (!fs.existsSync(tasksFile)) throw new Error(`missing ${tasksFile}`);
   let tasks = JSON.parse(fs.readFileSync(tasksFile, "utf8"));
+  tasks = tasks.filter((t) => !t.harnesses || t.harnesses.some((h) => o.harness.startsWith(h)));
   if (o.only) tasks = tasks.filter((t) => t.id === o.only);
   if (!tasks.length) throw new Error("no tasks selected");
 
@@ -110,7 +111,6 @@ async function main() {
   const runDir = path.join(here, "results", o.runId);
   fs.mkdirSync(runDir, { recursive: true });
   const index = path.join(runDir, "runs.jsonl");
-  const meta = runMeta(here, o.harness);
 
   for (const task of tasks) {
     for (let rep = 1; rep <= o.repeat; rep += 1) {
@@ -148,7 +148,7 @@ async function main() {
         task_key: taskKey,
         attempt,
         compose_exit: r.status,
-        ...meta,
+        ...runMeta(here, o.harness, process.env, resultDir),
         started_epoch_ms: startedAt,
         ended_epoch_ms: Date.now(),
       };

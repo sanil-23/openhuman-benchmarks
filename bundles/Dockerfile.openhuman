@@ -72,4 +72,5 @@ COPY --from=bench adapters/_common.sh /opt/harness/_common.sh
 COPY --from=bench ${ADAPTER} /opt/harness/adapter.sh
 COPY --from=bench forward.mjs /opt/harness/forward.mjs
 COPY --from=bench oh-turn.mjs /opt/harness/oh-turn.mjs
+COPY --from=bench oh-memory.mjs /opt/harness/oh-memory.mjs
 RUN echo "${GIT_SHA}" > /opt/harness/openhuman/GIT_SHA

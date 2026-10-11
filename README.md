@@ -31,6 +31,7 @@ latency, cache efficiency, prompt size, cost and SWE-bench Verified resolve rate
 | Same resources | One compose `task` service: `cpus: 4`, `mem_limit: 8g`, no swap, same for every harness. |
 | Same metering | Latency, TTFT, tokens, cache and cost are measured by the proxy from the wire, not from each harness's own accounting. |
 | Same tasks | Fixed instance list (`swebench/instances-10.txt`, seeded, pinned dataset revision) and a single prompt wrapper. |
+| Memory | OpenHuman memory is explicitly off: no engine, embeddings, automatic recall or conversation capture. The running core must confirm this before inference. |
 | Same grader | The official `swebench.harness.run_evaluation`. |
 
 The proxy logs what each harness *tried* to send (`overridden`), so a harness
@@ -45,7 +46,7 @@ meter-proxy/           wire parsers (chat / Anthropic / Responses), pricing, pro
 viewer/                zero-dependency web UI over results/ (prompts, tools, cache diagnostics)
 runner/                in-container entry (cgroup CPU/RAM sampler, patch capture, check)
 bundles/               per-harness build (/opt/harness) + adapters/*.sh headless entry points
-tasks/micro.mjs        5-task micro suite generator
+tasks/micro.mjs        5 task smokes + an OpenHuman memory-policy smoke
 swebench/              prepare.py (select + task dirs), grade.mjs (official evaluator)
 tbench/                Terminal-Bench via Harbor: OpenHuman agent, run + result conversion
 orchestrate.mjs        host driver: tags the proxy, runs one container per task
@@ -136,6 +137,47 @@ the same way from `TASK_TIMEOUT_S` (`runner/turn-budget.mjs`). An explicit
 public network. Unlike the other suites, these containers have internet access, because
 Terminal-Bench is defined that way and its verifiers install their own tooling. The task
 solutions are public on GitHub, so check `captures/` before trusting a pass.
+
+## OpenHuman memory policy
+
+The cross-harness adapter selects no memory engine (`[memory] engine = ""`), sets
+`embeddings_provider = "none"` and disables `[memory.recall]` and
+`[memory.conversations]`. This measures fresh, stateless task containers and prevents
+unmetered memory model or embedding traffic. Memory-enabled product behaviour is outside
+these comparisons.
+
+Before inference, `oh-turn.mjs` reads `openhuman.subsystems_status`,
+`openhuman.memory_engine_get`, `openhuman.memory_policy_get` and
+`openhuman.embeddings_get_settings` from the running core. It writes the bound driver,
+engine, effective embedder, embedding model, automatic recall and capture settings to
+`memory-state.json` beside `core.log`. Each `runs.jsonl` row includes that runtime state
+under `memory`. An unexpected setting, failed RPC or unsupported older bundle fails setup;
+missing evidence in older results is marked `verified: false`. Rebuild bundles after
+updating the adapter.
+
+The micro task `m6-memory-policy` boots the actual core, checks these settings and
+asserts that write (`memory_learn`) and recall RPCs both return `MEMORY_OFF`, without
+making a model request:
+
+```bash
+node orchestrate.mjs --harness openhuman --suite micro --only m6-memory-policy --run-id memory-smoke --repeat 1
+```
+
+For an offline regression check with a compiled bundle and `bench-micro` image:
+
+```bash
+OH_LIVE_TEST_BUNDLE="$PWD/.cache/harness/openhuman" node --test bundles/oh-live.test.mjs
+```
+
+This also sends a normal turn to a local mock model with external networking disabled.
+The adapter uses an ephemeral encryption key for the task's credential store, so its
+required dummy credential works without an OS keyring.
+
+This checks the chosen **memory-off** contract. A store/recall round trip requires a
+separate memory-enabled run and a metered engine. The current pin uses the `memory` tool
+with actions; the historical `prompts/openhuman/` capture contains the older
+`memory_store` / `memory_recall` / `retrieve_memory` tools and an invalid `memory_search`
+reference. It is evidence of that older run, not the current prompt.
 
 ## Seeing what each harness sends
 
