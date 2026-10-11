@@ -1,0 +1,29 @@
+{
+  "validated_date": "2026-10-11",
+  "code_revision": "2cc8c540bdb87fe6761629b585e727e1c4704520",
+  "data_revision": "f152293e235517d504809563c833d7190b8c713b",
+  "verified_manifest_entries": 37,
+  "documentation_checksum_overrides": ["README.md"],
+  "official_validations": [
+    {"tier": "small", "questions": 451, "trajectories": 1870, "haystack_questions": 451, "check_screenshots": true},
+    {"tier": "medium", "questions": 451, "trajectories": 1870, "haystack_questions": 451, "check_screenshots": true}
+  ],
+  "question_coverage": {
+    "web": {"questions": 240, "image_questions": 15},
+    "enterprise": {"questions": 211, "image_questions": 14}
+  },
+  "upstream_privacy_tests_passed": 7,
+  "integrity_regression_tests_passed": 3,
+  "official_harness_smoke": {
+    "synthetic_questions": 2,
+    "image_questions": 1,
+    "correct_and_wrong_answer_scoring": "passed",
+    "gold_answer_and_metadata_privacy": "passed",
+    "screenshot_delivery": "passed",
+    "paid_requests": 0
+  },
+  "memory_context_processor_text_probe_tokens": 13,
+  "additional_model_cost_usd": 0,
+  "benchmark_scores": null,
+  "oh_backend_integrated": false
+}
