@@ -86,6 +86,104 @@ class QuietMonitor:
             self.check()
 
 
+# Independent acceptance contract for the seven fixed legacy workloads. Counts
+# describe the paired untimed observation, never instrumentation inside timing.
+EXPECTED_ROWS = {
+    'allowed_read_command': ('allow', 'allow', 2),
+    'write_requires_approval': ('require_approval', 'allow', 2),
+    'credential_command_floor': ('deny', 'deny', 1),
+    'allowed_existing_file': ('allow', 'allow', 1),
+    'new_file_parent': ('allow', 'allow', 1),
+    'outside_root': ('deny', 'allow', 1),
+    'symlink_escape': ('deny', 'allow', 1),
+}
+MEASUREMENT_ERROR = 'invalid measurement evidence; run incomplete'
+
+
+def unique_fields(pairs):
+    """Reject duplicate JSON field names instead of silently keeping the last."""
+    fields = {}
+    for key, value in pairs:
+        if key in fields:
+            raise ValueError
+        fields[key] = value
+    return fields
+
+
+def measurement_records(path, limit):
+    """Read at most the fixed record budget, with a 1 KiB JSON line ceiling."""
+    with path.open('rb') as file:
+        for _ in range(limit):
+            line = file.readline(1025)
+            if not line:
+                return
+            if len(line) > 1024:
+                raise ValueError
+            yield json.loads(line, object_pairs_hook=unique_fields)
+        if file.read(1):
+            raise ValueError
+
+
+def unsigned(value):
+    """Require a JSON integer in the producer's unsigned 64-bit value range."""
+    return type(value) is int and 0 <= value <= 2**64 - 1
+
+
+def validate_measurements(output, enabled, samples=10000, warmup=1000):
+    """Check bounded raw coverage, outcomes, observation counts and percentiles.
+
+    Smaller counts support deterministic offline tests. The runner always uses
+    the production defaults of 10,000 samples and 1,000 warmups per row.
+    Errors deliberately contain neither raw records nor caller corpus content.
+    """
+    try:
+        if (type(enabled) is not bool or type(samples) is not int
+                or not 1 <= samples <= 10000 or type(warmup) is not int
+                or not 1 <= warmup <= 1000):
+            raise ValueError
+        timings = {row: [None] * samples for row in EXPECTED_ROWS}
+        counts = dict.fromkeys(EXPECTED_ROWS, 0)
+        for record in measurement_records(output / 'samples.jsonl', len(EXPECTED_ROWS) * samples):
+            if type(record) is not dict or set(record) != {'row', 'sample', 'elapsed_ns', 'decision', 'host_public_calls'}:
+                raise ValueError
+            row = record['row']
+            if type(row) is not str or row not in EXPECTED_ROWS:
+                raise ValueError
+            index = record['sample']
+            elapsed = record['elapsed_ns']
+            calls = record['host_public_calls']
+            expected = EXPECTED_ROWS[row]
+            if (not unsigned(index) or index >= samples or timings[row][index] is not None
+                    or not unsigned(elapsed) or not unsigned(calls)
+                    or record['decision'] != expected[0 if enabled else 1] or calls != expected[2]):
+                raise ValueError
+            timings[row][index] = elapsed
+            counts[row] += calls
+        if any(None in values for values in timings.values()):
+            raise ValueError
+        for values in timings.values():
+            values.sort()
+        seen = set()
+        for record in measurement_records(output / 'summary.jsonl', len(EXPECTED_ROWS)):
+            if type(record) is not dict or set(record) != {'row', 'samples', 'warmup', 'p50_ns', 'p99_ns', 'host_public_calls'}:
+                raise ValueError
+            row = record['row']
+            if type(row) is not str or row not in EXPECTED_ROWS or row in seen:
+                raise ValueError
+            seen.add(row)
+            if any(not unsigned(record[key]) for key in record if key != 'row'):
+                raise ValueError
+            if (record['samples'] != samples or record['warmup'] != warmup
+                    or record['host_public_calls'] != counts[row]
+                    or record['p50_ns'] != timings[row][(50 * samples + 99) // 100 - 1]
+                    or record['p99_ns'] != timings[row][(99 * samples + 99) // 100 - 1]):
+                raise ValueError
+        if seen != set(EXPECTED_ROWS):
+            raise ValueError
+    except (OSError, ValueError, TypeError, RecursionError):
+        raise SystemExit(MEASUREMENT_ERROR) from None
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--binary', type=pathlib.Path, required=True)
@@ -188,12 +286,14 @@ def main():
             metadata.setdefault('compiled_benchmarks_status', run.get('built_benchmarks_status'))
             if not run['release']:
                 raise SystemExit('debug binary cannot produce a release baseline')
-            summaries = [json.loads(line) for line in (run_output / 'summary.jsonl').read_text().splitlines()]
-            if len(summaries) != 7 or any(row['samples'] != 10000 or row['warmup'] != 1000 for row in summaries):
-                raise SystemExit('incomplete workload output')
+            validate_measurements(run_output, enabled == 'true')
             with (output / 'repetitions.jsonl').open('a') as file:
                 file.write(json.dumps({'repetition': repetition, 'enabled': enabled, 'start_unix_ns': start, 'end_unix_ns': time.time_ns(), 'load_average': os.getloadavg(), 'command': invocation}) + '\n')
             print(f'repetition {repetition}, enabled={enabled}: seven verified rows', flush=True)
+    # Recheck every accepted repetition in case later child invocations changed it.
+    for repetition in range(1, 6):
+        for enabled in ('true', 'false'):
+            validate_measurements(output / f'repetition-{repetition}-enabled-{enabled}', enabled == 'true')
     metadata['end_unix_ns'] = time.time_ns()
     metadata['artifact_sha256'] = {str(path.relative_to(output)): digest(path) for path in output.rglob('*') if path.is_file() and path != metadata_path}
     if digest(corpus_snapshot) != corpus_sha256 or digest(expected_snapshot) != expected_sha256:
