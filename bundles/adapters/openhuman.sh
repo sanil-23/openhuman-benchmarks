@@ -56,9 +56,6 @@ if [ ! -f "$OPENHUMAN_WORKSPACE/config.toml" ]; then
   # `runtime.reasoning_effort` makes the harness declare the effort the run is
   # pinned to (the meter-proxy still pins the wire), so every request carries a
   # thinking budget (`reasoning.budget_tokens`, 55% of the turn's output cap).
-  # The routable providers ignore that budget; tinyagents' reasoning watchdog
-  # enforces it client-side and ends a call that reasons past it with nothing
-  # visible, instead of waiting for the output cap.
   # Web search is on only when a direct search provider's key reached this
   # container (`BENCH_AGENT_ENV=EXA_API_KEY` on the runner); the harness's env
   # overlay configures that provider from the key. Without one the tool would
