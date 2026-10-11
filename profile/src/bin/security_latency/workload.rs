@@ -189,7 +189,18 @@ impl<'a> LegacyClient<'a> {
             calls: Calls::default(),
         }
     }
+    /// Measured workload: counter branches are removed at compile time.
     pub async fn evaluate(&mut self, row: Row) -> (Decision, Option<PathBuf>) {
+        self.evaluate_impl::<false>(row).await
+    }
+    /// Untimed observation of the same public entries and early-return branches.
+    pub async fn evaluate_observed(&mut self, row: Row) -> (Decision, Option<PathBuf>) {
+        self.evaluate_impl::<true>(row).await
+    }
+    async fn evaluate_impl<const OBSERVE: bool>(
+        &mut self,
+        row: Row,
+    ) -> (Decision, Option<PathBuf>) {
         let policy = &self.fixture.policy;
         match row {
             Row::ReadCommand | Row::WriteCommand | Row::CredentialCommand => {
@@ -198,11 +209,15 @@ impl<'a> LegacyClient<'a> {
                     Row::WriteCommand => "printf benchmark > benchmark.txt",
                     _ => &self.fixture.credential_command,
                 };
-                self.calls.host_public_calls += 1;
+                if OBSERVE {
+                    self.calls.host_public_calls += 1;
+                }
                 let Ok(class) = policy.check_gated_command(command) else {
                     return (Decision::Deny, None);
                 };
-                self.calls.host_public_calls += 1;
+                if OBSERVE {
+                    self.calls.host_public_calls += 1;
+                }
                 let decision = match policy.gate_decision(class) {
                     GateDecision::Allow => Decision::Allow,
                     GateDecision::Prompt => Decision::RequireApproval,
@@ -211,7 +226,9 @@ impl<'a> LegacyClient<'a> {
                 (decision, None)
             }
             _ => {
-                self.calls.host_public_calls += 1;
+                if OBSERVE {
+                    self.calls.host_public_calls += 1;
+                }
                 let path = match row {
                     Row::ExistingFile => &self.fixture.existing,
                     Row::NewFileParent => &self.fixture.new_file,

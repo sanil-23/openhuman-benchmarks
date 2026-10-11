@@ -15,40 +15,54 @@ async fn output_retains_individual_samples_and_observed_counts_for_every_row() -
     let base = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("target/security-test-fixtures");
     std::fs::create_dir_all(&base)?;
     let directory = tempfile::tempdir_in(base)?;
-    let output = directory.path().join("run");
-    run(Options {
-        output: output.clone(),
-        corpus: Corpus::default(),
-        enabled: true,
-        samples: 3,
-        warmup: 1,
-    })
-    .await?;
-    let raw: Vec<serde_json::Value> = std::fs::read_to_string(output.join("samples.jsonl"))?
-        .lines()
-        .map(|line| serde_json::from_str(line).unwrap())
-        .collect();
-    assert_eq!(raw.len(), 21);
-    assert_eq!(
-        raw.iter()
-            .map(|row| row["host_public_calls"].as_u64().unwrap())
-            .sum::<u64>(),
-        27
-    );
-    let summary: Vec<serde_json::Value> = std::fs::read_to_string(output.join("summary.jsonl"))?
-        .lines()
-        .map(|line| serde_json::from_str(line).unwrap())
-        .collect();
-    assert_eq!(summary.len(), 7);
-    for row in summary {
-        let mut times: Vec<u64> = raw
-            .iter()
-            .filter(|sample| sample["row"] == row["row"])
-            .map(|sample| sample["elapsed_ns"].as_u64().unwrap())
+    for enabled in [true, false] {
+        let output = directory.path().join(format!("run-{enabled}"));
+        run(Options {
+            output: output.clone(),
+            corpus: Corpus::default(),
+            enabled,
+            samples: 3,
+            warmup: 1,
+        })
+        .await?;
+        let raw: Vec<serde_json::Value> = std::fs::read_to_string(output.join("samples.jsonl"))?
+            .lines()
+            .map(|line| serde_json::from_str(line).unwrap())
             .collect();
-        times.sort_unstable();
-        assert_eq!(row["p50_ns"], times[1]);
-        assert_eq!(row["p99_ns"], times[2]);
+        assert_eq!(raw.len(), 21);
+        assert_eq!(
+            raw.iter()
+                .map(|row| row["host_public_calls"].as_u64().unwrap())
+                .sum::<u64>(),
+            27
+        );
+        let receipt: serde_json::Value =
+            serde_json::from_slice(&std::fs::read(output.join("run.json"))?)?;
+        assert_eq!(receipt["untimed_observations_per_row"], 3);
+        assert_eq!(receipt["workload_evaluations_per_row"], 7);
+        for sample in &raw {
+            let expected_calls = match sample["row"].as_str().unwrap() {
+                "allowed_read_command" | "write_requires_approval" => 2,
+                _ => 1,
+            };
+            assert_eq!(sample["host_public_calls"], expected_calls);
+        }
+        let summary: Vec<serde_json::Value> =
+            std::fs::read_to_string(output.join("summary.jsonl"))?
+                .lines()
+                .map(|line| serde_json::from_str(line).unwrap())
+                .collect();
+        assert_eq!(summary.len(), 7);
+        for row in summary {
+            let mut times: Vec<u64> = raw
+                .iter()
+                .filter(|sample| sample["row"] == row["row"])
+                .map(|sample| sample["elapsed_ns"].as_u64().unwrap())
+                .collect();
+            times.sort_unstable();
+            assert_eq!(row["p50_ns"], times[1]);
+            assert_eq!(row["p99_ns"], times[2]);
+        }
     }
     Ok(())
 }

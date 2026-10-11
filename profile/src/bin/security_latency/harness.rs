@@ -127,9 +127,11 @@ async fn run_with_reservation(options: Options, before_reservation: impl FnOnce(
             "build.rs": include_str!("../../../build.rs"),
         },
             "samples_per_row": options.samples, "warmup_per_row": options.warmup,
+            "untimed_observations_per_row": options.samples,
+            "workload_evaluations_per_row": options.warmup + 2 * options.samples,
             "runtime": "tokio_current_thread", "runtime_workers": 1, "max_blocking_threads": 1, "release": !cfg!(debug_assertions),
             "fixture_and_policy_setup_ns": setup_ns, "native_cold_registration_ns": null,
-            "bus_calls": null, "instrumentation": "public host API entries only; internal calls unobserved",
+            "bus_calls": null, "instrumentation": "reported public host API entries belong to a separate untimed evaluation after each sample with equal full outcome; measured evaluation has no counters; internal calls unobserved",
             "trusted_roots": [{"fixture_root": "action", "access": "readwrite"}],
             "reserved_roots": ["state", "synthetic-home/.ssh"], "forbidden_roots": ["state", "outside"]
         }))?)?;
@@ -143,11 +145,21 @@ async fn run_with_reservation(options: Options, before_reservation: impl FnOnce(
         let mut timings = Vec::with_capacity(options.samples);
         let mut row_calls = 0;
         for sample in 0..options.samples {
-            let before = client.calls.host_public_calls;
             let start = Instant::now();
             let value = std::hint::black_box(client.evaluate(std::hint::black_box(row)).await);
             let elapsed_ns = u64::try_from(start.elapsed().as_nanos())?;
             client.assert_correct(row, &value);
+            // The pinned checks only classify or resolve immutable fixtures.
+            // Warmup initializes the policy path cache. Observe the identical
+            // workload after stopping the timer, and verify its full result.
+            let before = client.calls.host_public_calls;
+            let observed = client.evaluate_observed(row).await;
+            assert_eq!(
+                observed,
+                value,
+                "untimed observation diverged for {}",
+                row.name()
+            );
             let host_public_calls = client.calls.host_public_calls - before;
             row_calls += host_public_calls;
             timings.push(elapsed_ns);
@@ -177,7 +189,7 @@ async fn run_with_reservation(options: Options, before_reservation: impl FnOnce(
             },
         )?;
         println!(
-            "legacy enabled={} row={} samples={} p50_ns={} p99_ns={} observed_host_public_calls={}",
+            "legacy enabled={} row={} samples={} p50_ns={} p99_ns={} untimed_observed_host_public_calls={}",
             options.enabled,
             row.name(),
             options.samples,
@@ -188,7 +200,7 @@ async fn run_with_reservation(options: Options, before_reservation: impl FnOnce(
     }
     raw.flush()?;
     summaries.flush()?;
-    println!("corpus_sweeps={} observed_host_public_calls={} (synthetic sweep, not a measured agent turn)", options.samples, sweep_calls);
+    println!("corpus_sweeps={} untimed_observed_host_public_calls={} (synthetic sweep, not a measured agent turn)", options.samples, sweep_calls);
     Ok(())
 }
 
