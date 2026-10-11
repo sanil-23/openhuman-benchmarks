@@ -16,6 +16,7 @@ ENV PATH=/root/.cargo/bin:$PATH
 WORKDIR /build
 COPY . .
 ARG CARGO_PROFILE=release
+ARG CARGO_BUILD_JOBS=4
 # Bench-only: the orchestrator's shipped turn cap (50 tool iterations) can still cut an agent off
 # mid-task on long-horizon benchmarks, and the other harnesses are run with no turn cap, so lift
 # this one to 200 for the benchmark. Set OH_MAX_ITERATIONS to the shipped value to reproduce the
@@ -26,7 +27,7 @@ RUN f=crates/openhuman-core/src/agent/registry/agents/orchestrator/agent.toml \
     && grep -q "^max_iterations = ${OH_MAX_ITERATIONS}\$" "$f"
 RUN --mount=type=cache,target=/root/.cargo/registry \
     --mount=type=cache,target=/build/target \
-    cargo build --profile "${CARGO_PROFILE}" -p openhuman-cli --bin openhuman-core \
+    ./scripts/ci-cancel-aware.sh cargo build --jobs "${CARGO_BUILD_JOBS}" --profile "${CARGO_PROFILE}" -p openhuman-cli --bin openhuman-core \
     && install -D "target/$([ "${CARGO_PROFILE}" = release ] && echo release || echo "${CARGO_PROFILE}")/openhuman-core" /out/openhuman/openhuman-core
 # Bench-only, opt-in: LOCAL_MODULES=tinyjuice compiles the checkout's vendor/tinyjuice module
 # and ships it as dev-modules/libtinyjuice_module.so; the adapter loads it through

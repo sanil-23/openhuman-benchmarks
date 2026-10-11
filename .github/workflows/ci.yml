@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  tests:
+    name: Node tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Test all tracked Node suites
+        run: git ls-files -z '*.test.mjs' | xargs -0 node --test
+
+  openhuman:
+    name: OpenHuman bundle and offline smoke
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Build the pinned core and benchmark adapter
+        env:
+          CARGO_BUILD_JOBS: 2
+        run: ./bundles/build.sh openhuman
+      - name: Build the task image
+        run: docker build -t bench-micro:latest micro
+      - name: Verify memory policy and a normal turn without external networking
+        env:
+          OH_LIVE_TEST_BUNDLE: ${{ github.workspace }}/.cache/harness/openhuman
+        run: node --test bundles/oh-live.test.mjs

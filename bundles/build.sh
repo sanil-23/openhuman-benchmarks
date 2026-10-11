@@ -38,6 +38,7 @@ case "$name" in
       --build-arg "ADAPTER=adapters/$name.sh" \
       --build-arg "GIT_SHA=$(git -C "$repo" rev-parse --short HEAD)" \
       --build-arg "LOCAL_MODULES=${LOCAL_MODULES:-}" \
+      --build-arg "CARGO_BUILD_JOBS=${CARGO_BUILD_JOBS:-4}" \
       -t "$image" "$repo"
     ;;
   deepseek-harness-minimal)
