@@ -1,0 +1,331 @@
+{
+  "longmemeval/no-memory/abstention": {
+    "n": 1,
+    "total": 1,
+    "empty": 0,
+    "metric": "official-judge-prompt",
+    "mean": 1
+  },
+  "longmemeval/full-context/abstention": {
+    "n": 1,
+    "total": 1,
+    "empty": 0,
+    "metric": "official-judge-prompt",
+    "mean": 1
+  },
+  "longmemeval/no-memory/knowledge-update": {
+    "n": 1,
+    "total": 0,
+    "empty": 0,
+    "metric": "official-judge-prompt",
+    "mean": 0
+  },
+  "longmemeval/full-context/knowledge-update": {
+    "n": 1,
+    "total": 1,
+    "empty": 0,
+    "metric": "official-judge-prompt",
+    "mean": 1
+  },
+  "longmemeval/no-memory/multi-session": {
+    "n": 1,
+    "total": 0,
+    "empty": 0,
+    "metric": "official-judge-prompt",
+    "mean": 0
+  },
+  "longmemeval/full-context/multi-session": {
+    "n": 1,
+    "total": 0,
+    "empty": 0,
+    "metric": "official-judge-prompt",
+    "mean": 0
+  },
+  "longmemeval/no-memory/single-session-assistant": {
+    "n": 1,
+    "total": 0,
+    "empty": 0,
+    "metric": "official-judge-prompt",
+    "mean": 0
+  },
+  "longmemeval/full-context/single-session-assistant": {
+    "n": 1,
+    "total": 1,
+    "empty": 0,
+    "metric": "official-judge-prompt",
+    "mean": 1
+  },
+  "longmemeval/no-memory/single-session-preference": {
+    "n": 1,
+    "total": 0,
+    "empty": 0,
+    "metric": "official-judge-prompt",
+    "mean": 0
+  },
+  "longmemeval/full-context/single-session-preference": {
+    "n": 1,
+    "total": 0,
+    "empty": 0,
+    "metric": "official-judge-prompt",
+    "mean": 0
+  },
+  "longmemeval/no-memory/single-session-user": {
+    "n": 1,
+    "total": 0,
+    "empty": 0,
+    "metric": "official-judge-prompt",
+    "mean": 0
+  },
+  "longmemeval/full-context/single-session-user": {
+    "n": 1,
+    "total": 1,
+    "empty": 0,
+    "metric": "official-judge-prompt",
+    "mean": 1
+  },
+  "longmemeval/no-memory/temporal-reasoning": {
+    "n": 1,
+    "total": 0,
+    "empty": 0,
+    "metric": "official-judge-prompt",
+    "mean": 0
+  },
+  "longmemeval/full-context/temporal-reasoning": {
+    "n": 1,
+    "total": 1,
+    "empty": 0,
+    "metric": "official-judge-prompt",
+    "mean": 1
+  },
+  "locomo/no-memory/1": {
+    "n": 3,
+    "total": 0,
+    "empty": 0,
+    "metric": "official-category-f1/abstention",
+    "mean": 0
+  },
+  "locomo/no-memory/2": {
+    "n": 3,
+    "total": 0,
+    "empty": 0,
+    "metric": "official-category-f1/abstention",
+    "mean": 0
+  },
+  "locomo/no-memory/3": {
+    "n": 3,
+    "total": 0.4,
+    "empty": 0,
+    "metric": "official-category-f1/abstention",
+    "mean": 0.13333333333333333
+  },
+  "locomo/no-memory/4": {
+    "n": 2,
+    "total": 0,
+    "empty": 0,
+    "metric": "official-category-f1/abstention",
+    "mean": 0
+  },
+  "locomo/no-memory/5": {
+    "n": 2,
+    "total": 2,
+    "empty": 0,
+    "metric": "official-category-f1/abstention",
+    "mean": 1
+  },
+  "longmemeval/reference-memory/abstention": {
+    "n": 1,
+    "total": 1,
+    "empty": 0,
+    "metric": "official-judge-prompt",
+    "mean": 1
+  },
+  "longmemeval/reference-memory/knowledge-update": {
+    "n": 1,
+    "total": 1,
+    "empty": 0,
+    "metric": "official-judge-prompt",
+    "mean": 1
+  },
+  "longmemeval/reference-memory/multi-session": {
+    "n": 1,
+    "total": 0,
+    "empty": 0,
+    "metric": "official-judge-prompt",
+    "mean": 0
+  },
+  "longmemeval/reference-memory/single-session-assistant": {
+    "n": 1,
+    "total": 0,
+    "empty": 0,
+    "metric": "official-judge-prompt",
+    "mean": 0
+  },
+  "longmemeval/reference-memory/single-session-preference": {
+    "n": 1,
+    "total": 0,
+    "empty": 0,
+    "metric": "official-judge-prompt",
+    "mean": 0
+  },
+  "longmemeval/reference-memory/single-session-user": {
+    "n": 1,
+    "total": 1,
+    "empty": 0,
+    "metric": "official-judge-prompt",
+    "mean": 1
+  },
+  "longmemeval/reference-memory/temporal-reasoning": {
+    "n": 1,
+    "total": 0,
+    "empty": 0,
+    "metric": "official-judge-prompt",
+    "mean": 0
+  },
+  "locomo/full-context/1": {
+    "n": 3,
+    "total": 0.5917211328976035,
+    "empty": 0,
+    "metric": "official-category-f1/abstention",
+    "mean": 0.19724037763253452
+  },
+  "locomo/full-context/2": {
+    "n": 3,
+    "total": 0.7562927663734116,
+    "empty": 0,
+    "metric": "official-category-f1/abstention",
+    "mean": 0.2520975887911372
+  },
+  "locomo/full-context/3": {
+    "n": 3,
+    "total": 0.1419172932330827,
+    "empty": 0,
+    "metric": "official-category-f1/abstention",
+    "mean": 0.047305764411027566
+  },
+  "locomo/full-context/4": {
+    "n": 2,
+    "total": 0.21598877980364656,
+    "empty": 0,
+    "metric": "official-category-f1/abstention",
+    "mean": 0.10799438990182328
+  },
+  "locomo/full-context/5": {
+    "n": 2,
+    "total": 2,
+    "empty": 0,
+    "metric": "official-category-f1/abstention",
+    "mean": 1
+  },
+  "locomo/reference-memory/1": {
+    "n": 3,
+    "total": 0,
+    "empty": 0,
+    "metric": "official-category-f1/abstention",
+    "mean": 0
+  },
+  "locomo/reference-memory/2": {
+    "n": 3,
+    "total": 0.8276923076923077,
+    "empty": 0,
+    "metric": "official-category-f1/abstention",
+    "mean": 0.2758974358974359
+  },
+  "locomo/reference-memory/3": {
+    "n": 3,
+    "total": 0.4757142857142857,
+    "empty": 0,
+    "metric": "official-category-f1/abstention",
+    "mean": 0.15857142857142856
+  },
+  "locomo/reference-memory/4": {
+    "n": 2,
+    "total": 0.2222222222222222,
+    "empty": 0,
+    "metric": "official-category-f1/abstention",
+    "mean": 0.1111111111111111
+  },
+  "locomo/reference-memory/5": {
+    "n": 2,
+    "total": 2,
+    "empty": 0,
+    "metric": "official-category-f1/abstention",
+    "mean": 1
+  },
+  "locomo/oh-tinymemory-cortex-direct/1": {
+    "n": 3,
+    "total": 0,
+    "empty": 0,
+    "metric": "official-category-f1/abstention",
+    "mean": 0
+  },
+  "locomo/oh-tinymemory-cortex-direct/2": {
+    "n": 3,
+    "total": 0.2857142857142857,
+    "empty": 0,
+    "metric": "official-category-f1/abstention",
+    "mean": 0.09523809523809523
+  },
+  "locomo/oh-tinymemory-cortex-direct/3": {
+    "n": 3,
+    "total": 0.4555555555555556,
+    "empty": 0,
+    "metric": "official-category-f1/abstention",
+    "mean": 0.15185185185185188
+  },
+  "locomo/oh-tinymemory-cortex-direct/4": {
+    "n": 2,
+    "total": 0.14285714285714288,
+    "empty": 0,
+    "metric": "official-category-f1/abstention",
+    "mean": 0.07142857142857144
+  },
+  "locomo/oh-tinymemory-cortex-direct/5": {
+    "n": 2,
+    "total": 2,
+    "empty": 0,
+    "metric": "official-category-f1/abstention",
+    "mean": 1
+  },
+  "longmemeval/oh-tinymemory-cortex-direct/temporal-reasoning": {
+    "n": 1,
+    "total": 0,
+    "empty": 0,
+    "metric": "official-judge-prompt",
+    "mean": 0
+  },
+  "longmemeval/oh-tinymemory-cortex-direct/knowledge-update": {
+    "n": 1,
+    "total": 1,
+    "empty": 0,
+    "metric": "official-judge-prompt",
+    "mean": 1
+  },
+  "longmemeval/oh-tinymemory-cortex-direct/single-session-assistant": {
+    "n": 1,
+    "total": 0,
+    "empty": 0,
+    "metric": "official-judge-prompt",
+    "mean": 0
+  },
+  "longmemeval/oh-tinymemory-cortex-direct/abstention": {
+    "n": 1,
+    "total": 1,
+    "empty": 0,
+    "metric": "official-judge-prompt",
+    "mean": 1
+  },
+  "longmemeval/oh-tinymemory-cortex-direct/single-session-preference": {
+    "n": 1,
+    "total": 0,
+    "empty": 0,
+    "metric": "official-judge-prompt",
+    "mean": 0
+  },
+  "longmemeval/oh-tinymemory-cortex-direct/multi-session": {
+    "n": 1,
+    "total": 1,
+    "empty": 0,
+    "metric": "official-judge-prompt",
+    "mean": 1
+  }
+}

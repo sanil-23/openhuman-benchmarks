@@ -1,0 +1,221 @@
+{
+  "engine": "reference",
+  "ingest_ms": 13878,
+  "mode": "direct-ingest/pre-turn",
+  "probes": [
+    {
+      "context": {
+        "engine": "reference",
+        "markdown": "# Memory\n\n## This agent's history\n\n- [2023-05-27 02:18] assistant: [session date: 2023/05/27 (Sat) 02:18] Railways of Europe is a fantastic expansion that offers a fresh challenge. The playtime for Railways of the World with the Europe expansion can vary depending on the number of players and their experience with the game. However, here are some general guidelines: * 2 players: 90-120 minutes * 3-4 players: 120-150 minutes * 5 players: 150-180 minutes Keep in mind that these times are approximate and can vary depending on the players' familiarity with the game, their strategic approaches, and the level of competition. With the…\n- [2023-05-27 02:18] assistant: [session date: 2023/05/27 (Sat) 02:18] All aboard! I'd be happy to recommend some popular train-themed board games for you! Here are a few: 1. **Ticket to Ride** (2004) - A modern classic! Players compete to build train routes across a map of North America (or other continents in expansions). Easy to learn, fun to play, and takes about 30-60 minutes. 2. **Railways of the World** (2005) - A more complex, strategic game where players build train networks across a modular board, managing resources and competing to deliver goods. Playtime: 60-120 minutes. 3.…\n- [2023-05-30 18:41] assistant: [session date: 2023/05/30 (Tue) 18:41] As an AI language model, I don't have preferences or feelings, but I can offer some suggestions for keeping your meal plan varied and interesting: 1. Experiment with new recipes: Look up new recipes online or in cookbooks, or try modifying existing ones by adding different spices or ingredients. Challenge yourself to try a new recipe a week or every other week, and vary the type of cuisine you cook. 2. Switch up the cooking method: If you always bake or roast your vegetables, try grilling or stir-frying them. Experiment with…\n- [2023-05-24 23:31] assistant: [session date: 2023/05/24 (Wed) 23:31] I do not have personal experience on this matter. however, here are some general steps recommended by experts for training a dog to stop barking excessively: 1. identify the reason for excessive barking: does your dog bark out of boredom, anxiety, or territorial behavior? once you identify the reason, it will be easier to address the problem. 2. teach the \"quiet\" command: teach your dog to be quiet on command. use a reward-based system where you give your dog a treat when it stops barking on command. 3. positive…\n- [2023-05-22 23:58] assistant: [session date: 2023/05/22 (Mon) 23:58] Squirrel-proof feeders can be a wonderful investment for bird enthusiasts. Yes, many bird species have specific migration patterns and preferences that influence their feeder visits throughout the year. Here are some examples of bird species that might visit your feeder during different times of the year: **Winter visitors (December to February):** 1. **Winter finches:** Species like the American Goldfinch, Common Redpoll, and Purple Finch might visit your feeder during the winter months, especially if you offer Nyjer seed…\n- [2023-05-23 03:06] assistant: [session date: 2023/05/23 (Tue) 03:06] You raise a valid concern regarding the potential trade-off between the goals of diversity and merit in the selection of judges to the Supreme Court of Canada. Ensuring that a diverse range of highly qualified judges is appointed to the court is a complex challenge, and there is no single solution. One approach is to prioritize diversity as a contributing factor alongside merit, rather than as a means to an end. By considering diversity among many other factors that contribute to judicial excellence, such as experience,…\n\n## Team conversations\n\n- [2023-05-22 23:37] assistant: [session date: 2023/05/22 (Mon) 23:37] Having a weekly snack schedule can help you stay on track with healthy eating and reduce last-minute, unhealthy impulse snacking. Here's a sample weekly snack schedule you can customize to fit your dietary needs and preferences: **Monday** * Morning: Fresh fruit (e.g., apples, bananas, berries) * Afternoon: Nuts and seeds (e.g., almonds, cashews, pumpkin seeds) **Tuesday** * Morning: Yogurt parfait ( Greek yogurt, granola, berries) * Afternoon: Carrot sticks with hummus **Wednesday** * Morning: Energy balls (oats, nuts,…\n",
+        "refs": [
+          "e1f9b66d69bba9674069dc8c89cb1f54d939ce7c",
+          "736f8c1f15cd7a7c310dcf4b3884dd802441e3a3",
+          "d4cfbf972f11d2059d8915c091251f6e3ee60368",
+          "230d99b53fac9be070449664837dfbdf478edecc",
+          "8e0406e6518da231ab813e3b8f8f1953ca4201b5",
+          "8aa5ca616e019cb5b926f315a44d8b5013fd0610",
+          "2dcdf2db34f00e00547416e987680d41a869a5f8"
+        ],
+        "sections": [
+          {
+            "heading": "This agent's history",
+            "hits": [
+              {
+                "id": "e1f9b66d69bba9674069dc8c89cb1f54d939ce7c",
+                "kind": "conversation",
+                "meta": {
+                  "agent_id": "benchmark",
+                  "namespace": "project:bench-lme-32260d93/agent:benchmark",
+                  "observed_at": "2023-05-27T02:18:00Z",
+                  "source": {
+                    "kind": "agent"
+                  },
+                  "thread_id": "history-24",
+                  "turns": {
+                    "first": 7,
+                    "last": 7
+                  }
+                },
+                "score": 0.6773636341094971,
+                "text": "assistant: [session date: 2023/05/27 (Sat) 02:18] Railways of Europe is a fantastic expansion that offers a fresh challenge.\n\nThe playtime for Railways of the World with the Europe expansion can vary depending on the number of players and their experience with the game. However, here are some general guidelines:\n\n* 2 players: 90-120 minutes\n* 3-4 players: 120-150 minutes\n* 5 players: 150-180 minutes\n\nKeep in mind that these times are approximate and can vary depending on the players' familiarity with the game, their strategic approaches, and the level of competition.\n\nWith the Europe expansion, you can expect a slightly longer playtime compared to the base game, mainly due to the larger map and the additional challenges it presents. The Europe map has more cities, longer routes, and different terrain features, which can lead to more complex route-building and strategic decisions.\n\nTo minimize playtime, you can consider the following tips:\n\n* Familiarize yourself with the new map and rules before playing with others.\n* Focus on building efficient routes and optimizing your train network.\n* Try to block your opponents' progress and limit their options.\n* Manage your resources carefully, as the Europe map can be more resource-intensive.\n\nRemember, the playtime will decrease as you and your fellow players become more experienced with the game and the expansion.\n\nNow that you have the Europe expansion, I recommend reading the rules and familiarizing yourself with the new map before your first playthrough. You can also watch online tutorials or gameplay videos to get a better understanding of the new mechanics and strategies.\n\nAre you excited to start building your train empire in Europe?"
+              },
+              {
+                "id": "736f8c1f15cd7a7c310dcf4b3884dd802441e3a3",
+                "kind": "conversation",
+                "meta": {
+                  "agent_id": "benchmark",
+                  "namespace": "project:bench-lme-32260d93/agent:benchmark",
+                  "observed_at": "2023-05-27T02:18:00Z",
+                  "source": {
+                    "kind": "agent"
+                  },
+                  "thread_id": "history-24",
+                  "turns": {
+                    "first": 1,
+                    "last": 1
+                  }
+                },
+                "score": 0.6768710017204285,
+                "text": "assistant: [session date: 2023/05/27 (Sat) 02:18] All aboard! I'd be happy to recommend some popular train-themed board games for you! Here are a few:\n\n1. **Ticket to Ride** (2004) - A modern classic! Players compete to build train routes across a map of North America (or other continents in expansions). Easy to learn, fun to play, and takes about 30-60 minutes.\n2. **Railways of the World** (2005) - A more complex, strategic game where players build train networks across a modular board, managing resources and competing to deliver goods. Playtime: 60-120 minutes.\n3. **TransAmerica** (2002) - A quick and simple game where players build train routes across a map of the United States, trying to connect cities. Playtime: 30-45 minutes.\n4. **Trains** (2012) - A deck-building game where players collect cards to build train routes and deliver goods in a futuristic setting. Playtime: 30-60 minutes.\n5. **18xx series** (1970s-1980s) - A series of games that simulate the growth of railroads in the 19th century. These games are considered classics, but they can be complex and take 2-4 hours to play.\n6. **Steam Railways to Riches** (2012) - A game of building train routes and delivering goods, with a focus on resource management and optimization. Playtime: 60-90 minutes.\n7. **Empires of the Void** (2012) - A space-themed train game where players build routes and manage resources to colonize planets. Playtime: 60-90 minutes.\n\nThese games vary in complexity, playtime, and theme, so you're sure to find one that suits your taste. If you're new to train games, Ticket to Ride is a great introduction. If you're looking for something more complex, Railways of the World might be the way to go.\n\nWhat type of game are you in the mood for? Do you have a specific number of players or playtime in mind?"
+              },
+              {
+                "id": "d4cfbf972f11d2059d8915c091251f6e3ee60368",
+                "kind": "conversation",
+                "meta": {
+                  "agent_id": "benchmark",
+                  "namespace": "project:bench-lme-32260d93/agent:benchmark",
+                  "observed_at": "2023-05-30T18:41:00Z",
+                  "source": {
+                    "kind": "agent"
+                  },
+                  "thread_id": "history-45",
+                  "turns": {
+                    "first": 3,
+                    "last": 3
+                  }
+                },
+                "score": 0.6725072860717773,
+                "text": "assistant: [session date: 2023/05/30 (Tue) 18:41] As an AI language model, I don't have preferences or feelings, but I can offer some suggestions for keeping your meal plan varied and interesting:\n\n1. Experiment with new recipes: Look up new recipes online or in cookbooks, or try modifying existing ones by adding different spices or ingredients. Challenge yourself to try a new recipe a week or every other week, and vary the type of cuisine you cook.\n\n2. Switch up the cooking method: If you always bake or roast your vegetables, try grilling or stir-frying them. Experiment with sous vide cooking, slow cooking, or pressure cooking. Changing up the cooking method can give the same ingredient a completely different flavor profile.\n\n3. Shop seasonally: Shopping seasonally ensures you're using fresh, local produce and helps you avoid getting stuck in a rut with the same ingredients or meals.\n\n4. Meal prep in batches: Cook a batch of your favorite meals, portion them out, and freeze them for an easy and quick meal later on. This allows you to mix and match different meals throughout the weeks and prevents you from getting bored with the same meals.\n\n5. Share recipes with friends and family: Ask friends and family to share their favorite recipes with you, this way you can enjoy their recipes while also adding variety to your meal plan.\n\nThese tips can help you maintain variety in your diet by trying new foods and cooking methods while still ensuring you are consuming a nutritious, well-balanced diet."
+              },
+              {
+                "id": "230d99b53fac9be070449664837dfbdf478edecc",
+                "kind": "conversation",
+                "meta": {
+                  "agent_id": "benchmark",
+                  "namespace": "project:bench-lme-32260d93/agent:benchmark",
+                  "observed_at": "2023-05-24T23:31:00Z",
+                  "source": {
+                    "kind": "agent"
+                  },
+                  "thread_id": "history-16",
+                  "turns": {
+                    "first": 1,
+                    "last": 1
+                  }
+                },
+                "score": 0.6677132844924927,
+                "text": "assistant: [session date: 2023/05/24 (Wed) 23:31] I do not have personal experience on this matter. however, here are some general steps recommended by experts for training a dog to stop barking excessively:\n\n1. identify the reason for excessive barking: does your dog bark out of boredom, anxiety, or territorial behavior? once you identify the reason, it will be easier to address the problem.\n\n2. teach the \"quiet\" command: teach your dog to be quiet on command. use a reward-based system where you give your dog a treat when it stops barking on command.\n\n3. positive reinforcement: use positive reinforcement to reward good behavior. when your dog stops barking on its own, praise it with treats and verbal affirmations.\n\n4. exercise and mental stimulation: dogs that are bored or anxious can benefit from regular exercise and mental stimulation. provide them with toys and games that keep them busy and engage their minds.\n\n5. consistency: be consistent in your training. don't allow your dog to bark excessively at times and then correct it at other times. stick to a routine that your dog can understand.\n\n6. seek professional help: if your dog's excessive barking persists, seek the help of a professional trainer or behaviorist. they can provide personalized training programs that address your dog's specific needs."
+              },
+              {
+                "id": "8e0406e6518da231ab813e3b8f8f1953ca4201b5",
+                "kind": "conversation",
+                "meta": {
+                  "agent_id": "benchmark",
+                  "namespace": "project:bench-lme-32260d93/agent:benchmark",
+                  "observed_at": "2023-05-22T23:58:00Z",
+                  "source": {
+                    "kind": "agent"
+                  },
+                  "thread_id": "history-10",
+                  "turns": {
+                    "first": 9,
+                    "last": 9
+                  }
+                },
+                "score": 0.6666861772537231,
+                "text": "assistant: [session date: 2023/05/22 (Mon) 23:58] Squirrel-proof feeders can be a wonderful investment for bird enthusiasts.\n\nYes, many bird species have specific migration patterns and preferences that influence their feeder visits throughout the year. Here are some examples of bird species that might visit your feeder during different times of the year:\n\n**Winter visitors (December to February):**\n\n1. **Winter finches:** Species like the American Goldfinch, Common Redpoll, and Purple Finch might visit your feeder during the winter months, especially if you offer Nyjer seed or suet.\n2. **Sparrows:** Birds like the American Tree Sparrow, Dark-eyed Junco, and White-throated Sparrow might frequent your feeder during the winter.\n3. **Woodpeckers:** Downy Woodpeckers, Hairy Woodpeckers, and Red-bellied Woodpeckers might visit your feeder for suet and sunflower seeds.\n4. **Blue Jays:** These birds are year-round residents in many areas, but they might become more frequent visitors during the winter when natural food sources are scarce.\n\n**Spring and fall migrants (March to May and August to November):**\n\n1. **Warblers:** During their migrations, warblers like the Yellow Warbler, Yellow-rumped Warbler, and American Goldfinch might stop by your feeder for a quick snack.\n2. **Hummingbirds:** As they migrate through your area, hummingbirds like the Ruby-throated Hummingbird might visit your feeder for nectar.\n3. **Orioles:** Baltimore Orioles and Orchard Orioles might stop by your feeder during their migrations, especially if you offer orange slices or jelly.\n\n**Year-round visitors:**\n\n1. **Cardinals:** Northern Cardinals are common visitors to bird feeders throughout the year, especially if you offer sunflower seeds and suet.\n2. **Chickadees:** Black-capped Chickadees and Carolina Chickadees are frequent visitors to bird feeders, often visiting daily for seeds and suet.\n3. **Titmice:** Tufted Titmice and Bridled Titmice might visit your feeder regularly, especially if you offer sunflower seeds and peanuts.\n\nKeep in mind that these are general patterns and can vary depending on your location, climate, and the specific species found in your area. It's always a good idea to research the bird species common to your region and tailor your feeder offerings accordingly.\n\nRemember to maintain a clean and well-stocked feeder, and enjoy the show!"
+              },
+              {
+                "id": "8aa5ca616e019cb5b926f315a44d8b5013fd0610",
+                "kind": "conversation",
+                "meta": {
+                  "agent_id": "benchmark",
+                  "namespace": "project:bench-lme-32260d93/agent:benchmark",
+                  "observed_at": "2023-05-23T03:06:00Z",
+                  "source": {
+                    "kind": "agent"
+                  },
+                  "thread_id": "history-11",
+                  "turns": {
+                    "first": 7,
+                    "last": 7
+                  }
+                },
+                "score": 0.6665661931037903,
+                "text": "assistant: [session date: 2023/05/23 (Tue) 03:06] You raise a valid concern regarding the potential trade-off between the goals of diversity and merit in the selection of judges to the Supreme Court of Canada. Ensuring that a diverse range of highly qualified judges is appointed to the court is a complex challenge, and there is no single solution.\n\nOne approach is to prioritize diversity as a contributing factor alongside merit, rather than as a means to an end. By considering diversity among many other factors that contribute to judicial excellence, such as experience, legal knowledge and understanding of Canadian society and its constitution, the government can create more opportunities for the appointment of highly qualified judges with a range of backgrounds and experiences.\n\nAnother approach is to rely on a diverse range of sources to identify and evaluate candidates, including legal experts, academics, and the broader public. By drawing on a range of perspectives, the government can consider factors beyond traditional measures of merit, such as potential for growth, life experience, and demonstrated or potential commitment to equity, diversity and inclusion.\n\nIn Canada, the judicial appointments process is designed to identify highly qualified candidates, and a transparent and rigorous process is followed for the selection of judges to the Supreme Court of Canada. The process involves extensive consultations with legal experts and other relevant stakeholders, as well as a review of the candidate's qualifications, legal expertise, and personal qualities.\n\nIn the end, the challenge of balancing diversity and merit in Supreme Court appointments remains an ongoing conversation, but the commitment to appoint highly qualified judges of diverse background who can contribute to a more equitable and justice-enabling legal system will only further reinforce the respect of the judiciary system in the eyes of the public."
+              }
+            ]
+          },
+          {
+            "heading": "Team conversations",
+            "hits": [
+              {
+                "id": "2dcdf2db34f00e00547416e987680d41a869a5f8",
+                "kind": "conversation",
+                "meta": {
+                  "agent_id": "benchmark",
+                  "namespace": "project:bench-lme-32260d93/agent:benchmark",
+                  "observed_at": "2023-05-22T23:37:00Z",
+                  "source": {
+                    "kind": "agent"
+                  },
+                  "thread_id": "history-9",
+                  "turns": {
+                    "first": 1,
+                    "last": 1
+                  }
+                },
+                "score": 0.6633888483047485,
+                "text": "assistant: [session date: 2023/05/22 (Mon) 23:37] Having a weekly snack schedule can help you stay on track with healthy eating and reduce last-minute, unhealthy impulse snacking. Here's a sample weekly snack schedule you can customize to fit your dietary needs and preferences:\n\n**Monday**\n\n* Morning: Fresh fruit (e.g., apples, bananas, berries)\n* Afternoon: Nuts and seeds (e.g., almonds, cashews, pumpkin seeds)\n\n**Tuesday**\n\n* Morning: Yogurt parfait ( Greek yogurt, granola, berries)\n* Afternoon: Carrot sticks with hummus\n\n**Wednesday**\n\n* Morning: Energy balls (oats, nuts, dried fruit)\n* Afternoon: Hard-boiled eggs\n\n**Thursday**\n\n* Morning: Cottage cheese with fruit (e.g., berries, sliced peaches)\n* Afternoon: Raw veggie sticks with guacamole\n\n**Friday**\n\n* Morning: Smoothie packs (frozen fruit, spinach, protein powder)\n* Afternoon: Trail mix (nuts, seeds, dried fruit)\n\n**Weekend Prep**\n\n* On Saturday or Sunday, set aside 30 minutes to an hour to prep snacks for the week:\n\t+ Cut fresh fruit (e.g., apples, carrots, bell peppers)\n\t+ Prepare energy balls or granola bars\n\t+ Boil eggs\n\t+ Assemble yogurt parfaits or smoothie packs\n\t+ Portion out nuts, seeds, and dried fruit\n\n**Tips and Variations**\n\n* Rotate snacks every 2-3 weeks to keep things interesting and prevent boredom.\n* Consider your dietary needs and preferences when selecting snacks. For example, if you're gluten-free, choose gluten-free granola or energy balls.\n* Incorporate seasonal fruits and veggies to keep your snacks fresh and exciting.\n* If you have a busy week ahead, prep extra snacks on the weekend to ensure you have healthy options on hand.\n* Involve family members or roommates in the snack prep process to make it a fun, collaborative activity.\n\nRemember, this is just a sample schedule, and you can adjust it to fit your personal preferences, dietary needs, and lifestyle. Happy snacking!"
+              },
+              {
+                "id": "03bbcf7110234951f08e6483e6cf7e33d603cafd",
+                "kind": "conversation",
+                "meta": {
+                  "agent_id": "benchmark",
+                  "namespace": "project:bench-lme-32260d93/agent:benchmark",
+                  "observed_at": "2023-05-30T18:41:00Z",
+                  "source": {
+                    "kind": "agent"
+                  },
+                  "thread_id": "history-45",
+                  "turns": {
+                    "first": 1,
+                    "last": 1
+                  }
+                },
+                "score": 0.661339521408081,
+                "text": "assistant: [session date: 2023/05/30 (Tue) 18:41] Meal planning can help ensure all necessary nutrients are being consumed in the following ways:\n\n1. Including a variety of foods: When meal planning, you can ensure that your meals include a mix of different food groups, such as fruits, vegetables, grains, protein, and dairy. This variety helps ensure you get a range of nutrients like vitamins, minerals, fiber, protein, healthy fats, and carbohydrates.\n\n2. Portion control: Meal planning can help you plan the quantity of food to be consumed, which can help you control portion sizes, prevent overeating, and ensure you get the right balance of nutrients.\n\n3. Meeting dietary goals: Meal planning can help you meet specific dietary goals. For example, someone with a low iron intake might plan meals with iron-rich foods like spinach or red meat.\n\n4. Avoiding unhealthy foods: Meal planning can help you avoid unhealthy foods like processed snacks, sugary drinks or fried food, which can harm your health and increase your calorie and sodium intake.\n\nBy using these strategies to ensure all necessary nutrients are present in meals, meal planning can help anyone achieve a balanced and nutritious diet."
+              },
+              {
+                "id": "93cd6ea5668a5e6e61244289c0eeaf571fe4ee84",
+                "kind": "conversation",
+                "meta": {
+                  "agent_id": "benchmark",
+                  "namespace": "project:bench-lme-32260d93/agent:benchmark",
+                  "observed_at": "2023-05-23T09:57:00Z",
+                  "source": {
+                    "kind": "agent"
+                  },
+                  "thread_id": "history-12",
+                  "turns": {
+                    "first": 1,
+                    "last": 1
+                  }
+                },
+                "score": 0.6601566076278687,
+                "text": "user: [session date: 2023/05/23 (Tue) 09:57] Step 3: Put your top foot in front of your bottom foot.\nStep 4: Find your neutral spine and engage your core to lock it in place. \nStep 5: Slowly lift your hips off the ground as you bring them forward to form a straight line from foot to shoulders, like a plank. You do this to avoid side bending in the spine. This motion is the same as for the bridge except it is done on your side; in other words, you are are bringing your pelvis forward as you come up, going from bent hips to straightened hips so that you don’t bend your spine sideways. \n\nStep 6: If you can, raise your upper arm up toward the ceiling with the palm facing forward, and pull that shoulder blade back toward the spine and buttocks as well.\nStep 7: Hold for five to ten seconds, with ten seconds being the goal.\nStep 8: Slowly “sit back,” pushing your hips back behind your feet and shoulders as you return to the floor in the starting position. Again, think about the movement of the bridge exercise, only done on your side.\nStep 9: Do two to five reps on each side, with five being the goal.\nTROUBLESHOOTING\n\n• Shoulder pain. If your shoulder hurts, make sure you pay attention to Step 1. Is your elbow directly under your shoulder? Did you pull your shoulder blade in toward the spine and down toward your back pocket before lifting up? If you feel you did these motions correctly and your shoulder still hurts, try bracing your shoulder with your upper hand as in the following picture.\nIf it still hurts, move on to one of the following regressions on the next page, and perform these until you build strength in the shoulder. Then try again in a few weeks.\n• Back Pain. If your lower back hurts with this exercise, try finding your neutral spine again. Try performing the exercise with a slightly more flat or rounded back and see if the pain resolves. If it does, that is your neutral spine. If the lower back pain doesn’t resolve, move on to one of the following regressions, and try again after a few weeks.\n• Pain on the downward side in the abdomen. This is likely muscular pain because these are the muscles you are working. Remember, if it resolves quickly once you stop the exercise, you are very likely okay doing this exercise.\nCommon Mistakes\n• Starting in a “straight line” from shoulder to foot and lifting straight up from that position. This position puts potentially dangerous pressures through the spine. Instead, start with the hips back and bring them forward as you rise.\n• Rolling the top shoulder forward. Throughout this exercise, make sure that your body is perpendicular to the floor and ceiling.\nREGRESSIONS\nSide Plank on Your Knees\nIf you are unable to perform side plank, try this one.\n\n1. Lie on your side with your legs stacked neatly on top of each other.\n2. Bend your knees at a 45-degree angle, and drop your hips back so they are behind your feet and shoulders when viewed from above.\n3. Find your neutral spine and brace your core.\n4. Place your elbow under your shoulder with your forearm on the floor. Your other arm can stay relaxed in whatever position feels comfortable for now.\n5. Pull your lower shoulder blade back toward your spine and down toward your back pocket and lock it in place.\n6. Slowly lift your hips off the floor as you bring them forward, forming a straight line from kneecaps to shoulders, like a plank. Think of the bridge exercise, only done on your side. This is a hip movement done to avoid side-bending of the spine.\n\n7. If you can, lift your upper arm up toward the ceiling with the palm facing forward, and pull the upper shoulder blade back and down toward the spine and buttocks as well.\n8. Hold for five to ten seconds, with ten being the goal.\n9. Carefully return to the starting position by dropping your hip back while maintaining your core brace.\n10. Repeat two to five times, with five being the goal.\nModified Side Plank\nIf you are unable to do the side plank on your knees, try this version, with your hip on the floor. Almost everyone should be able to do this version. Do it for a few weeks, and then go back to trying the side plank on your knees.\n1. Lie on your side, supporting your head with the hand of your bottom arm (you can also use a pillow).\n2. Use the hand of your top arm to brace yourself by putting it flat on the floor in front of your stomach.\n3. Find your neutral spine and brace your core.\n\n4. Slowly and carefully lift both of your thighs and legs off the floor toward the ceiling at the hip joints.\n5. Hold for five to ten seconds, with ten being the goal.\n6. Carefully return your legs to the starting position while maintaining core brace.\n7. Repeat two to five times each side, with five being the goal.\nPROGRESSION\nSide Plank with Pull\nFor those of you who progress to doing the side plank with relative ease and want to pursue increased fitness and spinal stability, and are willing to accept a slight increase in risk in that pursuit, try this progression.\n1. You will need a band, tubing, dumbbell, or a cable machine to perform this exercise.\n2. Set the resistance to light or the weight to low to start.\n3. Go into a side plank. Hold the handle of the band.\n\n4. Without twisting the torso or moving the hips, and with your top arm straight at the elbow, pull the shoulder blade back toward your spine and down toward your buttocks. The movement occurs in the shoulder joint and between the shoulder blade and the spine. Your arm should stay straight from the shoulder down to the hand.\n5. Do ten to fifteen reps on that side, then repeat on the other side.\nEXERCISE 6\nCat/Camel Mobilization\nOkay, this is the only time in the book I am going to ask you to forget about neutral spine and spinal stability. This exercise is meant to build a bit of mobility in the lumbar spine and thoracic spine without loading them during the process. This is also a good way to find your neutral spine when on your hands and knees, for Exercise 7. This one is easy.\nGet on your hands and knees, with your hands under your shoulders and knees under your hips. Pull both shoulder blades in toward the spine and back toward the back pockets in a “clockwise corkscrew” fashion. To get a sense of this movement, think of looking at someone’s back. You would see their right shoulder blade turning in a slightly clockwise motion (left shoulder blade in counterclockwise motion) while also coming down at the same time, allowing the person’s chest to stick out.\n\nStep 1: Keep your neck in neutral with the rest of your spine. You should be looking down at the floor, not out in front of you.\n\nStep 2: Slowly and carefully, let your stomach sink to the floor below you, creating an arch in your lower back. Go only as far as feels good.\n\nStep 3: Then, slowly and carefully, push your mid/lower back up to the ceiling but only as far as feels good.\nStep 4: Do not think of this as a stretch. Keep moving back and forth between those two positions, very slowly, getting mobility in the spine. Don’t force it: This should feel good, not hurt.\nStep 5: Notice the position that feels the best between down and up. This will be your neutral spine for the next exercise.\nStep 6: Do ten reps. Make sure to breathe.\nEXERCISE 7\n“Bird Dog,” or Opposite Arm/Leg Extension \nThe opposite arm/leg extension exercise, otherwise known as the “bird dog,” is one of the most commonly prescribed exercises for back pain. Unfortunately, it is also the one most commonly done improperly.\nThis exercise seeks to accomplish several things: (a) increased spinal stability when the spine is challenged from different directions with varying loads; (b) increased engagement, endurance, and strength of the back extensors including the lats; and (c) increased gluteal engagement, endurance, and strength. Done right, this exercise is a beauty.\nStep 1: Get on your hands and knees, with your hands under your shoulders and your knees under your hips. Pull both shoulder blades in toward the spine and back toward the back pockets in a “clockwise corkscrew” fashion.\nStep 2: Keep your neck in neutral with the rest of your spine. You should be looking down at the floor, not out in front of you.\nStep 3: Go through the “cat” and “camel” positions to find your neutral spine."
+              }
+            ]
+          }
+        ],
+        "skipped": [
+          {
+            "heading": "Learnings",
+            "reason": "empty"
+          },
+          {
+            "heading": "Brain",
+            "reason": "empty"
+          }
+        ],
+        "tokens": 1062
+      },
+      "id": "32260d93",
+      "log_error": null,
+      "pack": "# Memory\n\n## This agent's history\n\n- [2023-05-27 02:18] assistant: [session date: 2023/05/27 (Sat) 02:18] Railways of Europe is a fantastic expansion that offers a fresh challenge. The playtime for Railways of the World with the Europe expansion can vary depending on the number of players and their experience with the game. However, here are some general guidelines: * 2 players: 90-120 minutes * 3-4 players: 120-150 minutes * 5 players: 150-180 minutes Keep in mind that these times are approximate and can vary depending on the players' familiarity with the game, their strategic approaches, and the level of competition. With the…\n- [2023-05-27 02:18] assistant: [session date: 2023/05/27 (Sat) 02:18] All aboard! I'd be happy to recommend some popular train-themed board games for you! Here are a few: 1. **Ticket to Ride** (2004) - A modern classic! Players compete to build train routes across a map of North America (or other continents in expansions). Easy to learn, fun to play, and takes about 30-60 minutes. 2. **Railways of the World** (2005) - A more complex, strategic game where players build train networks across a modular board, managing resources and competing to deliver goods. Playtime: 60-120 minutes. 3.…\n- [2023-05-30 18:41] assistant: [session date: 2023/05/30 (Tue) 18:41] As an AI language model, I don't have preferences or feelings, but I can offer some suggestions for keeping your meal plan varied and interesting: 1. Experiment with new recipes: Look up new recipes online or in cookbooks, or try modifying existing ones by adding different spices or ingredients. Challenge yourself to try a new recipe a week or every other week, and vary the type of cuisine you cook. 2. Switch up the cooking method: If you always bake or roast your vegetables, try grilling or stir-frying them. Experiment with…\n- [2023-05-24 23:31] assistant: [session date: 2023/05/24 (Wed) 23:31] I do not have personal experience on this matter. however, here are some general steps recommended by experts for training a dog to stop barking excessively: 1. identify the reason for excessive barking: does your dog bark out of boredom, anxiety, or territorial behavior? once you identify the reason, it will be easier to address the problem. 2. teach the \"quiet\" command: teach your dog to be quiet on command. use a reward-based system where you give your dog a treat when it stops barking on command. 3. positive…\n- [2023-05-22 23:58] assistant: [session date: 2023/05/22 (Mon) 23:58] Squirrel-proof feeders can be a wonderful investment for bird enthusiasts. Yes, many bird species have specific migration patterns and preferences that influence their feeder visits throughout the year. Here are some examples of bird species that might visit your feeder during different times of the year: **Winter visitors (December to February):** 1. **Winter finches:** Species like the American Goldfinch, Common Redpoll, and Purple Finch might visit your feeder during the winter months, especially if you offer Nyjer seed…\n- [2023-05-23 03:06] assistant: [session date: 2023/05/23 (Tue) 03:06] You raise a valid concern regarding the potential trade-off between the goals of diversity and merit in the selection of judges to the Supreme Court of Canada. Ensuring that a diverse range of highly qualified judges is appointed to the court is a complex challenge, and there is no single solution. One approach is to prioritize diversity as a contributing factor alongside merit, rather than as a means to an end. By considering diversity among many other factors that contribute to judicial excellence, such as experience,…\n\n## Team conversations\n\n- [2023-05-22 23:37] assistant: [session date: 2023/05/22 (Mon) 23:37] Having a weekly snack schedule can help you stay on track with healthy eating and reduce last-minute, unhealthy impulse snacking. Here's a sample weekly snack schedule you can customize to fit your dietary needs and preferences: **Monday** * Morning: Fresh fruit (e.g., apples, bananas, berries) * Afternoon: Nuts and seeds (e.g., almonds, cashews, pumpkin seeds) **Tuesday** * Morning: Yogurt parfait ( Greek yogurt, granola, berries) * Afternoon: Carrot sticks with hummus **Wednesday** * Morning: Energy balls (oats, nuts,…\n",
+      "query_ms": 734
+    }
+  ],
+  "stored_turns": 524
+}

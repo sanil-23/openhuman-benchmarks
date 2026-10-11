@@ -1,0 +1,64 @@
+{
+  "contract": "Team conversations contains other agents' turns",
+  "agents_ingested": [
+    "benchmark"
+  ],
+  "own_turns_in_team": 3,
+  "pack": "# Memory\n\n## This agent's history\n\n- user: [session date: 2023-01-01] My canary memory fact number 10 is violet.\n- user: [session date: 2023-01-01] My canary memory fact number 0 is violet.\n- user: [session date: 2023-01-01] My canary memory fact number 6 is violet.\n- user: [session date: 2023-01-01] My canary memory fact number 1 is violet.\n- user: [session date: 2023-01-01] My canary memory fact number 3 is violet.\n- user: [session date: 2023-01-01] My canary memory fact number 4 is violet.\n\n## Team conversations\n\n- user: [session date: 2023-01-01] My canary memory fact number 7 is violet.\n- user: [session date: 2023-01-01] My canary memory fact number 11 is violet.\n- user: [session date: 2023-01-01] My canary memory fact number 2 is violet.\n",
+  "team_hits": [
+    {
+      "id": "571e4bafe78860ebf8cfbce18b0f735dd3f1d6af",
+      "kind": "conversation",
+      "meta": {
+        "agent_id": "benchmark",
+        "namespace": "project:bench-own-team-repro/agent:benchmark",
+        "source": {
+          "kind": "agent"
+        },
+        "thread_id": "history-0",
+        "turns": {
+          "first": 7,
+          "last": 7
+        }
+      },
+      "score": 0.5618314743041992,
+      "text": "user: [session date: 2023-01-01] My canary memory fact number 7 is violet."
+    },
+    {
+      "id": "aac3daf66c4a93165cca52a7ce011ff787668f6a",
+      "kind": "conversation",
+      "meta": {
+        "agent_id": "benchmark",
+        "namespace": "project:bench-own-team-repro/agent:benchmark",
+        "source": {
+          "kind": "agent"
+        },
+        "thread_id": "history-0",
+        "turns": {
+          "first": 11,
+          "last": 11
+        }
+      },
+      "score": 0.5602526664733887,
+      "text": "user: [session date: 2023-01-01] My canary memory fact number 11 is violet."
+    },
+    {
+      "id": "dfabd98733a771ab8f3cbf8f915268c1f4def199",
+      "kind": "conversation",
+      "meta": {
+        "agent_id": "benchmark",
+        "namespace": "project:bench-own-team-repro/agent:benchmark",
+        "source": {
+          "kind": "agent"
+        },
+        "thread_id": "history-0",
+        "turns": {
+          "first": 2,
+          "last": 2
+        }
+      },
+      "score": 0.558697521686554,
+      "text": "user: [session date: 2023-01-01] My canary memory fact number 2 is violet."
+    }
+  ]
+}

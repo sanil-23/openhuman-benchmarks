@@ -1,0 +1,11 @@
+{
+  "expected_scores": 80,
+  "completed_scores": 79,
+  "complete": false,
+  "arms": [
+    "no-memory",
+    "full-context",
+    "reference-memory",
+    "oh-tinymemory-cortex-direct"
+  ]
+}

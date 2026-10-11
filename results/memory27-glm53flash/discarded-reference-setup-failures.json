@@ -1,0 +1,326 @@
+{
+  "reason": "memory runner originally submitted sessions > MAX_STORE_MANY=100; these QA scores are INVALID and excluded",
+  "rows": [
+    {
+      "dataset": "longmemeval",
+      "id": "88432d0a_abs",
+      "question": "How many times did I bake egg tarts in the past two weeks?",
+      "category": "abstention",
+      "system": "reference-memory",
+      "answer": "No information available.",
+      "empty_answer": false,
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 78,
+        "completion_tokens": 6,
+        "total_tokens": 84,
+        "cost": 7.02e-06,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 64,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 7.02e-06,
+          "upstream_inference_prompt_cost": 4.02e-06,
+          "upstream_inference_completions_cost": 3e-06
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "reference": {
+        "answer": "The information provided is not enough. You did not mention baking egg tarts.",
+        "type": "multi-session",
+        "abstention": true,
+        "answer_session_ids": [
+          "answer_733e443a_abs_1",
+          "answer_733e443a_abs_3",
+          "answer_733e443a_abs_2",
+          "answer_733e443a_abs_4"
+        ]
+      },
+      "score": 1,
+      "metric": "official-judge-prompt",
+      "judge": "Yes",
+      "judge_model": "openai/gpt-4o-mini-2024-07-18"
+    },
+    {
+      "dataset": "longmemeval",
+      "id": "8fb83627",
+      "question": "How many issues of National Geographic have I finished reading?",
+      "category": "knowledge-update",
+      "system": "reference-memory",
+      "answer": "No information available.",
+      "empty_answer": false,
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 74,
+        "completion_tokens": 6,
+        "total_tokens": 80,
+        "cost": 6.42e-06,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 64,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 6.42e-06,
+          "upstream_inference_prompt_cost": 3.42e-06,
+          "upstream_inference_completions_cost": 3e-06
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "reference": {
+        "answer": "Five",
+        "type": "knowledge-update",
+        "abstention": false,
+        "answer_session_ids": [
+          "answer_966cecbb_1",
+          "answer_966cecbb_2"
+        ]
+      },
+      "score": 0,
+      "metric": "official-judge-prompt",
+      "judge": "no",
+      "judge_model": "openai/gpt-4o-mini-2024-07-18"
+    },
+    {
+      "dataset": "longmemeval",
+      "id": "078150f1",
+      "question": "How much more money did I raise than my initial goal in the charity cycling event?",
+      "category": "multi-session",
+      "system": "reference-memory",
+      "answer": "no information available",
+      "empty_answer": false,
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 80,
+        "completion_tokens": 5,
+        "total_tokens": 85,
+        "cost": 6.82e-06,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 64,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 6.82e-06,
+          "upstream_inference_prompt_cost": 4.32e-06,
+          "upstream_inference_completions_cost": 2.5e-06
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "reference": {
+        "answer": "$50",
+        "type": "multi-session",
+        "abstention": false,
+        "answer_session_ids": [
+          "answer_254d8b09_1",
+          "answer_254d8b09_2"
+        ]
+      },
+      "score": 0,
+      "metric": "official-judge-prompt",
+      "judge": "no",
+      "judge_model": "openai/gpt-4o-mini-2024-07-18"
+    },
+    {
+      "dataset": "longmemeval",
+      "id": "561fabcd",
+      "question": "I was thinking back to our previous conversation about the Radiation Amplified zombie, and I was wondering if you remembered what we finally decided to name it?",
+      "category": "single-session-assistant",
+      "system": "reference-memory",
+      "answer": "No information available.",
+      "empty_answer": false,
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 93,
+        "completion_tokens": 6,
+        "total_tokens": 99,
+        "cost": 9.27e-06,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 64,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 9.27e-06,
+          "upstream_inference_prompt_cost": 6.27e-06,
+          "upstream_inference_completions_cost": 3e-06
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "reference": {
+        "answer": "Fissionator.",
+        "type": "single-session-assistant",
+        "abstention": false,
+        "answer_session_ids": [
+          "answer_sharegpt_hChsWOp_97"
+        ]
+      },
+      "score": 0,
+      "metric": "official-judge-prompt",
+      "judge": "no",
+      "judge_model": "openai/gpt-4o-mini-2024-07-18"
+    },
+    {
+      "dataset": "longmemeval",
+      "id": "32260d93",
+      "question": "Can you recommend a show or movie for me to watch tonight?",
+      "category": "single-session-preference",
+      "system": "reference-memory",
+      "answer": "No information available.",
+      "empty_answer": false,
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 76,
+        "completion_tokens": 6,
+        "total_tokens": 82,
+        "cost": 6.72e-06,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 64,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 6.72e-06,
+          "upstream_inference_prompt_cost": 3.72e-06,
+          "upstream_inference_completions_cost": 3e-06
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "reference": {
+        "answer": "The user would prefer recommendations for stand-up comedy specials on Netflix, especially those that are known for their storytelling. They may not prefer recommendations for other genres or platforms.",
+        "type": "single-session-preference",
+        "abstention": false,
+        "answer_session_ids": [
+          "answer_0250ae1c"
+        ]
+      },
+      "score": 0,
+      "metric": "official-judge-prompt",
+      "judge": "No",
+      "judge_model": "openai/gpt-4o-mini-2024-07-18"
+    },
+    {
+      "dataset": "longmemeval",
+      "id": "3d86fd0a",
+      "question": "Where did I meet Sophia?",
+      "category": "single-session-user",
+      "system": "reference-memory",
+      "answer": "No information available.",
+      "empty_answer": false,
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 69,
+        "completion_tokens": 10,
+        "total_tokens": 79,
+        "cost": 7.67e-06,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 64,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 7.67e-06,
+          "upstream_inference_prompt_cost": 2.67e-06,
+          "upstream_inference_completions_cost": 5e-06
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 4,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "reference": {
+        "answer": "a coffee shop in the city",
+        "type": "single-session-user",
+        "abstention": false,
+        "answer_session_ids": [
+          "answer_19c24c11"
+        ]
+      },
+      "score": 0,
+      "metric": "official-judge-prompt",
+      "judge": "no",
+      "judge_model": "openai/gpt-4o-mini-2024-07-18"
+    },
+    {
+      "dataset": "longmemeval",
+      "id": "gpt4_fe651585",
+      "question": "Who became a parent first, Rachel or Alex?",
+      "category": "temporal-reasoning",
+      "system": "reference-memory",
+      "answer": "No information available.",
+      "empty_answer": false,
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 73,
+        "completion_tokens": 10,
+        "total_tokens": 83,
+        "cost": 8.27e-06,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 64,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 8.27e-06,
+          "upstream_inference_prompt_cost": 3.27e-06,
+          "upstream_inference_completions_cost": 5e-06
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 4,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "reference": {
+        "answer": "Alex",
+        "type": "temporal-reasoning",
+        "abstention": false,
+        "answer_session_ids": [
+          "answer_65600ff6_2",
+          "answer_65600ff6_1"
+        ]
+      },
+      "score": 0,
+      "metric": "official-judge-prompt",
+      "judge": "no",
+      "judge_model": "openai/gpt-4o-mini-2024-07-18"
+    }
+  ]
+}

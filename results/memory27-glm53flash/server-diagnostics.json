@@ -1,0 +1,227 @@
+[
+  {
+    "file": "lme-078150f1-cortex-server.log",
+    "sha256": "e0d027821a797da57b42b6a08403c265b9c3cb29f8acb71a2e16d2ee88f0bd64",
+    "indexing_batches": [
+      {
+        "chunks": 1,
+        "memories": 1
+      },
+      {
+        "chunks": 8,
+        "memories": 2
+      },
+      {
+        "chunks": 338,
+        "memories": 151
+      },
+      {
+        "chunks": 667,
+        "memories": 256
+      },
+      {
+        "chunks": 467,
+        "memories": 141
+      },
+      {
+        "chunks": 1,
+        "memories": 1
+      }
+    ],
+    "indexed_memories_including_probe": 552,
+    "indexing_batches_completed": 6,
+    "extraction_salvage_batches": 2,
+    "extraction_missing_indexes": 27,
+    "note": "Server indexing counts include probe writes; enrichment counters alone do not certify all turns indexed."
+  },
+  {
+    "file": "lme-32260d93-cortex-server.log",
+    "sha256": "2682b73c27c9a80f65209f8e4e7184799763ec679a31a792001f5023155af041",
+    "indexing_batches": [
+      {
+        "chunks": 2,
+        "memories": 1
+      },
+      {
+        "chunks": 682,
+        "memories": 256
+      },
+      {
+        "chunks": 733,
+        "memories": 237
+      },
+      {
+        "chunks": 34,
+        "memories": 30
+      },
+      {
+        "chunks": 1,
+        "memories": 1
+      }
+    ],
+    "indexed_memories_including_probe": 525,
+    "indexing_batches_completed": 5,
+    "extraction_salvage_batches": 3,
+    "extraction_missing_indexes": 29,
+    "note": "Server indexing counts include probe writes; enrichment counters alone do not certify all turns indexed."
+  },
+  {
+    "file": "lme-3d86fd0a-cortex-server.log",
+    "sha256": "3e10c144cf2ad36a2bbcd9d80c1db809fb64ba6b16c72a868da1081985dd010c",
+    "indexing_batches": [
+      {
+        "chunks": 1,
+        "memories": 1
+      },
+      {
+        "chunks": 1,
+        "memories": 1
+      },
+      {
+        "chunks": 448,
+        "memories": 172
+      },
+      {
+        "chunks": 690,
+        "memories": 256
+      },
+      {
+        "chunks": 300,
+        "memories": 96
+      }
+    ],
+    "indexed_memories_including_probe": 526,
+    "indexing_batches_completed": 5,
+    "extraction_salvage_batches": 2,
+    "extraction_missing_indexes": 13,
+    "note": "Server indexing counts include probe writes; enrichment counters alone do not certify all turns indexed."
+  },
+  {
+    "file": "lme-561fabcd-cortex-server.log",
+    "sha256": "9e426458aa0b595a7ec441bd28e08ca72a3c69badc736d480a2ff5624e8fc91c",
+    "indexing_batches": [
+      {
+        "chunks": 1,
+        "memories": 1
+      },
+      {
+        "chunks": 685,
+        "memories": 238
+      },
+      {
+        "chunks": 749,
+        "memories": 256
+      },
+      {
+        "chunks": 1,
+        "memories": 1
+      }
+    ],
+    "indexed_memories_including_probe": 496,
+    "indexing_batches_completed": 4,
+    "extraction_salvage_batches": 2,
+    "extraction_missing_indexes": 28,
+    "note": "Server indexing counts include probe writes; enrichment counters alone do not certify all turns indexed."
+  },
+  {
+    "file": "lme-88432d0a-abs-cortex-server.log",
+    "sha256": "8b875fbfff6ead255faad1dd553440775516f843c64477efb1c67bcd8878a4fb",
+    "indexing_batches": [
+      {
+        "chunks": 1,
+        "memories": 1
+      },
+      {
+        "chunks": 620,
+        "memories": 253
+      },
+      {
+        "chunks": 832,
+        "memories": 256
+      },
+      {
+        "chunks": 1,
+        "memories": 1
+      }
+    ],
+    "indexed_memories_including_probe": 511,
+    "indexing_batches_completed": 4,
+    "extraction_salvage_batches": 3,
+    "extraction_missing_indexes": 44,
+    "note": "Server indexing counts include probe writes; enrichment counters alone do not certify all turns indexed."
+  },
+  {
+    "file": "lme-8fb83627-cortex-server.log",
+    "sha256": "bcb64adc7cbff159a9b0212685e7cc8856dafe0b51638a65b0114b863a6a5359",
+    "indexing_batches": [
+      {
+        "chunks": 1,
+        "memories": 1
+      },
+      {
+        "chunks": 5,
+        "memories": 1
+      },
+      {
+        "chunks": 165,
+        "memories": 52
+      },
+      {
+        "chunks": 1,
+        "memories": 1
+      },
+      {
+        "chunks": 752,
+        "memories": 256
+      },
+      {
+        "chunks": 514,
+        "memories": 174
+      },
+      {
+        "chunks": 1,
+        "memories": 1
+      }
+    ],
+    "indexed_memories_including_probe": 486,
+    "indexing_batches_completed": 7,
+    "extraction_salvage_batches": 4,
+    "extraction_missing_indexes": 53,
+    "note": "Server indexing counts include probe writes; enrichment counters alone do not certify all turns indexed."
+  },
+  {
+    "file": "lme-gpt4-fe651585-cortex-server.log",
+    "sha256": "6c0262e2d5be655a1c31c3fa03db173d8f5f840319bb5f86532fc8fe22684d35",
+    "indexing_batches": [
+      {
+        "chunks": 1,
+        "memories": 1
+      },
+      {
+        "chunks": 2,
+        "memories": 1
+      },
+      {
+        "chunks": 441,
+        "memories": 130
+      },
+      {
+        "chunks": 702,
+        "memories": 256
+      },
+      {
+        "chunks": 267,
+        "memories": 83
+      },
+      {
+        "chunks": 1,
+        "memories": 1
+      }
+    ],
+    "indexed_memories_including_probe": 472,
+    "indexing_batches_completed": 6,
+    "extraction_salvage_batches": 3,
+    "extraction_missing_indexes": 34,
+    "note": "Server indexing counts include probe writes; enrichment counters alone do not certify all turns indexed."
+  }
+]

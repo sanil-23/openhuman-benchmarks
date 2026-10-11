@@ -1,0 +1,56 @@
+[
+  {
+    "at": "2026-10-10T21:55:05.751Z",
+    "capture_file": "captures/memory/003772.json",
+    "max_tokens": 16384,
+    "finish_reason": "stop",
+    "requested_events": 16,
+    "returned_indexes": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15
+    ],
+    "request_sha256": "a578a8969aefd2d28b52b297783155f0c3f60281c2e3abba6a691fc6e2339139",
+    "note": "Compare the contemporaneous server salvage warning; valid JSON and finish=stop did not imply every input event was represented."
+  },
+  {
+    "at": "2026-10-10T21:55:08.321Z",
+    "capture_file": "captures/memory/003774.json",
+    "max_tokens": 16384,
+    "finish_reason": "stop",
+    "requested_events": 16,
+    "returned_indexes": [
+      0,
+      1,
+      2
+    ],
+    "request_sha256": "09b68c253170673a37632f2382a2fe253f823a771602e00e4d61117df941c0d2",
+    "note": "Compare the contemporaneous server salvage warning; valid JSON and finish=stop did not imply every input event was represented."
+  },
+  {
+    "at": "2026-10-10T21:55:11.687Z",
+    "capture_file": "captures/memory/003778.json",
+    "max_tokens": 16384,
+    "finish_reason": "stop",
+    "requested_events": 16,
+    "returned_indexes": [
+      0,
+      1
+    ],
+    "request_sha256": "025aedca704baba6aa9c8ccd4c88c65b6e030f87d253f9f218847f7ddd71e171",
+    "note": "Compare the contemporaneous server salvage warning; valid JSON and finish=stop did not imply every input event was represented."
+  }
+]

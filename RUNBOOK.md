@@ -178,3 +178,66 @@ and cache views. `results/` is git-ignored; copy it out, or tar
   double-counts, so use a fresh id for every run.
 - One attempt per task, no repeats: treat differences between harnesses as indicative, not
   as a ranking.
+
+# Memory smoke audit (issue #27)
+
+Run in an isolated benchmark worktree with the recursive OpenHuman pin. The
+20-question subset covers seven LongMemEval-S categories and thirteen LoCoMo
+questions. `memory/manifest.json` pins dataset/scorer revisions, SHA-256 hashes,
+seed and IDs. Raw datasets and generated transcripts stay local.
+
+```bash
+python3 memory/download.py
+python3 memory/prepare.py
+uv venv --python 3.12 memory/.venv
+uv pip install --python memory/.venv/bin/python nltk==3.9.2 regex==2025.9.18 numpy==2.3.3
+cargo build --locked --manifest-path memory/Cargo.toml
+node --test memory/*.test.mjs
+memory/.venv/bin/python -m unittest discover -s memory -p 'test_*.py'
+# OPENROUTER_API_KEY must already be in the environment; never paste it here.
+node memory/run.mjs memory27-glm53flash
+node memory/report.mjs results/memory27-glm53flash
+node memory/diagnose.mjs results/memory27-glm53flash
+# Only after the run has stopped: move full wire bodies to ignored captures.
+node memory/archive-captures.mjs results/memory27-glm53flash
+```
+
+The answer/extraction model is `z-ai/glm-5.3-flash`, pinned to Z.ai with low
+reasoning. The embedding model is `openai/text-embedding-3-small`; LongMemEval's
+official judge prompt uses the separate pinned `openai/gpt-4o-mini-2024-07-18`.
+LoCoMo uses the pinned upstream category-specific F1/abstention functions.
+Its F1 values are not binary answer accuracy.
+
+This measures direct transcript ingestion into the pinned TinyMemory engine
+and fresh-thread pre-turn recall. It does not establish desktop JSON-RPC
+wiring, scrubbing, the core's recall deadline, or an agent's choice to store.
+`reference-memory` is TinyMemory's deterministic reference engine, not a
+competitive hosted memory product. No-memory and full-context controls are
+labelled separately. CortexDB runs on a Docker internal network; only the
+gateway holds a real model credential. Each history has its own namespace;
+probe questions are removed before the next query.
+
+`results/<run>/meter.jsonl` records embeddings and model calls, tokens,
+reported cost and latency. The archive step retains wire pins and capture
+hashes in that file and moves request bodies and chat responses into local
+`captures/memory/`, matching the repository's existing capture policy.
+Embedding responses retain model/vector counts and metered usage; vector
+arrays are omitted. Response hashes describe the recorded JSON, including
+that summary for embeddings.
+`budget.json` reserves a conservative cost
+before each upstream call under a persistent **$10 global cap**, with provider
+price ceilings. In-flight calls, missing costs and failed calls retain their
+full reservation across restarts. Reuse the same run ID to resume and preserve
+the budget; run only one driver for that ID at a time. Creating a new ID starts
+a separate budget. Setup failures are
+saved as failures and never scored as memory misses. Inspect the packs, engine
+logs and discarded setup records before interpreting scores.
+If a native setup fails, use `--native-task <manifest-task-id>` to attempt a
+different remaining history under the same ledger; do not repeat failed
+ingestion without addressing its cause.
+
+Native runs require all receipt IDs to be readable and three quiet enrichment
+polls. Audit completed indexing batches with `memory/diagnose.mjs`: readable
+receipts and aggregate enrichment counters do not certify every turn's
+derived-index readiness. These native results are snapshots of that policy;
+desktop replay and an independent memory competitor remain to be added.

@@ -1,0 +1,125 @@
+{
+  "model": "z-ai/glm-5.3-flash",
+  "provider": "z-ai",
+  "reasoning": "low",
+  "judge": "openai/gpt-4o-mini-2024-07-18",
+  "native_task_limit": null,
+  "native_task_filter": "lme-078150f1",
+  "embedding": "openai/text-embedding-3-small",
+  "budget_usd": 10,
+  "mode": "direct-ingest/pre-turn; text plus supplied captions; default RecallPolicy",
+  "openhuman_sha": "43956eb27cfb3cd5e7e812d70835ff9e7bf20ed7",
+  "tinymemory_sha": "004763036e8ac6af36059ef5bcefed537d55a888",
+  "manifest": {
+    "seed": 27,
+    "pins": {
+      "longmemeval": "2ec2a557f339b6c0369619b1ed5793734cc87533",
+      "locomo": "3eb6f2c585f5e1699204e3c3bdf7adc5c28cb376",
+      "longmemeval_scorer": "9e0b455f4ef0e2ab8f2e582289761153549043fc"
+    },
+    "selection": "shortest-quartile LME stratified; LoCoMo dialogue 0 category round-robin; text plus supplied captions",
+    "sha256": {
+      "locomo-evaluate.py": "8e3be5d57ff2ff9ec5cd05939592f468c5f3f1fd95d13e431932bdf6bf0fd6fd",
+      "lme-evaluate.py": "ecce9c4c79dc89d99534ac17b383a5cbb5b9f0c69ee98adaf0684742e3d95251",
+      "longmemeval.json": "08d8dad4be43ee2049a22ff5674eb86725d0ce5ff434cde2627e5e8e7e117894",
+      "locomo.json": "79fa87e90f04081343b8c8debecb80a9a6842b76a7aa537dc9fdf651ea698ff4",
+      "LOCOMO-LICENSE": "41003d4a74749c0220e33dd415042164b5a1093ed401f36277234f772d22d3d0",
+      "LONGMEMEVAL-LICENSE": "d3c4b9aa54759df6ded337978a6f3b55b75615e5e4525c3b82d7e2627d4b9732"
+    },
+    "references_sha256": "1db3849aaa5130b974b5d5695a2e07cd0eb5f776a1080ce4c6dceba32f27de3a",
+    "tasks": [
+      {
+        "id": "lme-88432d0a-abs",
+        "sha256": "02c00327317a4fcb2775ae81d35bd470c287853b84895cd56524c915182ee416",
+        "dataset": "longmemeval",
+        "questions": [
+          "88432d0a_abs"
+        ],
+        "sessions": 47,
+        "turns": 510
+      },
+      {
+        "id": "lme-8fb83627",
+        "sha256": "ef4f0bfb18970040d0114f3185a766a2dbe2c59aa2a5b297ccf5ab4c320b1da3",
+        "dataset": "longmemeval",
+        "questions": [
+          "8fb83627"
+        ],
+        "sessions": 45,
+        "turns": 485
+      },
+      {
+        "id": "lme-078150f1",
+        "sha256": "e7851b31d728c00fb4635cddc6e5d0254b379de42501357e498fc9fc179de419",
+        "dataset": "longmemeval",
+        "questions": [
+          "078150f1"
+        ],
+        "sessions": 47,
+        "turns": 551
+      },
+      {
+        "id": "lme-561fabcd",
+        "sha256": "097b4cb0ba11b651d5e6bb6d472571004909b1cceb656fad8bc54ccda40c23d3",
+        "dataset": "longmemeval",
+        "questions": [
+          "561fabcd"
+        ],
+        "sessions": 50,
+        "turns": 495
+      },
+      {
+        "id": "lme-32260d93",
+        "sha256": "28becc238a3fab9e6e300b634948f57b9a611ae3563205914452447c3ed7a4e3",
+        "dataset": "longmemeval",
+        "questions": [
+          "32260d93"
+        ],
+        "sessions": 47,
+        "turns": 524
+      },
+      {
+        "id": "lme-3d86fd0a",
+        "sha256": "5d001a98f04a7b06e289b84a2b707ac2df8cd1a032dd6809e1d7ca65d45beab6",
+        "dataset": "longmemeval",
+        "questions": [
+          "3d86fd0a"
+        ],
+        "sessions": 57,
+        "turns": 526
+      },
+      {
+        "id": "lme-gpt4-fe651585",
+        "sha256": "56a333d67e87e7e5e4d02cdce4d32ee811e842e2621a18227428f037fce13b66",
+        "dataset": "longmemeval",
+        "questions": [
+          "gpt4_fe651585"
+        ],
+        "sessions": 50,
+        "turns": 471
+      },
+      {
+        "id": "locomo-0",
+        "sha256": "81fe97662c73abe55251858a06a45352947cd7ad4dbb100073c23f589700f4f9",
+        "dataset": "locomo",
+        "questions": [
+          "locomo-0-34",
+          "locomo-0-8",
+          "locomo-0-77",
+          "locomo-0-93",
+          "locomo-0-169",
+          "locomo-0-76",
+          "locomo-0-31",
+          "locomo-0-2",
+          "locomo-0-124",
+          "locomo-0-153",
+          "locomo-0-52",
+          "locomo-0-74",
+          "locomo-0-69"
+        ],
+        "sessions": 19,
+        "turns": 419
+      }
+    ]
+  }
+}

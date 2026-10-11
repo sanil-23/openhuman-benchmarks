@@ -1,0 +1,237 @@
+{
+  "engine": "cortexdb",
+  "enrichment": {
+    "jobs_completed_total": 256,
+    "jobs_pending": 0,
+    "jobs_queued_total": 256
+  },
+  "ingest_ms": 184822,
+  "mode": "direct-ingest/pre-turn",
+  "policy": {
+    "brain_limit": 6,
+    "budget_tokens": 1200,
+    "build_beliefs_every": 10,
+    "history_limit": 6,
+    "learnings_limit": 8,
+    "team_limit": 3
+  },
+  "probes": [
+    {
+      "context": {
+        "engine": "cortexdb",
+        "markdown": "# Memory\n\n## This agent's history\n\n- [2023-05-30 22:45] assistant: [session date: 2023/05/30 (Tue) 22:45] Thank you for your responses. Based on this interview, I would estimate your familiarity with the Fire-Eaters to be around 30%. You have shown some understanding of their political stance and region, but the specific historical context and their roles in shaping events are still unclear. The Fire-Eaters were a group of pro-slavery extremists in the United States in the mid-19th century, primarily from the South. They advocated for secession and played a significant role in the events leading up to the American Civil War.\n- [2023-05-30 22:45] assistant: [session date: 2023/05/30 (Tue) 22:45] 1. Do you think the Fire-Eaters were influential in shaping any particular policies or decisions during their time? If so, can you provide any examples?\n- [2023-05-30 22:45] assistant: [session date: 2023/05/30 (Tue) 22:45] 1. In which century do you think the Voynich Manuscript was created, and where do you think it might have originated from?\n- [2023-05-30 22:45] assistant: [session date: 2023/05/30 (Tue) 22:45] Of course, I'd be happy to interview you on the subject. Let's begin with some questions to gauge your familiarity with the historical context of the Fire-Eaters: 1. In what country and during which time period were the Fire-Eaters most active? 2. Can you explain the political stance of the Fire-Eaters and what they advocated for? 3. Were the Fire-Eaters a formal political party, a faction, or a loosely organized group of individuals? 4. Can you name any prominent individuals who were associated with the Fire-Eaters? 5. How…\n- [2023-05-30 18:41] user: [session date: 2023/05/30 (Tue) 18:41] Those meal ideas sound delicious! Do you have any suggestions for vegetarian snacks that are high in protein?\n- [2023-05-30 22:45] user: [session date: 2023/05/30 (Tue) 22:45] ok, now choose your own topic. it shoudl be something obscure - something almost no-one knows about, and interview me using the same rules as above\n\n## Team conversations\n\n- [2023-05-30 22:45] user: [session date: 2023/05/30 (Tue) 22:45] something to do with politics\n- [2023-05-30 22:45] user: [session date: 2023/05/30 (Tue) 22:45] conservative\n- [2023-05-30 22:45] user: [session date: 2023/05/30 (Tue) 22:45] not sure... maybe around the 20th century\n",
+        "refs": [
+          "96273928120a2cb7dde1b1c21301afbbf99cb8cb",
+          "272f6cdfaf376bcea61ce5ae0b35af3f50611ceb",
+          "4d956a3d4d36c7654f6c69af4a6b7b02df307ae7",
+          "67111e15c6ad00d186f0a8cde090af13d6fa0c2c",
+          "ac624bd79cc4f5dcccc998ee546676196d293a42",
+          "ee392c785fb63f47b1545e90d03567cc2c115f5e",
+          "c5aa1775a64d6ae2e93f386efa12ceb5aa5b375a",
+          "d57ab1e0d100d893993b8d14c4add509417f8229",
+          "fe0c877565622dde4e3dec6cc2d145a3d7f97449"
+        ],
+        "sections": [
+          {
+            "heading": "This agent's history",
+            "hits": [
+              {
+                "id": "96273928120a2cb7dde1b1c21301afbbf99cb8cb",
+                "kind": "conversation",
+                "meta": {
+                  "agent_id": "benchmark",
+                  "namespace": "project:bench-lme-32260d93/agent:benchmark",
+                  "observed_at": "2023-05-30T22:45:00Z",
+                  "source": {
+                    "kind": "agent"
+                  },
+                  "thread_id": "history-46",
+                  "turns": {
+                    "first": 17,
+                    "last": 17
+                  }
+                },
+                "score": 1,
+                "text": "assistant: [session date: 2023/05/30 (Tue) 22:45] Thank you for your responses. Based on this interview, I would estimate your familiarity with the Fire-Eaters to be around 30%. You have shown some understanding of their political stance and region, but the specific historical context and their roles in shaping events are still unclear. The Fire-Eaters were a group of pro-slavery extremists in the United States in the mid-19th century, primarily from the South. They advocated for secession and played a significant role in the events leading up to the American Civil War."
+              },
+              {
+                "id": "272f6cdfaf376bcea61ce5ae0b35af3f50611ceb",
+                "kind": "conversation",
+                "meta": {
+                  "agent_id": "benchmark",
+                  "namespace": "project:bench-lme-32260d93/agent:benchmark",
+                  "observed_at": "2023-05-30T22:45:00Z",
+                  "source": {
+                    "kind": "agent"
+                  },
+                  "thread_id": "history-46",
+                  "turns": {
+                    "first": 13,
+                    "last": 13
+                  }
+                },
+                "score": 0.5,
+                "text": "assistant: [session date: 2023/05/30 (Tue) 22:45] 1. Do you think the Fire-Eaters were influential in shaping any particular policies or decisions during their time? If so, can you provide any examples?"
+              },
+              {
+                "id": "4d956a3d4d36c7654f6c69af4a6b7b02df307ae7",
+                "kind": "conversation",
+                "meta": {
+                  "agent_id": "benchmark",
+                  "namespace": "project:bench-lme-32260d93/agent:benchmark",
+                  "observed_at": "2023-05-30T22:45:00Z",
+                  "source": {
+                    "kind": "agent"
+                  },
+                  "thread_id": "history-46",
+                  "turns": {
+                    "first": 23,
+                    "last": 23
+                  }
+                },
+                "score": 0.3333333432674408,
+                "text": "assistant: [session date: 2023/05/30 (Tue) 22:45] 1. In which century do you think the Voynich Manuscript was created, and where do you think it might have originated from?"
+              },
+              {
+                "id": "67111e15c6ad00d186f0a8cde090af13d6fa0c2c",
+                "kind": "conversation",
+                "meta": {
+                  "agent_id": "benchmark",
+                  "namespace": "project:bench-lme-32260d93/agent:benchmark",
+                  "observed_at": "2023-05-30T22:45:00Z",
+                  "source": {
+                    "kind": "agent"
+                  },
+                  "thread_id": "history-46",
+                  "turns": {
+                    "first": 1,
+                    "last": 1
+                  }
+                },
+                "score": 0.25,
+                "text": "assistant: [session date: 2023/05/30 (Tue) 22:45] Of course, I'd be happy to interview you on the subject. Let's begin with some questions to gauge your familiarity with the historical context of the Fire-Eaters:\n\n1. In what country and during which time period were the Fire-Eaters most active?\n2. Can you explain the political stance of the Fire-Eaters and what they advocated for?\n3. Were the Fire-Eaters a formal political party, a faction, or a loosely organized group of individuals?\n4. Can you name any prominent individuals who were associated with the Fire-Eaters?\n5. How did the Fire-Eaters contribute to the events leading up to the American Civil War?"
+              },
+              {
+                "id": "ac624bd79cc4f5dcccc998ee546676196d293a42",
+                "kind": "conversation",
+                "meta": {
+                  "agent_id": "benchmark",
+                  "namespace": "project:bench-lme-32260d93/agent:benchmark",
+                  "observed_at": "2023-05-30T18:41:00Z",
+                  "source": {
+                    "kind": "agent"
+                  },
+                  "thread_id": "history-45",
+                  "turns": {
+                    "first": 10,
+                    "last": 10
+                  }
+                },
+                "score": 0.20000000298023224,
+                "text": "user: [session date: 2023/05/30 (Tue) 18:41] Those meal ideas sound delicious! Do you have any suggestions for vegetarian snacks that are high in protein?"
+              },
+              {
+                "id": "ee392c785fb63f47b1545e90d03567cc2c115f5e",
+                "kind": "conversation",
+                "meta": {
+                  "agent_id": "benchmark",
+                  "namespace": "project:bench-lme-32260d93/agent:benchmark",
+                  "observed_at": "2023-05-30T22:45:00Z",
+                  "source": {
+                    "kind": "agent"
+                  },
+                  "thread_id": "history-46",
+                  "turns": {
+                    "first": 18,
+                    "last": 18
+                  }
+                },
+                "score": 0.1666666716337204,
+                "text": "user: [session date: 2023/05/30 (Tue) 22:45] ok, now choose your own topic. it shoudl be something obscure - something almost no-one knows about, and interview me using the same rules as above"
+              }
+            ]
+          },
+          {
+            "heading": "Team conversations",
+            "hits": [
+              {
+                "id": "c5aa1775a64d6ae2e93f386efa12ceb5aa5b375a",
+                "kind": "conversation",
+                "meta": {
+                  "agent_id": "benchmark",
+                  "namespace": "project:bench-lme-32260d93/agent:benchmark",
+                  "observed_at": "2023-05-30T22:45:00Z",
+                  "source": {
+                    "kind": "agent"
+                  },
+                  "thread_id": "history-46",
+                  "turns": {
+                    "first": 10,
+                    "last": 10
+                  }
+                },
+                "score": 0.1428571492433548,
+                "text": "user: [session date: 2023/05/30 (Tue) 22:45] something to do with politics"
+              },
+              {
+                "id": "d57ab1e0d100d893993b8d14c4add509417f8229",
+                "kind": "conversation",
+                "meta": {
+                  "agent_id": "benchmark",
+                  "namespace": "project:bench-lme-32260d93/agent:benchmark",
+                  "observed_at": "2023-05-30T22:45:00Z",
+                  "source": {
+                    "kind": "agent"
+                  },
+                  "thread_id": "history-46",
+                  "turns": {
+                    "first": 12,
+                    "last": 12
+                  }
+                },
+                "score": 0.125,
+                "text": "user: [session date: 2023/05/30 (Tue) 22:45] conservative"
+              },
+              {
+                "id": "fe0c877565622dde4e3dec6cc2d145a3d7f97449",
+                "kind": "conversation",
+                "meta": {
+                  "agent_id": "benchmark",
+                  "namespace": "project:bench-lme-32260d93/agent:benchmark",
+                  "observed_at": "2023-05-30T22:45:00Z",
+                  "source": {
+                    "kind": "agent"
+                  },
+                  "thread_id": "history-46",
+                  "turns": {
+                    "first": 6,
+                    "last": 6
+                  }
+                },
+                "score": 0.1111111119389534,
+                "text": "user: [session date: 2023/05/30 (Tue) 22:45] not sure... maybe around the 20th century"
+              }
+            ]
+          }
+        ],
+        "skipped": [
+          {
+            "heading": "Learnings",
+            "reason": "empty"
+          },
+          {
+            "heading": "Brain",
+            "reason": "empty"
+          }
+        ],
+        "tokens": 588
+      },
+      "id": "32260d93",
+      "log_error": null,
+      "pack": "# Memory\n\n## This agent's history\n\n- [2023-05-30 22:45] assistant: [session date: 2023/05/30 (Tue) 22:45] Thank you for your responses. Based on this interview, I would estimate your familiarity with the Fire-Eaters to be around 30%. You have shown some understanding of their political stance and region, but the specific historical context and their roles in shaping events are still unclear. The Fire-Eaters were a group of pro-slavery extremists in the United States in the mid-19th century, primarily from the South. They advocated for secession and played a significant role in the events leading up to the American Civil War.\n- [2023-05-30 22:45] assistant: [session date: 2023/05/30 (Tue) 22:45] 1. Do you think the Fire-Eaters were influential in shaping any particular policies or decisions during their time? If so, can you provide any examples?\n- [2023-05-30 22:45] assistant: [session date: 2023/05/30 (Tue) 22:45] 1. In which century do you think the Voynich Manuscript was created, and where do you think it might have originated from?\n- [2023-05-30 22:45] assistant: [session date: 2023/05/30 (Tue) 22:45] Of course, I'd be happy to interview you on the subject. Let's begin with some questions to gauge your familiarity with the historical context of the Fire-Eaters: 1. In what country and during which time period were the Fire-Eaters most active? 2. Can you explain the political stance of the Fire-Eaters and what they advocated for? 3. Were the Fire-Eaters a formal political party, a faction, or a loosely organized group of individuals? 4. Can you name any prominent individuals who were associated with the Fire-Eaters? 5. How…\n- [2023-05-30 18:41] user: [session date: 2023/05/30 (Tue) 18:41] Those meal ideas sound delicious! Do you have any suggestions for vegetarian snacks that are high in protein?\n- [2023-05-30 22:45] user: [session date: 2023/05/30 (Tue) 22:45] ok, now choose your own topic. it shoudl be something obscure - something almost no-one knows about, and interview me using the same rules as above\n\n## Team conversations\n\n- [2023-05-30 22:45] user: [session date: 2023/05/30 (Tue) 22:45] something to do with politics\n- [2023-05-30 22:45] user: [session date: 2023/05/30 (Tue) 22:45] conservative\n- [2023-05-30 22:45] user: [session date: 2023/05/30 (Tue) 22:45] not sure... maybe around the 20th century\n",
+      "query_ms": 924
+    }
+  ],
+  "stored_turns": 524,
+  "write_wait": "accepted; all receipt ids listed; enrichment quiet for three polls"
+}

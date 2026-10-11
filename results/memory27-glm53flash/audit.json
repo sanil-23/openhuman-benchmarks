@@ -1,0 +1,1692 @@
+{
+  "coverage": {
+    "expected_scores": 80,
+    "completed_scores": 79,
+    "complete": false,
+    "arms": [
+      "no-memory",
+      "full-context",
+      "reference-memory",
+      "oh-tinymemory-cortex-direct"
+    ]
+  },
+  "scores": {
+    "longmemeval/no-memory/abstention": {
+      "n": 1,
+      "sum": 1,
+      "empty_answers": 0,
+      "metric": "official-judge-prompt",
+      "mean": 1
+    },
+    "longmemeval/no-memory/ALL": {
+      "n": 7,
+      "sum": 1,
+      "empty_answers": 0,
+      "metric": "official-judge-prompt",
+      "mean": 0.14285714285714285
+    },
+    "longmemeval/full-context/abstention": {
+      "n": 1,
+      "sum": 1,
+      "empty_answers": 0,
+      "metric": "official-judge-prompt",
+      "mean": 1
+    },
+    "longmemeval/full-context/ALL": {
+      "n": 7,
+      "sum": 5,
+      "empty_answers": 0,
+      "metric": "official-judge-prompt",
+      "mean": 0.7142857142857143
+    },
+    "longmemeval/no-memory/knowledge-update": {
+      "n": 1,
+      "sum": 0,
+      "empty_answers": 0,
+      "metric": "official-judge-prompt",
+      "mean": 0
+    },
+    "longmemeval/full-context/knowledge-update": {
+      "n": 1,
+      "sum": 1,
+      "empty_answers": 0,
+      "metric": "official-judge-prompt",
+      "mean": 1
+    },
+    "longmemeval/no-memory/multi-session": {
+      "n": 1,
+      "sum": 0,
+      "empty_answers": 0,
+      "metric": "official-judge-prompt",
+      "mean": 0
+    },
+    "longmemeval/full-context/multi-session": {
+      "n": 1,
+      "sum": 0,
+      "empty_answers": 0,
+      "metric": "official-judge-prompt",
+      "mean": 0
+    },
+    "longmemeval/no-memory/single-session-assistant": {
+      "n": 1,
+      "sum": 0,
+      "empty_answers": 0,
+      "metric": "official-judge-prompt",
+      "mean": 0
+    },
+    "longmemeval/full-context/single-session-assistant": {
+      "n": 1,
+      "sum": 1,
+      "empty_answers": 0,
+      "metric": "official-judge-prompt",
+      "mean": 1
+    },
+    "longmemeval/no-memory/single-session-preference": {
+      "n": 1,
+      "sum": 0,
+      "empty_answers": 0,
+      "metric": "official-judge-prompt",
+      "mean": 0
+    },
+    "longmemeval/full-context/single-session-preference": {
+      "n": 1,
+      "sum": 0,
+      "empty_answers": 0,
+      "metric": "official-judge-prompt",
+      "mean": 0
+    },
+    "longmemeval/no-memory/single-session-user": {
+      "n": 1,
+      "sum": 0,
+      "empty_answers": 0,
+      "metric": "official-judge-prompt",
+      "mean": 0
+    },
+    "longmemeval/full-context/single-session-user": {
+      "n": 1,
+      "sum": 1,
+      "empty_answers": 0,
+      "metric": "official-judge-prompt",
+      "mean": 1
+    },
+    "longmemeval/no-memory/temporal-reasoning": {
+      "n": 1,
+      "sum": 0,
+      "empty_answers": 0,
+      "metric": "official-judge-prompt",
+      "mean": 0
+    },
+    "longmemeval/full-context/temporal-reasoning": {
+      "n": 1,
+      "sum": 1,
+      "empty_answers": 0,
+      "metric": "official-judge-prompt",
+      "mean": 1
+    },
+    "locomo/no-memory/1": {
+      "n": 3,
+      "sum": 0,
+      "empty_answers": 0,
+      "metric": "official-category-f1/abstention",
+      "mean": 0
+    },
+    "locomo/no-memory/ALL": {
+      "n": 13,
+      "sum": 2.4,
+      "empty_answers": 0,
+      "metric": "official-category-f1/abstention",
+      "mean": 0.1846153846153846
+    },
+    "locomo/no-memory/2": {
+      "n": 3,
+      "sum": 0,
+      "empty_answers": 0,
+      "metric": "official-category-f1/abstention",
+      "mean": 0
+    },
+    "locomo/no-memory/3": {
+      "n": 3,
+      "sum": 0.4,
+      "empty_answers": 0,
+      "metric": "official-category-f1/abstention",
+      "mean": 0.13333333333333333
+    },
+    "locomo/no-memory/4": {
+      "n": 2,
+      "sum": 0,
+      "empty_answers": 0,
+      "metric": "official-category-f1/abstention",
+      "mean": 0
+    },
+    "locomo/no-memory/5": {
+      "n": 2,
+      "sum": 2,
+      "empty_answers": 0,
+      "metric": "official-category-f1/abstention",
+      "mean": 1
+    },
+    "longmemeval/reference-memory/abstention": {
+      "n": 1,
+      "sum": 1,
+      "empty_answers": 0,
+      "metric": "official-judge-prompt",
+      "mean": 1
+    },
+    "longmemeval/reference-memory/ALL": {
+      "n": 7,
+      "sum": 3,
+      "empty_answers": 0,
+      "metric": "official-judge-prompt",
+      "mean": 0.42857142857142855
+    },
+    "longmemeval/reference-memory/knowledge-update": {
+      "n": 1,
+      "sum": 1,
+      "empty_answers": 0,
+      "metric": "official-judge-prompt",
+      "mean": 1
+    },
+    "longmemeval/reference-memory/multi-session": {
+      "n": 1,
+      "sum": 0,
+      "empty_answers": 0,
+      "metric": "official-judge-prompt",
+      "mean": 0
+    },
+    "longmemeval/reference-memory/single-session-assistant": {
+      "n": 1,
+      "sum": 0,
+      "empty_answers": 0,
+      "metric": "official-judge-prompt",
+      "mean": 0
+    },
+    "longmemeval/reference-memory/single-session-preference": {
+      "n": 1,
+      "sum": 0,
+      "empty_answers": 0,
+      "metric": "official-judge-prompt",
+      "mean": 0
+    },
+    "longmemeval/reference-memory/single-session-user": {
+      "n": 1,
+      "sum": 1,
+      "empty_answers": 0,
+      "metric": "official-judge-prompt",
+      "mean": 1
+    },
+    "longmemeval/reference-memory/temporal-reasoning": {
+      "n": 1,
+      "sum": 0,
+      "empty_answers": 0,
+      "metric": "official-judge-prompt",
+      "mean": 0
+    },
+    "locomo/full-context/1": {
+      "n": 3,
+      "sum": 0.5917211328976035,
+      "empty_answers": 0,
+      "metric": "official-category-f1/abstention",
+      "mean": 0.19724037763253452
+    },
+    "locomo/full-context/ALL": {
+      "n": 13,
+      "sum": 3.7059199723077443,
+      "empty_answers": 0,
+      "metric": "official-category-f1/abstention",
+      "mean": 0.2850707671005957
+    },
+    "locomo/full-context/2": {
+      "n": 3,
+      "sum": 0.7562927663734116,
+      "empty_answers": 0,
+      "metric": "official-category-f1/abstention",
+      "mean": 0.2520975887911372
+    },
+    "locomo/full-context/3": {
+      "n": 3,
+      "sum": 0.1419172932330827,
+      "empty_answers": 0,
+      "metric": "official-category-f1/abstention",
+      "mean": 0.047305764411027566
+    },
+    "locomo/full-context/4": {
+      "n": 2,
+      "sum": 0.21598877980364656,
+      "empty_answers": 0,
+      "metric": "official-category-f1/abstention",
+      "mean": 0.10799438990182328
+    },
+    "locomo/full-context/5": {
+      "n": 2,
+      "sum": 2,
+      "empty_answers": 0,
+      "metric": "official-category-f1/abstention",
+      "mean": 1
+    },
+    "locomo/reference-memory/1": {
+      "n": 3,
+      "sum": 0,
+      "empty_answers": 0,
+      "metric": "official-category-f1/abstention",
+      "mean": 0
+    },
+    "locomo/reference-memory/ALL": {
+      "n": 13,
+      "sum": 3.5256288156288154,
+      "empty_answers": 0,
+      "metric": "official-category-f1/abstention",
+      "mean": 0.27120221658683197
+    },
+    "locomo/reference-memory/2": {
+      "n": 3,
+      "sum": 0.8276923076923077,
+      "empty_answers": 0,
+      "metric": "official-category-f1/abstention",
+      "mean": 0.2758974358974359
+    },
+    "locomo/reference-memory/3": {
+      "n": 3,
+      "sum": 0.4757142857142857,
+      "empty_answers": 0,
+      "metric": "official-category-f1/abstention",
+      "mean": 0.15857142857142856
+    },
+    "locomo/reference-memory/4": {
+      "n": 2,
+      "sum": 0.2222222222222222,
+      "empty_answers": 0,
+      "metric": "official-category-f1/abstention",
+      "mean": 0.1111111111111111
+    },
+    "locomo/reference-memory/5": {
+      "n": 2,
+      "sum": 2,
+      "empty_answers": 0,
+      "metric": "official-category-f1/abstention",
+      "mean": 1
+    },
+    "locomo/oh-tinymemory-cortex-direct/1": {
+      "n": 3,
+      "sum": 0,
+      "empty_answers": 0,
+      "metric": "official-category-f1/abstention",
+      "mean": 0
+    },
+    "locomo/oh-tinymemory-cortex-direct/ALL": {
+      "n": 13,
+      "sum": 2.8841269841269845,
+      "empty_answers": 0,
+      "metric": "official-category-f1/abstention",
+      "mean": 0.2218559218559219
+    },
+    "locomo/oh-tinymemory-cortex-direct/2": {
+      "n": 3,
+      "sum": 0.2857142857142857,
+      "empty_answers": 0,
+      "metric": "official-category-f1/abstention",
+      "mean": 0.09523809523809523
+    },
+    "locomo/oh-tinymemory-cortex-direct/3": {
+      "n": 3,
+      "sum": 0.4555555555555556,
+      "empty_answers": 0,
+      "metric": "official-category-f1/abstention",
+      "mean": 0.15185185185185188
+    },
+    "locomo/oh-tinymemory-cortex-direct/4": {
+      "n": 2,
+      "sum": 0.14285714285714288,
+      "empty_answers": 0,
+      "metric": "official-category-f1/abstention",
+      "mean": 0.07142857142857144
+    },
+    "locomo/oh-tinymemory-cortex-direct/5": {
+      "n": 2,
+      "sum": 2,
+      "empty_answers": 0,
+      "metric": "official-category-f1/abstention",
+      "mean": 1
+    },
+    "longmemeval/oh-tinymemory-cortex-direct/temporal-reasoning": {
+      "n": 1,
+      "sum": 0,
+      "empty_answers": 0,
+      "metric": "official-judge-prompt",
+      "mean": 0
+    },
+    "longmemeval/oh-tinymemory-cortex-direct/ALL": {
+      "n": 6,
+      "sum": 3,
+      "empty_answers": 0,
+      "metric": "official-judge-prompt",
+      "mean": 0.5
+    },
+    "longmemeval/oh-tinymemory-cortex-direct/knowledge-update": {
+      "n": 1,
+      "sum": 1,
+      "empty_answers": 0,
+      "metric": "official-judge-prompt",
+      "mean": 1
+    },
+    "longmemeval/oh-tinymemory-cortex-direct/single-session-assistant": {
+      "n": 1,
+      "sum": 0,
+      "empty_answers": 0,
+      "metric": "official-judge-prompt",
+      "mean": 0
+    },
+    "longmemeval/oh-tinymemory-cortex-direct/abstention": {
+      "n": 1,
+      "sum": 1,
+      "empty_answers": 0,
+      "metric": "official-judge-prompt",
+      "mean": 1
+    },
+    "longmemeval/oh-tinymemory-cortex-direct/single-session-preference": {
+      "n": 1,
+      "sum": 0,
+      "empty_answers": 0,
+      "metric": "official-judge-prompt",
+      "mean": 0
+    },
+    "longmemeval/oh-tinymemory-cortex-direct/multi-session": {
+      "n": 1,
+      "sum": 1,
+      "empty_answers": 0,
+      "metric": "official-judge-prompt",
+      "mean": 1
+    }
+  },
+  "matched_scores": {
+    "longmemeval/no-memory": {
+      "n": 6,
+      "metric": "official-judge-prompt",
+      "mean": 0.16666666666666666
+    },
+    "longmemeval/full-context": {
+      "n": 6,
+      "metric": "official-judge-prompt",
+      "mean": 0.6666666666666666
+    },
+    "longmemeval/reference-memory": {
+      "n": 6,
+      "metric": "official-judge-prompt",
+      "mean": 0.3333333333333333
+    },
+    "longmemeval/oh-tinymemory-cortex-direct": {
+      "n": 6,
+      "metric": "official-judge-prompt",
+      "mean": 0.5
+    },
+    "locomo/no-memory": {
+      "n": 13,
+      "metric": "official-category-f1/abstention",
+      "mean": 0.1846153846153846
+    },
+    "locomo/full-context": {
+      "n": 13,
+      "metric": "official-category-f1/abstention",
+      "mean": 0.2850707671005957
+    },
+    "locomo/reference-memory": {
+      "n": 13,
+      "metric": "official-category-f1/abstention",
+      "mean": 0.27120221658683197
+    },
+    "locomo/oh-tinymemory-cortex-direct": {
+      "n": 13,
+      "metric": "official-category-f1/abstention",
+      "mean": 0.2218559218559219
+    }
+  },
+  "calls": {
+    "extraction-probe": {
+      "n": 3,
+      "reported_cost_usd": 0.00014440999999999998,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 423,
+      "completion_tokens": 208,
+      "p50_ms": 1955,
+      "p95_ms": 3022
+    },
+    "no-memory/88432d0a_abs": {
+      "n": 1,
+      "reported_cost_usd": 0.0000162,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 78,
+      "completion_tokens": 9,
+      "p50_ms": 1093,
+      "p95_ms": 1093
+    },
+    "judge": {
+      "n": 34,
+      "reported_cost_usd": 0.0008170499999999999,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 5303,
+      "completion_tokens": 36,
+      "p50_ms": 671,
+      "p95_ms": 849
+    },
+    "full-context/88432d0a_abs": {
+      "n": 1,
+      "reported_cost_usd": 0.0158712,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 105768,
+      "completion_tokens": 12,
+      "p50_ms": 9438,
+      "p95_ms": 9438
+    },
+    "reference-memory/88432d0a_abs": {
+      "n": 2,
+      "reported_cost_usd": 0.00020082,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 1350,
+      "completion_tokens": 12,
+      "p50_ms": 1219,
+      "p95_ms": 1250
+    },
+    "no-memory/8fb83627": {
+      "n": 1,
+      "reported_cost_usd": 0.0000141,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 74,
+      "completion_tokens": 6,
+      "p50_ms": 1091,
+      "p95_ms": 1091
+    },
+    "full-context/8fb83627": {
+      "n": 1,
+      "reported_cost_usd": 0.01562465,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 103991,
+      "completion_tokens": 52,
+      "p50_ms": 9730,
+      "p95_ms": 9730
+    },
+    "reference-memory/8fb83627": {
+      "n": 2,
+      "reported_cost_usd": 0.00022132,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 1380,
+      "completion_tokens": 44,
+      "p50_ms": 1993,
+      "p95_ms": 2734
+    },
+    "no-memory/078150f1": {
+      "n": 1,
+      "reported_cost_usd": 0.000016,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 80,
+      "completion_tokens": 8,
+      "p50_ms": 1171,
+      "p95_ms": 1171
+    },
+    "full-context/078150f1": {
+      "n": 1,
+      "reported_cost_usd": 0.0156183,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 104042,
+      "completion_tokens": 24,
+      "p50_ms": 8293,
+      "p95_ms": 8293
+    },
+    "reference-memory/078150f1": {
+      "n": 2,
+      "reported_cost_usd": 0.00019606999999999998,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 1325,
+      "completion_tokens": 10,
+      "p50_ms": 1286,
+      "p95_ms": 1430
+    },
+    "no-memory/561fabcd": {
+      "n": 1,
+      "reported_cost_usd": 0.00001845,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 93,
+      "completion_tokens": 9,
+      "p50_ms": 1160,
+      "p95_ms": 1160
+    },
+    "full-context/561fabcd": {
+      "n": 1,
+      "reported_cost_usd": 0.0158213,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 105272,
+      "completion_tokens": 61,
+      "p50_ms": 8678,
+      "p95_ms": 8678
+    },
+    "reference-memory/561fabcd": {
+      "n": 3,
+      "reported_cost_usd": 0.00019577,
+      "unpriced": 1,
+      "errors": 1,
+      "prompt_tokens": 1213,
+      "completion_tokens": 43,
+      "p50_ms": 1076,
+      "p95_ms": 2798
+    },
+    "no-memory/32260d93": {
+      "n": 1,
+      "reported_cost_usd": 0.0000159,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 76,
+      "completion_tokens": 9,
+      "p50_ms": 1186,
+      "p95_ms": 1186
+    },
+    "full-context/32260d93": {
+      "n": 1,
+      "reported_cost_usd": 0.015754,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 103810,
+      "completion_tokens": 365,
+      "p50_ms": 14614,
+      "p95_ms": 14614
+    },
+    "reference-memory/32260d93": {
+      "n": 2,
+      "reported_cost_usd": 0.00017711999999999998,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 1192,
+      "completion_tokens": 12,
+      "p50_ms": 1044,
+      "p95_ms": 1588
+    },
+    "no-memory/3d86fd0a": {
+      "n": 1,
+      "reported_cost_usd": 0.00001535,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 69,
+      "completion_tokens": 10,
+      "p50_ms": 1202,
+      "p95_ms": 1202
+    },
+    "full-context/3d86fd0a": {
+      "n": 1,
+      "reported_cost_usd": 0.01589325,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 105895,
+      "completion_tokens": 18,
+      "p50_ms": 8068,
+      "p95_ms": 8068
+    },
+    "reference-memory/3d86fd0a": {
+      "n": 2,
+      "reported_cost_usd": 0.00019567,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 1279,
+      "completion_tokens": 23,
+      "p50_ms": 1314,
+      "p95_ms": 1473
+    },
+    "no-memory/gpt4_fe651585": {
+      "n": 1,
+      "reported_cost_usd": 0.00001345,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 73,
+      "completion_tokens": 5,
+      "p50_ms": 1201,
+      "p95_ms": 1201
+    },
+    "full-context/gpt4_fe651585": {
+      "n": 1,
+      "reported_cost_usd": 0.0155712,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 103618,
+      "completion_tokens": 57,
+      "p50_ms": 8226,
+      "p95_ms": 8226
+    },
+    "reference-memory/gpt4_fe651585": {
+      "n": 2,
+      "reported_cost_usd": 0.00019622,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 1126,
+      "completion_tokens": 70,
+      "p50_ms": 1190,
+      "p95_ms": 2727
+    },
+    "no-memory/locomo-0-34": {
+      "n": 1,
+      "reported_cost_usd": 0.0000139,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 56,
+      "completion_tokens": 11,
+      "p50_ms": 1677,
+      "p95_ms": 1677
+    },
+    "no-memory/locomo-0-8": {
+      "n": 1,
+      "reported_cost_usd": 0.0000134,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 56,
+      "completion_tokens": 10,
+      "p50_ms": 1259,
+      "p95_ms": 1259
+    },
+    "no-memory/locomo-0-77": {
+      "n": 1,
+      "reported_cost_usd": 0.00001325,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 55,
+      "completion_tokens": 10,
+      "p50_ms": 1341,
+      "p95_ms": 1341
+    },
+    "no-memory/locomo-0-93": {
+      "n": 1,
+      "reported_cost_usd": 0.0000111,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 54,
+      "completion_tokens": 6,
+      "p50_ms": 1214,
+      "p95_ms": 1214
+    },
+    "no-memory/locomo-0-169": {
+      "n": 1,
+      "reported_cost_usd": 0.0000139,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 56,
+      "completion_tokens": 11,
+      "p50_ms": 1179,
+      "p95_ms": 1179
+    },
+    "no-memory/locomo-0-76": {
+      "n": 1,
+      "reported_cost_usd": 0.0000137,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 58,
+      "completion_tokens": 10,
+      "p50_ms": 1498,
+      "p95_ms": 1498
+    },
+    "no-memory/locomo-0-31": {
+      "n": 2,
+      "reported_cost_usd": 0.0000242,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 108,
+      "completion_tokens": 16,
+      "p50_ms": 1611,
+      "p95_ms": 1673
+    },
+    "no-memory/locomo-0-2": {
+      "n": 1,
+      "reported_cost_usd": 0.00001385,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 59,
+      "completion_tokens": 10,
+      "p50_ms": 1178,
+      "p95_ms": 1178
+    },
+    "no-memory/locomo-0-124": {
+      "n": 1,
+      "reported_cost_usd": 0.0000128,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 52,
+      "completion_tokens": 10,
+      "p50_ms": 1526,
+      "p95_ms": 1526
+    },
+    "no-memory/locomo-0-153": {
+      "n": 1,
+      "reported_cost_usd": 0.00001385,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 59,
+      "completion_tokens": 10,
+      "p50_ms": 1510,
+      "p95_ms": 1510
+    },
+    "no-memory/locomo-0-52": {
+      "n": 1,
+      "reported_cost_usd": 0.0000131,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 54,
+      "completion_tokens": 10,
+      "p50_ms": 1159,
+      "p95_ms": 1159
+    },
+    "no-memory/locomo-0-74": {
+      "n": 1,
+      "reported_cost_usd": 0.00001305,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 57,
+      "completion_tokens": 9,
+      "p50_ms": 1275,
+      "p95_ms": 1275
+    },
+    "no-memory/locomo-0-69": {
+      "n": 1,
+      "reported_cost_usd": 0.00001375,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 55,
+      "completion_tokens": 11,
+      "p50_ms": 1414,
+      "p95_ms": 1414
+    },
+    "full-context/locomo-0-34": {
+      "n": 1,
+      "reported_cost_usd": 0.0029264,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 18776,
+      "completion_tokens": 220,
+      "p50_ms": 4923,
+      "p95_ms": 4923
+    },
+    "full-context/locomo-0-8": {
+      "n": 1,
+      "reported_cost_usd": 0.00059516,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 18776,
+      "completion_tokens": 58,
+      "p50_ms": 2415,
+      "p95_ms": 2415
+    },
+    "full-context/locomo-0-77": {
+      "n": 1,
+      "reported_cost_usd": 0.00060751,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 18775,
+      "completion_tokens": 83,
+      "p50_ms": 2757,
+      "p95_ms": 2757
+    },
+    "full-context/locomo-0-93": {
+      "n": 1,
+      "reported_cost_usd": 0.00058586,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 18774,
+      "completion_tokens": 40,
+      "p50_ms": 1857,
+      "p95_ms": 1857
+    },
+    "full-context/locomo-0-169": {
+      "n": 1,
+      "reported_cost_usd": 0.00058516,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 18776,
+      "completion_tokens": 38,
+      "p50_ms": 1936,
+      "p95_ms": 1936
+    },
+    "full-context/locomo-0-76": {
+      "n": 1,
+      "reported_cost_usd": 0.00060696,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 18778,
+      "completion_tokens": 81,
+      "p50_ms": 2769,
+      "p95_ms": 2769
+    },
+    "full-context/locomo-0-31": {
+      "n": 1,
+      "reported_cost_usd": 0.00060886,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 18774,
+      "completion_tokens": 86,
+      "p50_ms": 3032,
+      "p95_ms": 3032
+    },
+    "full-context/locomo-0-2": {
+      "n": 1,
+      "reported_cost_usd": 0.00059211,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 18779,
+      "completion_tokens": 51,
+      "p50_ms": 2234,
+      "p95_ms": 2234
+    },
+    "full-context/locomo-0-124": {
+      "n": 1,
+      "reported_cost_usd": 0.00060156,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 18772,
+      "completion_tokens": 72,
+      "p50_ms": 2841,
+      "p95_ms": 2841
+    },
+    "full-context/locomo-0-153": {
+      "n": 1,
+      "reported_cost_usd": 0.00059811,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 18779,
+      "completion_tokens": 63,
+      "p50_ms": 2778,
+      "p95_ms": 2778
+    },
+    "full-context/locomo-0-52": {
+      "n": 1,
+      "reported_cost_usd": 0.00057936,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 18774,
+      "completion_tokens": 27,
+      "p50_ms": 2214,
+      "p95_ms": 2214
+    },
+    "full-context/locomo-0-74": {
+      "n": 1,
+      "reported_cost_usd": 0.00059231,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 18777,
+      "completion_tokens": 52,
+      "p50_ms": 2271,
+      "p95_ms": 2271
+    },
+    "full-context/locomo-0-69": {
+      "n": 1,
+      "reported_cost_usd": 0.00066301,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 18775,
+      "completion_tokens": 194,
+      "p50_ms": 4884,
+      "p95_ms": 4884
+    },
+    "reference-memory/locomo-0-34": {
+      "n": 1,
+      "reported_cost_usd": 0.0001814,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 916,
+      "completion_tokens": 88,
+      "p50_ms": 2426,
+      "p95_ms": 2426
+    },
+    "reference-memory/locomo-0-8": {
+      "n": 1,
+      "reported_cost_usd": 0.00016155,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 917,
+      "completion_tokens": 48,
+      "p50_ms": 1938,
+      "p95_ms": 1938
+    },
+    "reference-memory/locomo-0-77": {
+      "n": 1,
+      "reported_cost_usd": 0.00012435,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 809,
+      "completion_tokens": 6,
+      "p50_ms": 1109,
+      "p95_ms": 1109
+    },
+    "reference-memory/locomo-0-93": {
+      "n": 1,
+      "reported_cost_usd": 0.00014135,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 899,
+      "completion_tokens": 13,
+      "p50_ms": 1447,
+      "p95_ms": 1447
+    },
+    "reference-memory/locomo-0-169": {
+      "n": 1,
+      "reported_cost_usd": 0.00013855,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 887,
+      "completion_tokens": 11,
+      "p50_ms": 1291,
+      "p95_ms": 1291
+    },
+    "reference-memory/locomo-0-76": {
+      "n": 1,
+      "reported_cost_usd": 0.0001555,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 950,
+      "completion_tokens": 26,
+      "p50_ms": 1560,
+      "p95_ms": 1560
+    },
+    "reference-memory/locomo-0-31": {
+      "n": 1,
+      "reported_cost_usd": 0.00016715,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 931,
+      "completion_tokens": 55,
+      "p50_ms": 2223,
+      "p95_ms": 2223
+    },
+    "reference-memory/locomo-0-2": {
+      "n": 1,
+      "reported_cost_usd": 0.00018315,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 961,
+      "completion_tokens": 78,
+      "p50_ms": 2521,
+      "p95_ms": 2521
+    },
+    "reference-memory/locomo-0-124": {
+      "n": 1,
+      "reported_cost_usd": 0.0001153,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 702,
+      "completion_tokens": 20,
+      "p50_ms": 1425,
+      "p95_ms": 1425
+    },
+    "reference-memory/locomo-0-153": {
+      "n": 1,
+      "reported_cost_usd": 0.00015395,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 923,
+      "completion_tokens": 31,
+      "p50_ms": 1494,
+      "p95_ms": 1494
+    },
+    "reference-memory/locomo-0-52": {
+      "n": 1,
+      "reported_cost_usd": 0.00009967,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 599,
+      "completion_tokens": 35,
+      "p50_ms": 1865,
+      "p95_ms": 1865
+    },
+    "reference-memory/locomo-0-74": {
+      "n": 1,
+      "reported_cost_usd": 0.00014795,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 873,
+      "completion_tokens": 34,
+      "p50_ms": 1469,
+      "p95_ms": 1469
+    },
+    "reference-memory/locomo-0-69": {
+      "n": 1,
+      "reported_cost_usd": 0.00014585,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 719,
+      "completion_tokens": 76,
+      "p50_ms": 2314,
+      "p95_ms": 2314
+    },
+    "memory-background": {
+      "n": 9228,
+      "reported_cost_usd": 1.9277230499999989,
+      "unpriced": 6,
+      "errors": 6,
+      "prompt_tokens": 11796923,
+      "completion_tokens": 2636887,
+      "p50_ms": 2459,
+      "p95_ms": 14161
+    },
+    "ablation-budget2400": {
+      "n": 1,
+      "reported_cost_usd": 0.0002517,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 1418,
+      "completion_tokens": 78,
+      "p50_ms": 2606,
+      "p95_ms": 2606
+    },
+    "ablation-judge": {
+      "n": 1,
+      "reported_cost_usd": 0.0000321,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 210,
+      "completion_tokens": 1,
+      "p50_ms": 689,
+      "p95_ms": 689
+    },
+    "cortex/locomo-0-34": {
+      "n": 1,
+      "reported_cost_usd": 0.00018315,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 1201,
+      "completion_tokens": 6,
+      "p50_ms": 1082,
+      "p95_ms": 1082
+    },
+    "cortex/locomo-0-8": {
+      "n": 1,
+      "reported_cost_usd": 0.00018105,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 1027,
+      "completion_tokens": 54,
+      "p50_ms": 1967,
+      "p95_ms": 1967
+    },
+    "cortex/locomo-0-77": {
+      "n": 1,
+      "reported_cost_usd": 0.00013255,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 867,
+      "completion_tokens": 5,
+      "p50_ms": 1540,
+      "p95_ms": 1540
+    },
+    "cortex/locomo-0-93": {
+      "n": 1,
+      "reported_cost_usd": 0.000186,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 1170,
+      "completion_tokens": 21,
+      "p50_ms": 1635,
+      "p95_ms": 1635
+    },
+    "cortex/locomo-0-169": {
+      "n": 1,
+      "reported_cost_usd": 0.00017654,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 1186,
+      "completion_tokens": 28,
+      "p50_ms": 1692,
+      "p95_ms": 1692
+    },
+    "cortex/locomo-0-76": {
+      "n": 1,
+      "reported_cost_usd": 0.00013335,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 869,
+      "completion_tokens": 6,
+      "p50_ms": 1208,
+      "p95_ms": 1208
+    },
+    "cortex/locomo-0-31": {
+      "n": 1,
+      "reported_cost_usd": 0.00018565,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 981,
+      "completion_tokens": 77,
+      "p50_ms": 2722,
+      "p95_ms": 2722
+    },
+    "cortex/locomo-0-2": {
+      "n": 1,
+      "reported_cost_usd": 0.00017754,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 1136,
+      "completion_tokens": 45,
+      "p50_ms": 2105,
+      "p95_ms": 2105
+    },
+    "cortex/locomo-0-124": {
+      "n": 1,
+      "reported_cost_usd": 0.00011784,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 868,
+      "completion_tokens": 6,
+      "p50_ms": 1946,
+      "p95_ms": 1946
+    },
+    "cortex/locomo-0-153": {
+      "n": 1,
+      "reported_cost_usd": 0.00015254,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 1016,
+      "completion_tokens": 31,
+      "p50_ms": 1538,
+      "p95_ms": 1538
+    },
+    "cortex/locomo-0-52": {
+      "n": 1,
+      "reported_cost_usd": 0.00011394,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 842,
+      "completion_tokens": 6,
+      "p50_ms": 2309,
+      "p95_ms": 2309
+    },
+    "cortex/locomo-0-74": {
+      "n": 1,
+      "reported_cost_usd": 0.00011629,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 861,
+      "completion_tokens": 5,
+      "p50_ms": 1273,
+      "p95_ms": 1273
+    },
+    "cortex/locomo-0-69": {
+      "n": 1,
+      "reported_cost_usd": 0.00016864,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 1020,
+      "completion_tokens": 62,
+      "p50_ms": 2372,
+      "p95_ms": 2372
+    },
+    "cortex/gpt4_fe651585": {
+      "n": 1,
+      "reported_cost_usd": 0.0001299,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 846,
+      "completion_tokens": 6,
+      "p50_ms": 1537,
+      "p95_ms": 1537
+    },
+    "cortex/8fb83627": {
+      "n": 1,
+      "reported_cost_usd": 0.0001924,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 1196,
+      "completion_tokens": 26,
+      "p50_ms": 2661,
+      "p95_ms": 2661
+    },
+    "cortex/561fabcd": {
+      "n": 1,
+      "reported_cost_usd": 0.00019645,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 1103,
+      "completion_tokens": 62,
+      "p50_ms": 1913,
+      "p95_ms": 1913
+    },
+    "cortex/88432d0a_abs": {
+      "n": 1,
+      "reported_cost_usd": 0.00015225,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 995,
+      "completion_tokens": 6,
+      "p50_ms": 1096,
+      "p95_ms": 1096
+    },
+    "cortex/32260d93": {
+      "n": 1,
+      "reported_cost_usd": 0.00011515,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 751,
+      "completion_tokens": 5,
+      "p50_ms": 1234,
+      "p95_ms": 1234
+    },
+    "cortex/078150f1": {
+      "n": 1,
+      "reported_cost_usd": 0.0001922,
+      "unpriced": 0,
+      "errors": 0,
+      "prompt_tokens": 1218,
+      "completion_tokens": 19,
+      "p50_ms": 1366,
+      "p95_ms": 1366
+    }
+  },
+  "retrievals": [
+    {
+      "file": "diagnostic-561fabcd-reference.json",
+      "engine": "reference",
+      "error": null,
+      "stored_turns": 495,
+      "ingest_ms": 10887,
+      "write_wait": "accepted; all receipt ids listed; enrichment quiet for three polls",
+      "query_count": 1,
+      "query_p50_ms": 860,
+      "query_p95_ms": 860,
+      "over_core_default_1500ms": 0,
+      "skipped": [
+        {
+          "id": "561fabcd",
+          "heading": "Learnings",
+          "reason": "empty"
+        },
+        {
+          "id": "561fabcd",
+          "heading": "Brain",
+          "reason": "empty"
+        }
+      ]
+    },
+    {
+      "file": "initial-shared-lme-gpt4-fe651585-cortex.json",
+      "engine": "cortex",
+      "error": "Command failed: /home/enamakel/work/openhuman-benchmarks/worktrees/memory-27-glm53flash/memory/target/debug/memory-bench cortex /home/enamakel/work/openhuman-benchmarks/worktrees/memory-27-glm53flash/memory/data/lme-gpt4-fe651585.json\n\"lme-gpt4-fe651585\" session 1/50; 12 turns\n\"lme-gpt4-fe651585\" session 2/50; 24 turns\n\"lme-gpt4-fe651585\" session 3/50; 38 turns\n\"lme-gpt4-fe651585\" session 4/50; 50 turns\n\"lme-gpt4-fe651585\" session 5/50; 71 turns\n\"lme-gpt4-fe651585\" session 6/50; 83 turns\n\"lme-gpt4-fe651585\" session 7/50; 95 turns\n\"lme-gpt4-fe651585\" session 8/50; 107 turns\n\"lme-gpt4-fe651585\" session 9/50; 119 turns\n\"lme-gpt4-fe651585\" session 10/50; 131 turns\n\"lme-gpt4-fe651585\" session 11/50; 133 turns\n\"lme-gpt4-fe651585\" session 12/50; 135 turns\n\"lme-gpt4-fe651585\" session 13/50; 145 turns\n\"lme-gpt4-fe651585\" session 14/50; 157 turns\n\"lme-gpt4-fe651585\" session 15/50; 161 turns\n\"lme-gpt4-fe651585\" session 16/50; 173 turns\n\"lme-gpt4-fe651585\" session 17/50; 175 turns\n\"lme-gpt4-fe651585\" session 18/50; 183 turns\n\"lme-gpt4-fe651585\" session 19/50; 195 turns\n\"lme-gpt4-fe651585\" session 20/50; 207 turns\n\"lme-gpt4-fe651585\" session 21/50; 215 turns\n\"lme-gpt4-fe651585\" session 22/50; 217 turns\n\"lme-gpt4-fe651585\" session 23/50; 225 turns\n\"lme-gpt4-fe651585\" session 24/50; 237 turns\n\"lme-gpt4-fe651585\" session 25/50; 237 turns\n\"lme-gpt4-fe651585\" session 26/50; 243 turns\n\"lme-gpt4-fe651585\" session 27/50; 255 turns\n\"lme-gpt4-fe651585\" session 28/50; 267 turns\n\"lme-gpt4-fe651585\" session 29/50; 275 turns\n\"lme-gpt4-fe651585\" session 30/50; 279 turns\n\"lme-gpt4-fe651585\" session 31/50; 291 turns\n\"lme-gpt4-fe651585\" session 32/50; 303 turns\n\"lme-gpt4-fe651585\" session 33/50; 315 turns\n\"lme-gpt4-fe651585\" session 34/50; 327 turns\n\"lme-gpt4-fe651585\" session 35/50; 339 turns\n\"lme-gpt4-fe651585\" session 36/50; 345 turns\n\"lme-gpt4-fe651585\" session 37/50; 357 turns\n\"lme-gpt4-fe651585\" session 38/50; 371 turns\n\"lme-gpt4-fe651585\" session 39/50; 383 turns\n\"lme-gpt4-fe651585\" session 40/50; 390 turns\n\"lme-gpt4-fe651585\" session 41/50; 400 turns\n\"lme-gpt4-fe651585\" session 42/50; 412 turns\n\"lme-gpt4-fe651585\" session 43/50; 418 turns\n\"lme-gpt4-fe651585\" session 44/50; 430 turns\n\"lme-gpt4-fe651585\" session 45/50; 430 turns\n\"lme-gpt4-fe651585\" session 46/50; 442 turns\n\"lme-gpt4-fe651585\" session 47/50; 449 turns\n\"lme-gpt4-fe651585\" session 48/50; 451 turns\n\"lme-gpt4-fe651585\" session 49/50; 463 turns\n\"lme-gpt4-fe651585\" session 50/50; 471 turns\nError: \"enrichment failed to drain: {\\\"jobs_completed_total\\\":957,\\\"jobs_pending\\\":16,\\\"jobs_queued_total\\\":973}\"\n",
+      "write_wait": "visible writes; enrichment not explicitly settled",
+      "query_count": 0,
+      "query_p50_ms": null,
+      "query_p95_ms": null,
+      "over_core_default_1500ms": 0,
+      "skipped": []
+    },
+    {
+      "file": "lme-078150f1-cortex.json",
+      "engine": "cortexdb",
+      "error": null,
+      "stored_turns": 551,
+      "ingest_ms": 255738,
+      "write_wait": "accepted; all receipt ids listed; enrichment quiet for three polls",
+      "query_count": 1,
+      "query_p50_ms": 1428,
+      "query_p95_ms": 1428,
+      "over_core_default_1500ms": 0,
+      "skipped": [
+        {
+          "id": "078150f1",
+          "heading": "Brain",
+          "reason": "empty"
+        }
+      ]
+    },
+    {
+      "file": "lme-078150f1-reference.json",
+      "engine": "reference",
+      "error": null,
+      "stored_turns": 551,
+      "ingest_ms": 16069,
+      "write_wait": "visible writes; enrichment not explicitly settled",
+      "query_count": 1,
+      "query_p50_ms": 1393,
+      "query_p95_ms": 1393,
+      "over_core_default_1500ms": 0,
+      "skipped": []
+    },
+    {
+      "file": "lme-32260d93-cortex.json",
+      "engine": "cortexdb",
+      "error": null,
+      "stored_turns": 524,
+      "ingest_ms": 184822,
+      "write_wait": "accepted; all receipt ids listed; enrichment quiet for three polls",
+      "query_count": 1,
+      "query_p50_ms": 924,
+      "query_p95_ms": 924,
+      "over_core_default_1500ms": 0,
+      "skipped": [
+        {
+          "id": "32260d93",
+          "heading": "Learnings",
+          "reason": "empty"
+        },
+        {
+          "id": "32260d93",
+          "heading": "Brain",
+          "reason": "empty"
+        }
+      ]
+    },
+    {
+      "file": "lme-32260d93-reference.json",
+      "engine": "reference",
+      "error": null,
+      "stored_turns": 524,
+      "ingest_ms": 13878,
+      "write_wait": "visible writes; enrichment not explicitly settled",
+      "query_count": 1,
+      "query_p50_ms": 734,
+      "query_p95_ms": 734,
+      "over_core_default_1500ms": 0,
+      "skipped": [
+        {
+          "id": "32260d93",
+          "heading": "Learnings",
+          "reason": "empty"
+        },
+        {
+          "id": "32260d93",
+          "heading": "Brain",
+          "reason": "empty"
+        }
+      ]
+    },
+    {
+      "file": "lme-3d86fd0a-cortex.json",
+      "engine": "cortex",
+      "error": "Command failed: /home/enamakel/work/openhuman-benchmarks/worktrees/memory-27-glm53flash/memory/target/debug/memory-bench cortex /home/enamakel/work/openhuman-benchmarks/worktrees/memory-27-glm53flash/memory/data/lme-3d86fd0a.json\n\"lme-3d86fd0a\" session 1/57; 12 turns\n\"lme-3d86fd0a\" session 2/57; 16 turns\n\"lme-3d86fd0a\" session 3/57; 30 turns\n\"lme-3d86fd0a\" session 4/57; 38 turns\n\"lme-3d86fd0a\" session 5/57; 40 turns\n\"lme-3d86fd0a\" session 6/57; 52 turns\n\"lme-3d86fd0a\" session 7/57; 64 turns\n\"lme-3d86fd0a\" session 8/57; 76 turns\n\"lme-3d86fd0a\" session 9/57; 88 turns\n\"lme-3d86fd0a\" session 10/57; 94 turns\n\"lme-3d86fd0a\" session 11/57; 102 turns\n\"lme-3d86fd0a\" session 12/57; 114 turns\n\"lme-3d86fd0a\" session 13/57; 114 turns\n\"lme-3d86fd0a\" session 14/57; 126 turns\n\"lme-3d86fd0a\" session 15/57; 135 turns\n\"lme-3d86fd0a\" session 16/57; 147 turns\n\"lme-3d86fd0a\" session 17/57; 157 turns\n\"lme-3d86fd0a\" session 18/57; 171 turns\n\"lme-3d86fd0a\" session 19/57; 177 turns\n\"lme-3d86fd0a\" session 20/57; 191 turns\n\"lme-3d86fd0a\" session 21/57; 203 turns\n\"lme-3d86fd0a\" session 22/57; 209 turns\n\"lme-3d86fd0a\" session 23/57; 217 turns\n\"lme-3d86fd0a\" session 24/57; 229 turns\n\"lme-3d86fd0a\" session 25/57; 241 turns\n\"lme-3d86fd0a\" session 26/57; 253 turns\n\"lme-3d86fd0a\" session 27/57; 255 turns\n\"lme-3d86fd0a\" session 28/57; 279 turns\n\"lme-3d86fd0a\" session 29/57; 279 turns\n\"lme-3d86fd0a\" session 30/57; 291 turns\n\"lme-3d86fd0a\" session 31/57; 293 turns\n\"lme-3d86fd0a\" session 32/57; 306 turns\n\"lme-3d86fd0a\" session 33/57; 314 turns\n\"lme-3d86fd0a\" session 34/57; 325 turns\n\"lme-3d86fd0a\" session 35/57; 337 turns\n\"lme-3d86fd0a\" session 36/57; 345 turns\n\"lme-3d86fd0a\" session 37/57; 357 turns\n\"lme-3d86fd0a\" session 38/57; 369 turns\n\"lme-3d86fd0a\" session 39/57; 379 turns\n\"lme-3d86fd0a\" session 40/57; 391 turns\n\"lme-3d86fd0a\" session 41/57; 399 turns\n\"lme-3d86fd0a\" session 42/57; 411 turns\n\"lme-3d86fd0a\" session 43/57; 415 turns\n\"lme-3d86fd0a\" session 44/57; 427 turns\n\"lme-3d86fd0a\" session 45/57; 437 turns\n\"lme-3d86fd0a\" session 46/57; 449 turns\n\"lme-3d86fd0a\" session 47/57; 453 turns\n\"lme-3d86fd0a\" session 48/57; 465 turns\n\"lme-3d86fd0a\" session 49/57; 477 turns\n\"lme-3d86fd0a\" session 50/57; 487 turns\n\"lme-3d86fd0a\" session 51/57; 489 turns\n\"lme-3d86fd0a\" session 52/57; 501 turns\n\"lme-3d86fd0a\" session 53/57; 513 turns\n\"lme-3d86fd0a\" session 54/57; 521 turns\n\"lme-3d86fd0a\" session 55/57; 523 turns\n\"lme-3d86fd0a\" session 56/57; 525 turns\n\"lme-3d86fd0a\" session 57/57; 526 turns\nError: \"enrichment failed to drain: {\\\"jobs_completed_total\\\":557,\\\"jobs_pending\\\":65,\\\"jobs_queued_total\\\":622}\"\n",
+      "write_wait": "visible writes; enrichment not explicitly settled",
+      "query_count": 0,
+      "query_p50_ms": null,
+      "query_p95_ms": null,
+      "over_core_default_1500ms": 0,
+      "skipped": []
+    },
+    {
+      "file": "lme-3d86fd0a-reference.json",
+      "engine": "reference",
+      "error": null,
+      "stored_turns": 526,
+      "ingest_ms": 12424,
+      "write_wait": "visible writes; enrichment not explicitly settled",
+      "query_count": 1,
+      "query_p50_ms": 686,
+      "query_p95_ms": 686,
+      "over_core_default_1500ms": 0,
+      "skipped": [
+        {
+          "id": "3d86fd0a",
+          "heading": "Learnings",
+          "reason": "empty"
+        },
+        {
+          "id": "3d86fd0a",
+          "heading": "Brain",
+          "reason": "empty"
+        }
+      ]
+    },
+    {
+      "file": "lme-561fabcd-cortex.json",
+      "engine": "cortexdb",
+      "error": null,
+      "stored_turns": 495,
+      "ingest_ms": 183797,
+      "write_wait": "accepted; all receipt ids listed; enrichment quiet for three polls",
+      "query_count": 1,
+      "query_p50_ms": 1566,
+      "query_p95_ms": 1566,
+      "over_core_default_1500ms": 1,
+      "skipped": [
+        {
+          "id": "561fabcd",
+          "heading": "Learnings",
+          "reason": "empty"
+        },
+        {
+          "id": "561fabcd",
+          "heading": "Brain",
+          "reason": "empty"
+        }
+      ]
+    },
+    {
+      "file": "lme-561fabcd-reference.json",
+      "engine": "reference",
+      "error": null,
+      "stored_turns": 495,
+      "ingest_ms": 12175,
+      "write_wait": "visible writes; enrichment not explicitly settled",
+      "query_count": 1,
+      "query_p50_ms": 839,
+      "query_p95_ms": 839,
+      "over_core_default_1500ms": 0,
+      "skipped": []
+    },
+    {
+      "file": "lme-88432d0a-abs-cortex.json",
+      "engine": "cortexdb",
+      "error": null,
+      "stored_turns": 510,
+      "ingest_ms": 190218,
+      "write_wait": "accepted; all receipt ids listed; enrichment quiet for three polls",
+      "query_count": 1,
+      "query_p50_ms": 1504,
+      "query_p95_ms": 1504,
+      "over_core_default_1500ms": 1,
+      "skipped": [
+        {
+          "id": "88432d0a_abs",
+          "heading": "Learnings",
+          "reason": "empty"
+        },
+        {
+          "id": "88432d0a_abs",
+          "heading": "Brain",
+          "reason": "empty"
+        }
+      ]
+    },
+    {
+      "file": "lme-88432d0a-abs-reference.json",
+      "engine": "reference",
+      "error": null,
+      "stored_turns": 510,
+      "ingest_ms": 12012,
+      "write_wait": "visible writes; enrichment not explicitly settled",
+      "query_count": 1,
+      "query_p50_ms": 815,
+      "query_p95_ms": 815,
+      "over_core_default_1500ms": 0,
+      "skipped": []
+    },
+    {
+      "file": "lme-8fb83627-cortex.json",
+      "engine": "cortexdb",
+      "error": null,
+      "stored_turns": 485,
+      "ingest_ms": 495891,
+      "write_wait": "accepted; all receipt ids listed; enrichment quiet for three polls",
+      "query_count": 1,
+      "query_p50_ms": 1458,
+      "query_p95_ms": 1458,
+      "over_core_default_1500ms": 0,
+      "skipped": [
+        {
+          "id": "8fb83627",
+          "heading": "Brain",
+          "reason": "empty"
+        }
+      ]
+    },
+    {
+      "file": "lme-8fb83627-reference.json",
+      "engine": "reference",
+      "error": null,
+      "stored_turns": 485,
+      "ingest_ms": 10908,
+      "write_wait": "visible writes; enrichment not explicitly settled",
+      "query_count": 1,
+      "query_p50_ms": 581,
+      "query_p95_ms": 581,
+      "over_core_default_1500ms": 0,
+      "skipped": []
+    },
+    {
+      "file": "lme-gpt4-fe651585-cortex.json",
+      "engine": "cortexdb",
+      "error": null,
+      "stored_turns": 471,
+      "ingest_ms": 237936,
+      "write_wait": "accepted; all receipt ids listed; enrichment quiet for three polls",
+      "query_count": 1,
+      "query_p50_ms": 1601,
+      "query_p95_ms": 1601,
+      "over_core_default_1500ms": 1,
+      "skipped": [
+        {
+          "id": "gpt4_fe651585",
+          "heading": "Brain",
+          "reason": "empty"
+        }
+      ]
+    },
+    {
+      "file": "lme-gpt4-fe651585-reference.json",
+      "engine": "reference",
+      "error": null,
+      "stored_turns": 471,
+      "ingest_ms": 9784,
+      "write_wait": "visible writes; enrichment not explicitly settled",
+      "query_count": 1,
+      "query_p50_ms": 849,
+      "query_p95_ms": 849,
+      "over_core_default_1500ms": 0,
+      "skipped": [
+        {
+          "id": "gpt4_fe651585",
+          "heading": "Learnings",
+          "reason": "empty"
+        },
+        {
+          "id": "gpt4_fe651585",
+          "heading": "Brain",
+          "reason": "empty"
+        }
+      ]
+    },
+    {
+      "file": "locomo-0-cortex.json",
+      "engine": "cortexdb",
+      "error": null,
+      "stored_turns": 419,
+      "ingest_ms": 650759,
+      "write_wait": "visible writes; enrichment not explicitly settled",
+      "query_count": 13,
+      "query_p50_ms": 1586,
+      "query_p95_ms": 9943,
+      "over_core_default_1500ms": 9,
+      "skipped": [
+        {
+          "id": "locomo-0-34",
+          "heading": "Brain",
+          "reason": "empty"
+        },
+        {
+          "id": "locomo-0-8",
+          "heading": "Brain",
+          "reason": "empty"
+        },
+        {
+          "id": "locomo-0-77",
+          "heading": "Brain",
+          "reason": "empty"
+        },
+        {
+          "id": "locomo-0-93",
+          "heading": "Brain",
+          "reason": "empty"
+        },
+        {
+          "id": "locomo-0-169",
+          "heading": "Brain",
+          "reason": "empty"
+        },
+        {
+          "id": "locomo-0-76",
+          "heading": "Brain",
+          "reason": "empty"
+        },
+        {
+          "id": "locomo-0-31",
+          "heading": "Brain",
+          "reason": "empty"
+        },
+        {
+          "id": "locomo-0-2",
+          "heading": "Brain",
+          "reason": "empty"
+        },
+        {
+          "id": "locomo-0-124",
+          "heading": "Brain",
+          "reason": "empty"
+        },
+        {
+          "id": "locomo-0-153",
+          "heading": "Brain",
+          "reason": "empty"
+        },
+        {
+          "id": "locomo-0-52",
+          "heading": "Brain",
+          "reason": "empty"
+        },
+        {
+          "id": "locomo-0-74",
+          "heading": "Brain",
+          "reason": "empty"
+        },
+        {
+          "id": "locomo-0-69",
+          "heading": "Brain",
+          "reason": "empty"
+        }
+      ]
+    },
+    {
+      "file": "locomo-0-reference.json",
+      "engine": "reference",
+      "error": null,
+      "stored_turns": 419,
+      "ingest_ms": 4963,
+      "write_wait": "visible writes; enrichment not explicitly settled",
+      "query_count": 13,
+      "query_p50_ms": 259,
+      "query_p95_ms": 380,
+      "over_core_default_1500ms": 0,
+      "skipped": []
+    }
+  ],
+  "budget": {
+    "limit": 10,
+    "charged": 2.2527659200000105,
+    "actual": 2.0558600200000012,
+    "calls": 9356
+  },
+  "limitations": [
+    "Smoke subset; no population accuracy claim",
+    "Direct TinyMemory lifecycle, not desktop/core wiring",
+    "Aggregate quiet enrichment polls do not certify complete per-turn enrichment; native scores are snapshots",
+    "Reference engine is a deterministic control, not an independent memory product",
+    "memory-background costs include ingestion and recall; asynchronous work prevents exact phase attribution",
+    "Core deadline comparison is diagnostic; the core timeout hook was not executed",
+    "LoCoMo scores are official category-specific F1/abstention, not judge accuracy"
+  ]
+}

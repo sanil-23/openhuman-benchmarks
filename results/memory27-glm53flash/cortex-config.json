@@ -1,0 +1,32 @@
+{
+  "env": {
+    "CORTEX_API_KEY": "memory-bench-local",
+    "CORTEX_DEPLOYMENT_PRESET": "dev_local",
+    "CORTEX_EMBEDDING_URL": "http://172.19.0.1:36219/v1",
+    "CORTEX_EMBEDDING_API_KEY": "dummy",
+    "CORTEX_EMBEDDING_MODEL": "openai/text-embedding-3-small",
+    "CORTEX_EMBEDDING_DIMS": "1536",
+    "OPENAI_API_KEY": "dummy",
+    "CORTEX_LLM_URL": "http://172.19.0.1:36219/v1",
+    "CORTEX_ENTITY_API_KEY": "dummy",
+    "CORTEX_LLM_MODEL": "z-ai/glm-5.3-flash",
+    "CORTEX_ENRICHMENT_URL": "http://172.19.0.1:36219/v1",
+    "CORTEX_ENRICHMENT_API_KEY": "dummy",
+    "CORTEX_ENRICHMENT_MODEL": "z-ai/glm-5.3-flash",
+    "CORTEX_ENRICHMENT_DELAY_SECONDS": "0",
+    "CORTEX_ANSWER_PROVIDER": "openai",
+    "CORTEX_ANSWER_URL": "http://172.19.0.1:36219/v1",
+    "CORTEX_ANSWER_API_KEY": "dummy",
+    "CORTEX_ANSWER_MODEL": "z-ai/glm-5.3-flash",
+    "CORTEX_VERIFIER_URL": "http://172.19.0.1:36219/v1",
+    "CORTEX_VERIFIER_API_KEY": "dummy",
+    "CORTEX_VERIFIER_MODEL": "z-ai/glm-5.3-flash",
+    "CORTEX_VERIFIER_MAX_TOKENS": "16384",
+    "CORTEX_ENTITY_GRAPH": "1",
+    "CORTEX_V1_LAYERS_AUTO": "1",
+    "CORTEX_AUTO_ROUTE": "1",
+    "CORTEX_CONSOLIDATION_MIN_AGE_HOURS": "0"
+  },
+  "image_ref": "cortexdb/cortexdb@sha256:636e0ed0b8cd4ae2f307e3a90f99050f7879f73c556b1ccbbabf2d3a383398fc",
+  "image": "sha256:636e0ed0b8cd4ae2f307e3a90f99050f7879f73c556b1ccbbabf2d3a383398fc"
+}

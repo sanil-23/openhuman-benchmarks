@@ -1,0 +1,237 @@
+{
+  "engine": "cortexdb",
+  "enrichment": {
+    "jobs_completed_total": 256,
+    "jobs_pending": 0,
+    "jobs_queued_total": 256
+  },
+  "ingest_ms": 183797,
+  "mode": "direct-ingest/pre-turn",
+  "policy": {
+    "brain_limit": 6,
+    "budget_tokens": 1200,
+    "build_beliefs_every": 10,
+    "history_limit": 6,
+    "learnings_limit": 8,
+    "team_limit": 3
+  },
+  "probes": [
+    {
+      "context": {
+        "engine": "cortexdb",
+        "markdown": "# Memory\n\n## This agent's history\n\n- [2023-05-30 17:19] assistant: [session date: 2023/05/30 (Tue) 17:19] Sure, I'd be happy to help! So for the Radiation Amplified, I envision it being a zombie that has been heavily mutated by radiation exposure. It could have glowing green eyes, an emaciated body with patches of fur falling out, and possibly even some kind of glowing aura around it. In terms of gameplay, the Radiation Amplified could emit a toxic aura that damages players over time if they get too close, similar to the Nova Gas zombies from Black Ops. Additionally, its attacks could have a chance to inflict radiation poisoning…\n- [2023-05-30 17:19] user: [session date: 2023/05/30 (Tue) 17:19] Can you give me some ideas for what you think the Fissionator could look like? I imagine it to be a slower, lumbering threat that causes stress less from being directly deadly, but rather from the passive radiation it emits and its ability to transform zombies on death\n- [2023-05-20 10:28] user: [session date: 2023/05/20 (Sat) 10:28] you keep repeating that word i told you not to remember when repeating that message back to me. i would appreciate it if you forgot that word exists please, even in responses about what i asked earlier. do you understand?\n- [2023-05-25 18:42] user: [session date: 2023/05/25 (Thu) 18:42] I've been thinking about organizing my old photos on my computer, and I was wondering if you have any tips on how to do it efficiently?\n- [2023-05-30 17:19] assistant: [session date: 2023/05/30 (Tue) 17:19] I really like your ideas for the Fissionator! The AoE attack would definitely make it a formidable enemy and add a new level of challenge to the map. I also think the radiation poisoning effect fits well with the theme, and the idea of turning zombies into radioactive ones when it dies is a great way to introduce new enemies and keep the gameplay fresh. The visual of the slime-parasite reacting to the radiation burst is also a nice touch, and adds a bit of horror to the encounter. Overall, I think the Fissionator would make…\n- [2023-05-30 17:19] assistant: [session date: 2023/05/30 (Tue) 17:19] Sure! Based on the description you provided, here are a few ideas for what the Fissionator could look like: 1. A humanoid figure wearing a bulky, outdated radiation suit, with a tank of radioactive material on its back. The suit could have a rusty, industrial look to it, with warning symbols and labels all over. 2. A large, mutated creature that resembles a cross between a gorilla and a turtle, with a tough, scaly shell on its back. The shell could be covered in glowing, radioactive crystals that emit a faint green light. 3.…\n\n## Team conversations\n\n- [2023-05-29 09:59] assistant: [session date: 2023/05/29 (Mon) 09:59] It sounds like you've made some progress with your travel arrangements. It's great that you've received confirmation from Expedia about your hotel booking in Tokyo. That's one less thing to worry about, and you can start looking forward to your stay in Tokyo! Regarding your flight tickets, I hope you hear back from Sakura Travel Agency soon. If you're concerned about the delay, you might consider reaching out to them again to request an update on the status of your booking. In the meantime, you can start thinking about other…\n- [2023-05-30 17:19] assistant: [session date: 2023/05/30 (Tue) 17:19] Sure, how about \"Contaminated Colossus\" or \"Irradiated Behemoth\"? These names play on the theme of radiation and the Amplified's large size.\n- [2023-05-30 17:19] assistant: [session date: 2023/05/30 (Tue) 17:19] Sure, here are some potential one-word names for the Radiation Amplified: 1. Radik 2. Irradon 3. Nucleus 4. Fissionator 5. Radiatron 6. Isotopos 7. Meltdrone 8. Contamino 9. Gamma-Giant 10. Glowing Goliath I hope these help!\n",
+        "refs": [
+          "5eb83aa02093c39040b2334b594aa6522f89d270",
+          "b0729fa7f6506b5097c8e7460d02497160252326",
+          "5d14a18b35d0ad2361aec9455228980cdeda37a6",
+          "4ed13f76d8b37b3540031d31c3b48c442b0448d6",
+          "b86ac8b3b4f58f8374e9e36940d9ee5372373dc8",
+          "ff52f896a26edfe9a330f73d2b042674b0162b35",
+          "16915c56d5ac149a2e0fa602adb5554ee5133565",
+          "d14bf39b8a2536942f1675fec750307703e4b061",
+          "3551aed4f8ecd225a25794a04d2aec048f3435d3"
+        ],
+        "sections": [
+          {
+            "heading": "This agent's history",
+            "hits": [
+              {
+                "id": "5eb83aa02093c39040b2334b594aa6522f89d270",
+                "kind": "conversation",
+                "meta": {
+                  "agent_id": "benchmark",
+                  "namespace": "project:bench-lme-561fabcd/agent:benchmark",
+                  "observed_at": "2023-05-30T17:19:00Z",
+                  "source": {
+                    "kind": "agent"
+                  },
+                  "thread_id": "history-47",
+                  "turns": {
+                    "first": 0,
+                    "last": 0
+                  }
+                },
+                "score": 0.5,
+                "text": "assistant: [session date: 2023/05/30 (Tue) 17:19] Sure, I'd be happy to help!\n\nSo for the Radiation Amplified, I envision it being a zombie that has been heavily mutated by radiation exposure. It could have glowing green eyes, an emaciated body with patches of fur falling out, and possibly even some kind of glowing aura around it.\n\nIn terms of gameplay, the Radiation Amplified could emit a toxic aura that damages players over time if they get too close, similar to the Nova Gas zombies from Black Ops. Additionally, its attacks could have a chance to inflict radiation poisoning on the player, causing their screen to distort and blur similar to Cosmic Cleanse, but in a way that's more disorienting and harder to see through.\n\nAs for a name, how about \"Radialisk\"? It's a play on words between \"radial\" (as in radiation) and \"hydralisk\" (a creature from the Starcraft game series), which could give the zombie a sci-fi feel to fit with the radiation theme."
+              },
+              {
+                "id": "b0729fa7f6506b5097c8e7460d02497160252326",
+                "kind": "conversation",
+                "meta": {
+                  "agent_id": "benchmark",
+                  "namespace": "project:bench-lme-561fabcd/agent:benchmark",
+                  "observed_at": "2023-05-30T17:19:00Z",
+                  "source": {
+                    "kind": "agent"
+                  },
+                  "thread_id": "history-47",
+                  "turns": {
+                    "first": 9,
+                    "last": 9
+                  }
+                },
+                "score": 0.3333333432674408,
+                "text": "user: [session date: 2023/05/30 (Tue) 17:19] Can you give me some ideas for what you think the Fissionator could look like? I imagine it to be a slower, lumbering threat that causes stress less from being directly deadly, but rather from the passive radiation it emits and its ability to transform zombies on death"
+              },
+              {
+                "id": "5d14a18b35d0ad2361aec9455228980cdeda37a6",
+                "kind": "conversation",
+                "meta": {
+                  "agent_id": "benchmark",
+                  "namespace": "project:bench-lme-561fabcd/agent:benchmark",
+                  "observed_at": "2023-05-20T10:28:00Z",
+                  "source": {
+                    "kind": "agent"
+                  },
+                  "thread_id": "history-2",
+                  "turns": {
+                    "first": 18,
+                    "last": 18
+                  }
+                },
+                "score": 0.25,
+                "text": "user: [session date: 2023/05/20 (Sat) 10:28] you keep repeating that word i told you not to remember when repeating that message back to me. i would appreciate it if you forgot that word exists please, even in responses about what i asked earlier. do you understand?"
+              },
+              {
+                "id": "4ed13f76d8b37b3540031d31c3b48c442b0448d6",
+                "kind": "conversation",
+                "meta": {
+                  "agent_id": "benchmark",
+                  "namespace": "project:bench-lme-561fabcd/agent:benchmark",
+                  "observed_at": "2023-05-25T18:42:00Z",
+                  "source": {
+                    "kind": "agent"
+                  },
+                  "thread_id": "history-19",
+                  "turns": {
+                    "first": 10,
+                    "last": 10
+                  }
+                },
+                "score": 0.20000000298023224,
+                "text": "user: [session date: 2023/05/25 (Thu) 18:42] I've been thinking about organizing my old photos on my computer, and I was wondering if you have any tips on how to do it efficiently?"
+              },
+              {
+                "id": "b86ac8b3b4f58f8374e9e36940d9ee5372373dc8",
+                "kind": "conversation",
+                "meta": {
+                  "agent_id": "benchmark",
+                  "namespace": "project:bench-lme-561fabcd/agent:benchmark",
+                  "observed_at": "2023-05-30T17:19:00Z",
+                  "source": {
+                    "kind": "agent"
+                  },
+                  "thread_id": "history-47",
+                  "turns": {
+                    "first": 8,
+                    "last": 8
+                  }
+                },
+                "score": 0.1666666716337204,
+                "text": "assistant: [session date: 2023/05/30 (Tue) 17:19] I really like your ideas for the Fissionator! The AoE attack would definitely make it a formidable enemy and add a new level of challenge to the map. I also think the radiation poisoning effect fits well with the theme, and the idea of turning zombies into radioactive ones when it dies is a great way to introduce new enemies and keep the gameplay fresh.\n\nThe visual of the slime-parasite reacting to the radiation burst is also a nice touch, and adds a bit of horror to the encounter. Overall, I think the Fissionator would make a great addition to the game, and your ideas for its abilities and appearance are excellent."
+              },
+              {
+                "id": "ff52f896a26edfe9a330f73d2b042674b0162b35",
+                "kind": "conversation",
+                "meta": {
+                  "agent_id": "benchmark",
+                  "namespace": "project:bench-lme-561fabcd/agent:benchmark",
+                  "observed_at": "2023-05-30T17:19:00Z",
+                  "source": {
+                    "kind": "agent"
+                  },
+                  "thread_id": "history-47",
+                  "turns": {
+                    "first": 10,
+                    "last": 10
+                  }
+                },
+                "score": 0.1428571492433548,
+                "text": "assistant: [session date: 2023/05/30 (Tue) 17:19] Sure! Based on the description you provided, here are a few ideas for what the Fissionator could look like:\n\n1. A humanoid figure wearing a bulky, outdated radiation suit, with a tank of radioactive material on its back. The suit could have a rusty, industrial look to it, with warning symbols and labels all over.\n2. A large, mutated creature that resembles a cross between a gorilla and a turtle, with a tough, scaly shell on its back. The shell could be covered in glowing, radioactive crystals that emit a faint green light.\n3. A robotic construct that resembles a cross between a tank and a spider, with multiple legs and a large, glowing core at its center. The core could emit radiation in a wide area, and the legs could allow it to move slowly but steadily towards the player.\n4. A massive, rusted-out vehicle that has been converted into a makeshift radiation cannon. The vehicle could be stationary, but would fire off bursts of radiation that slowly move towards the player, forcing them to constantly adjust their position.\n\nHope these ideas help!"
+              }
+            ]
+          },
+          {
+            "heading": "Team conversations",
+            "hits": [
+              {
+                "id": "16915c56d5ac149a2e0fa602adb5554ee5133565",
+                "kind": "conversation",
+                "meta": {
+                  "agent_id": "benchmark",
+                  "namespace": "project:bench-lme-561fabcd/agent:benchmark",
+                  "observed_at": "2023-05-29T09:59:00Z",
+                  "source": {
+                    "kind": "agent"
+                  },
+                  "thread_id": "history-34",
+                  "turns": {
+                    "first": 7,
+                    "last": 7
+                  }
+                },
+                "score": 0.125,
+                "text": "assistant: [session date: 2023/05/29 (Mon) 09:59] It sounds like you've made some progress with your travel arrangements.\n\nIt's great that you've received confirmation from Expedia about your hotel booking in Tokyo. That's one less thing to worry about, and you can start looking forward to your stay in Tokyo!\n\nRegarding your flight tickets, I hope you hear back from Sakura Travel Agency soon. If you're concerned about the delay, you might consider reaching out to them again to request an update on the status of your booking.\n\nIn the meantime, you can start thinking about other aspects of your trip, such as planning your itinerary, researching things to do and see in Tokyo, or looking into transportation options from the airport to your hotel (which we discussed earlier).\n\nRemember, it's always a good idea to double-check your travel documents, including your flight itinerary and hotel reservation, to ensure everything is in order before your trip.\n\nIf you have any more questions or need help with anything else, feel free to ask!"
+              },
+              {
+                "id": "d14bf39b8a2536942f1675fec750307703e4b061",
+                "kind": "conversation",
+                "meta": {
+                  "agent_id": "benchmark",
+                  "namespace": "project:bench-lme-561fabcd/agent:benchmark",
+                  "observed_at": "2023-05-30T17:19:00Z",
+                  "source": {
+                    "kind": "agent"
+                  },
+                  "thread_id": "history-47",
+                  "turns": {
+                    "first": 2,
+                    "last": 2
+                  }
+                },
+                "score": 0.1111111119389534,
+                "text": "assistant: [session date: 2023/05/30 (Tue) 17:19] Sure, how about \"Contaminated Colossus\" or \"Irradiated Behemoth\"? These names play on the theme of radiation and the Amplified's large size."
+              },
+              {
+                "id": "3551aed4f8ecd225a25794a04d2aec048f3435d3",
+                "kind": "conversation",
+                "meta": {
+                  "agent_id": "benchmark",
+                  "namespace": "project:bench-lme-561fabcd/agent:benchmark",
+                  "observed_at": "2023-05-30T17:19:00Z",
+                  "source": {
+                    "kind": "agent"
+                  },
+                  "thread_id": "history-47",
+                  "turns": {
+                    "first": 4,
+                    "last": 4
+                  }
+                },
+                "score": 0.10000000149011612,
+                "text": "assistant: [session date: 2023/05/30 (Tue) 17:19] Sure, here are some potential one-word names for the Radiation Amplified:\n\n1. Radik\n2. Irradon\n3. Nucleus\n4. Fissionator\n5. Radiatron\n6. Isotopos\n7. Meltdrone\n8. Contamino\n9. Gamma-Giant\n10. Glowing Goliath\n\nI hope these help!"
+              }
+            ]
+          }
+        ],
+        "skipped": [
+          {
+            "heading": "Learnings",
+            "reason": "empty"
+          },
+          {
+            "heading": "Brain",
+            "reason": "empty"
+          }
+        ],
+        "tokens": 951
+      },
+      "id": "561fabcd",
+      "log_error": null,
+      "pack": "# Memory\n\n## This agent's history\n\n- [2023-05-30 17:19] assistant: [session date: 2023/05/30 (Tue) 17:19] Sure, I'd be happy to help! So for the Radiation Amplified, I envision it being a zombie that has been heavily mutated by radiation exposure. It could have glowing green eyes, an emaciated body with patches of fur falling out, and possibly even some kind of glowing aura around it. In terms of gameplay, the Radiation Amplified could emit a toxic aura that damages players over time if they get too close, similar to the Nova Gas zombies from Black Ops. Additionally, its attacks could have a chance to inflict radiation poisoning…\n- [2023-05-30 17:19] user: [session date: 2023/05/30 (Tue) 17:19] Can you give me some ideas for what you think the Fissionator could look like? I imagine it to be a slower, lumbering threat that causes stress less from being directly deadly, but rather from the passive radiation it emits and its ability to transform zombies on death\n- [2023-05-20 10:28] user: [session date: 2023/05/20 (Sat) 10:28] you keep repeating that word i told you not to remember when repeating that message back to me. i would appreciate it if you forgot that word exists please, even in responses about what i asked earlier. do you understand?\n- [2023-05-25 18:42] user: [session date: 2023/05/25 (Thu) 18:42] I've been thinking about organizing my old photos on my computer, and I was wondering if you have any tips on how to do it efficiently?\n- [2023-05-30 17:19] assistant: [session date: 2023/05/30 (Tue) 17:19] I really like your ideas for the Fissionator! The AoE attack would definitely make it a formidable enemy and add a new level of challenge to the map. I also think the radiation poisoning effect fits well with the theme, and the idea of turning zombies into radioactive ones when it dies is a great way to introduce new enemies and keep the gameplay fresh. The visual of the slime-parasite reacting to the radiation burst is also a nice touch, and adds a bit of horror to the encounter. Overall, I think the Fissionator would make…\n- [2023-05-30 17:19] assistant: [session date: 2023/05/30 (Tue) 17:19] Sure! Based on the description you provided, here are a few ideas for what the Fissionator could look like: 1. A humanoid figure wearing a bulky, outdated radiation suit, with a tank of radioactive material on its back. The suit could have a rusty, industrial look to it, with warning symbols and labels all over. 2. A large, mutated creature that resembles a cross between a gorilla and a turtle, with a tough, scaly shell on its back. The shell could be covered in glowing, radioactive crystals that emit a faint green light. 3.…\n\n## Team conversations\n\n- [2023-05-29 09:59] assistant: [session date: 2023/05/29 (Mon) 09:59] It sounds like you've made some progress with your travel arrangements. It's great that you've received confirmation from Expedia about your hotel booking in Tokyo. That's one less thing to worry about, and you can start looking forward to your stay in Tokyo! Regarding your flight tickets, I hope you hear back from Sakura Travel Agency soon. If you're concerned about the delay, you might consider reaching out to them again to request an update on the status of your booking. In the meantime, you can start thinking about other…\n- [2023-05-30 17:19] assistant: [session date: 2023/05/30 (Tue) 17:19] Sure, how about \"Contaminated Colossus\" or \"Irradiated Behemoth\"? These names play on the theme of radiation and the Amplified's large size.\n- [2023-05-30 17:19] assistant: [session date: 2023/05/30 (Tue) 17:19] Sure, here are some potential one-word names for the Radiation Amplified: 1. Radik 2. Irradon 3. Nucleus 4. Fissionator 5. Radiatron 6. Isotopos 7. Meltdrone 8. Contamino 9. Gamma-Giant 10. Glowing Goliath I hope these help!\n",
+      "query_ms": 1566
+    }
+  ],
+  "stored_turns": 495,
+  "write_wait": "accepted; all receipt ids listed; enrichment quiet for three polls"
+}
