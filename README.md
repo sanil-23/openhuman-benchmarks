@@ -170,8 +170,8 @@ OH_LIVE_TEST_BUNDLE="$PWD/.cache/harness/openhuman" node --test bundles/oh-live.
 ```
 
 This also sends a normal turn to a local mock model with external networking disabled.
-DeepSeek regressions check that tool calls replay reasoning and that a recovery call
-with reasoning off can finish its tool chain without a provider rejection.
+DeepSeek regressions check that tool calls replay reasoning and that a stream exceeding
+its requested reasoning budget completes with the configured reasoning effort intact.
 The adapter uses an ephemeral encryption key for the task's credential store, so its
 required dummy credential works without an OS keyring.
 

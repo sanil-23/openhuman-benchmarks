@@ -9,11 +9,11 @@ import test from 'node:test';
 // It runs an actual core with no external network and no paid model endpoint.
 const bundle = process.env.OH_LIVE_TEST_BUNDLE;
 const root = new URL('../', import.meta.url).pathname;
-for (const scenario of ['memory', 'normal', 'reasoning-recovery', 'reasoning-tool-chain']) {
+for (const scenario of ['memory', 'normal', 'reasoning-budget', 'reasoning-tool-chain']) {
   const smoke = scenario === 'memory';
-  const recovery = scenario === 'reasoning-recovery';
+  const budget = scenario === 'reasoning-budget';
   const thinkingChain = scenario === 'reasoning-tool-chain';
-  test(thinkingChain ? 'live DeepSeek reasoning and tool calls replay without disabling thinking' : recovery ? 'live DeepSeek tool recovery keeps reasoning off until the tool chain finishes' : smoke ? 'live memory-off write and recall are refused locally' : 'a dummy credential supports a normal turn without an OS keyring', {
+  test(thinkingChain ? 'live DeepSeek reasoning and tool calls replay without disabling thinking' : budget ? 'live reasoning beyond the requested budget finishes without disabling thinking' : smoke ? 'live memory-off write and recall are refused locally' : 'a dummy credential supports a normal turn without an OS keyring', {
     skip: bundle ? false : 'set OH_LIVE_TEST_BUNDLE to a compiled OpenHuman bundle to run the offline Docker gate',
     timeout: 150_000,
   }, () => {
@@ -32,7 +32,7 @@ for (const scenario of ['memory', 'normal', 'reasoning-recovery', 'reasoning-too
         `${root}bundles/adapters/openhuman.sh:/opt/harness/adapter.sh:ro`,
         `${root}bundles/oh-turn.mjs:/opt/harness/oh-turn.mjs:ro`,
         `${root}bundles/oh-memory.mjs:/opt/harness/oh-memory.mjs:ro`,
-        `${root}bundles/fixtures/${recovery || thinkingChain ? 'mock-reasoning-recovery.mjs' : 'mock-chat.mjs'}:/opt/bench/mock.mjs:ro`,
+        `${root}bundles/fixtures/${budget || thinkingChain ? 'mock-reasoning-policy.mjs' : 'mock-chat.mjs'}:/opt/bench/mock.mjs:ro`,
         `${task}:/bench/task:ro`, `${results}:/results`,
       ];
       const env = {
@@ -75,10 +75,10 @@ for (const scenario of ['memory', 'normal', 'reasoning-recovery', 'reasoning-too
           assert.equal(calls[1].effort, 'high');
           assert.equal(calls[1].reasoning_replayed, true);
         }
-        if (recovery) {
-          assert.ok(calls.length >= 3, 'exercise reasoning exhaustion, an unreasoned tool call, and its continuation');
-          assert.equal(calls[1].effort, 'none');
-          assert.equal(calls[2].effort, 'none');
+        if (budget) {
+          assert.equal(calls.length, 2, 'the provider stream completes without a recovery call');
+          assert.ok(calls.every(call => call.effort === 'high'));
+          assert.equal(calls[1].reasoning_replayed, true);
         }
       }
     } finally {
