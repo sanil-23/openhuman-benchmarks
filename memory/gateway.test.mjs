@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { Budget, requestBound, startGateway } from './gateway.mjs';
+import { Budget, requestBound, startGateway, streamUsage } from './gateway.mjs';
 
 test('concurrent reservations and restart cannot exceed the global $10 cap', () => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'memory-budget-'));
@@ -63,4 +63,41 @@ test('gateway refuses before forwarding when the persisted cap is exhausted', as
     const r = await fetch(`http://127.0.0.1:${g.port}/v1/chat/completions`, { method: 'POST', body: JSON.stringify({ model: 'z-ai/glm-5.3-flash', messages: [], max_tokens: 100 }) });
     assert.equal(r.status, 402); assert.equal(forwarded, 0);
   } finally { await new Promise(r => g.server.close(r)); fs.rmSync(dir, { recursive: true }); }
+});
+test('an authorised ceiling above $10 must be passed explicitly', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'memory-budget-'));
+  try {
+    assert.throws(() => new Budget(path.join(dir, 'a.json'), 15));
+    const b = new Budget(path.join(dir, 'b.json'), 15, 15);
+    b.reserve(12); assert.throws(() => b.reserve(4), /exhausted/);
+  } finally { fs.rmSync(dir, { recursive: true }); }
+});
+test('agent-turn requests need the opt-ins, and images stay refused', () => {
+  const turn = { model: 'z-ai/glm-5.3-flash', max_tokens: 16384, stream: true, tools: [{ type: 'function' }],
+    messages: [{ role: 'user', content: 'hi' }, { role: 'assistant', content: null, tool_calls: [] }, { role: 'tool', content: 'ok' }] };
+  assert.throws(() => requestBound(turn), /nonstream/);
+  assert.throws(() => requestBound({ ...turn, stream: false }), /nonstream/);
+  assert.ok(requestBound(turn, { allowTools: true, allowStream: true }) > 0);
+  assert.throws(() => requestBound({ ...turn, messages: [{ role: 'user', content: null }] }, { allowTools: true, allowStream: true }), /text-only messages/);
+  assert.throws(() => requestBound({ ...turn, messages: [{ role: 'user', content: [{ type: 'image_url' }] }] }, { allowTools: true, allowStream: true }), /text-only messages/);
+});
+test('streamed calls pass through and settle from the last usage event', async () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'memory-gateway-'));
+  const sse = 'data: {"choices":[{"delta":{"content":"he"}}]}\n\ndata: {"choices":[],"usage":{"cost":0.0002}}\n\ndata: [DONE]\n\n';
+  let sent;
+  const g = await startGateway({ dir, key: 'k', glmProvider: 'together', allowTools: true, allowStream: true,
+    fetchImpl: async (_url, options) => { sent = JSON.parse(options.body); return new Response(sse, { headers: { 'content-type': 'text/event-stream' } }); } });
+  try {
+    const r = await fetch(`http://127.0.0.1:${g.port}/v1/chat/completions`, { method: 'POST', headers: { 'x-bench-phase': 'integration/q1' },
+      body: JSON.stringify({ model: 'z-ai/glm-5.3-flash', max_tokens: 100, stream: true, tools: [], messages: [{ role: 'user', content: 'hi' }] }) });
+    assert.equal(await r.text(), sse);
+    assert.deepEqual(sent.provider.only, ['together']);
+    const row = JSON.parse(fs.readFileSync(path.join(dir, 'meter.jsonl'), 'utf8'));
+    assert.equal(row.phase, 'integration/q1'); assert.equal(row.usage.cost, 0.0002);
+    assert.ok(Math.abs(g.budget.state.actual - 0.0002) < 1e-12);
+  } finally { await new Promise(r => g.server.close(r)); fs.rmSync(dir, { recursive: true }); }
+});
+test('stream usage comes from the last event that reports it', () => {
+  assert.equal(streamUsage('data: {"usage":{"cost":1}}\n\ndata: {"usage":{"cost":2}}\n\ndata: [DONE]\n').cost, 2);
+  assert.equal(streamUsage('data: {"choices":[]}\n\ndata: [DONE]\n'), null);
 });

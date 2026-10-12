@@ -11,8 +11,10 @@ export const PRICES = {
   'openai/gpt-4o-mini-2024-07-18': { prompt: 0.30e-6, completion: 1.20e-6 },
 };
 export class Budget {
-  constructor(file, limit = 10) {
-    if (!(limit > 0 && limit <= 10)) throw new Error('budget must be in (0, $10]');
+  // `maxLimit` is the authorised ceiling. It stays $10 unless a caller passes
+  // the cap recorded on the issue for its phase.
+  constructor(file, limit = 10, maxLimit = 10) {
+    if (!(limit > 0 && limit <= maxLimit)) throw new Error(`budget must be in (0, $${maxLimit}]`);
     this.file = file;
     this.state = fs.existsSync(file) ? JSON.parse(fs.readFileSync(file)) : { limit, charged: 0, actual: 0, calls: 0 };
     if (this.state.limit !== limit) throw new Error('cannot change existing budget');
@@ -44,18 +46,35 @@ export class Budget {
     } // missing cost and failures keep the entire reservation
   }
 }
-export function requestBound(body) {
+// OpenHuman agent turns (the integration arm) send tool schemas, stream, and
+// carry assistant rows whose content is null beside their tool calls. Those are
+// allowed only when the caller opts in; images stay refused either way.
+export function requestBound(body, { allowTools = false, allowStream = false } = {}) {
   const price = PRICES[body.model];
   if (!price) throw new Error(`unapproved model: ${body.model}`);
-  if (body.tools || body.plugins || body.audio || body.images || body.stream) throw new Error('text-only nonstream requests required');
-  if (body.messages?.some(m => typeof m.content !== 'string')) throw new Error('text-only messages required');
+  if (body.plugins || body.audio || body.images) throw new Error('text-only requests required');
+  if ((body.tools && !allowTools) || (body.stream && !allowStream)) throw new Error('text-only nonstream requests required');
+  const textOnly = m => typeof m.content === 'string' || (allowTools && m.content == null && m.role === 'assistant');
+  if (body.messages?.some(m => !textOnly(m))) throw new Error('text-only messages required');
   if (body.max_completion_tokens !== undefined && body.max_completion_tokens !== body.max_tokens) throw new Error('conflicting output bounds');
   const max = body.model.includes('embedding') ? 0 : Number(body.max_tokens);
   if (!Number.isInteger(max) || max < 0 || max > 16384 || (!body.model.includes('embedding') && max === 0)) throw new Error('bounded max_tokens required');
   return (Buffer.byteLength(JSON.stringify(body)) + 20000) * price.prompt + max * price.completion;
 }
-export async function startGateway({ dir, key, port = 0, upstream = 'https://openrouter.ai/api/v1', fetchImpl = fetch }) {
-  const budget = new Budget(path.join(dir, 'budget.json'));
+/** The usage block of the last SSE event that carries one. */
+export function streamUsage(raw) {
+  let usage = null;
+  for (const line of raw.split('\n')) {
+    if (!line.startsWith('data:')) continue;
+    const data = line.slice(5).trim();
+    if (!data || data === '[DONE]') continue;
+    try { usage = JSON.parse(data).usage ?? usage; } catch { /* a partial line is not usage */ }
+  }
+  return usage;
+}
+export async function startGateway({ dir, key, port = 0, upstream = 'https://openrouter.ai/api/v1', fetchImpl = fetch,
+  limit = 10, maxLimit = 10, glmProvider = 'z-ai', allowTools = false, allowStream = false }) {
+  const budget = new Budget(path.join(dir, 'budget.json'), limit, maxLimit);
   const server = http.createServer(async (req, res) => {
     if (req.url === '/budget') return res.end(JSON.stringify(budget.state));
     if (req.method !== 'POST' || !/^\/v1\/(chat\/completions|embeddings)$/.test(req.url)) return res.writeHead(404).end();
@@ -68,11 +87,11 @@ export async function startGateway({ dir, key, port = 0, upstream = 'https://ope
       if (!p) throw new Error('unapproved model');
       body.provider = { allow_fallbacks: false, max_price: { prompt: p.prompt * 1e6, completion: p.completion * 1e6 } };
       if (body.model === 'z-ai/glm-5.3-flash') {
-        body.provider.only = ['z-ai'];
+        body.provider.only = [glmProvider];
         body.reasoning = { effort: 'low' };
       }
       body.usage = { include: true };
-      bound = requestBound(body);
+      bound = requestBound(body, { allowTools, allowStream });
       budget.reserve(bound);
     } catch (e) { return res.writeHead(402).end(JSON.stringify({ error: e.message })); }
     const started = Date.now();
@@ -81,6 +100,23 @@ export async function startGateway({ dir, key, port = 0, upstream = 'https://ope
         method: 'POST', headers: { authorization: `Bearer ${key}`, 'content-type': 'application/json' },
         body: JSON.stringify(body), signal: AbortSignal.timeout(240000),
       });
+      if (body.stream) {
+        // Pass the stream through as it arrives, so the client's first-event
+        // timeout sees the provider's pace, and settle from its final usage.
+        res.writeHead(response.status, { 'content-type': response.headers.get('content-type') ?? 'text/event-stream' });
+        const decoder = new TextDecoder();
+        let raw = '';
+        for await (const chunk of response.body) { raw += decoder.decode(chunk, { stream: true }); res.write(chunk); }
+        res.end();
+        const usage = streamUsage(raw);
+        budget.settle(bound, usage?.cost);
+        fs.appendFileSync(path.join(dir, 'meter.jsonl'), JSON.stringify({ at: new Date().toISOString(),
+          phase: req.headers['x-bench-phase'] ?? 'memory-background', model: body.model,
+          route: req.url, status: response.status, wall_ms: Date.now() - started, stream: true,
+          reserved_usd: bound, usage, request: body, response_chars: raw.length,
+        }) + '\n');
+        return;
+      }
       const raw = await response.text();
       let output;
       try { output = JSON.parse(raw); } catch { output = { raw }; }
