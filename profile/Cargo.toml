@@ -43,6 +43,10 @@ name = "library-profile"
 path = "src/bin/library_profile/main.rs"
 required-features = ["rss-bench"]
 
+[[bin]]
+name = "security-latency-bench"
+path = "src/bin/security_latency/main.rs"
+
 [dependencies]
 openhuman-core = { path = "../vendor/openhuman/crates/openhuman-core", package = "openhuman", default-features = false }
 openhuman-tinyhumans = { path = "../vendor/openhuman/crates/openhuman-tinyhumans", default-features = false }
