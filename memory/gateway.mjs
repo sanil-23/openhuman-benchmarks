@@ -49,9 +49,10 @@ export class Budget {
 // OpenHuman agent turns (the integration arm) send tool schemas, stream, and
 // carry assistant rows whose content is null beside their tool calls. Those are
 // allowed only when the caller opts in; images stay refused either way.
-export function requestBound(body, { allowTools = false, allowStream = false } = {}) {
-  const price = PRICES[body.model];
-  if (!price) throw new Error(`unapproved model: ${body.model}`);
+// `price` replaces the model's OpenRouter ceiling when a route serves it
+// elsewhere at its own prices; the model must still be on the allowlist.
+export function requestBound(body, { allowTools = false, allowStream = false, price = PRICES[body.model] } = {}) {
+  if (!PRICES[body.model] || !price) throw new Error(`unapproved model: ${body.model}`);
   if (body.plugins || body.audio || body.images) throw new Error('text-only requests required');
   if ((body.tools && !allowTools) || (body.stream && !allowStream)) throw new Error('text-only nonstream requests required');
   const textOnly = m => typeof m.content === 'string' || (allowTools && m.content == null && m.role === 'assistant');
@@ -60,6 +61,15 @@ export function requestBound(body, { allowTools = false, allowStream = false } =
   const max = body.model.includes('embedding') ? 0 : Number(body.max_tokens);
   if (!Number.isInteger(max) || max < 0 || max > 16384 || (!body.model.includes('embedding') && max === 0)) throw new Error('bounded max_tokens required');
   return (Buffer.byteLength(JSON.stringify(body)) + 20000) * price.prompt + max * price.completion;
+}
+/**
+ * What a call to a routed provider cost, from its token counts and the route's
+ * prices (per token). `undefined` without usage, which keeps the reservation.
+ */
+export function routeCost(usage, prices) {
+  if (!usage || !Number.isFinite(usage.prompt_tokens) || !Number.isFinite(usage.completion_tokens)) return undefined;
+  const cached = Math.min(usage.prompt_tokens_details?.cached_tokens ?? 0, usage.prompt_tokens);
+  return (usage.prompt_tokens - cached) * prices.prompt + cached * prices.cached + usage.completion_tokens * prices.completion;
 }
 /** The usage block of the last SSE event that carries one. */
 export function streamUsage(raw) {
@@ -73,32 +83,44 @@ export function streamUsage(raw) {
   return usage;
 }
 export async function startGateway({ dir, key, port = 0, upstream = 'https://openrouter.ai/api/v1', fetchImpl = fetch,
-  limit = 10, maxLimit = 10, glmProvider = 'z-ai', allowTools = false, allowStream = false }) {
+  limit = 10, maxLimit = 10, glmProvider = 'z-ai', allowTools = false, allowStream = false, routes = {} }) {
   const budget = new Budget(path.join(dir, 'budget.json'), limit, maxLimit);
   const server = http.createServer(async (req, res) => {
     if (req.url === '/budget') return res.end(JSON.stringify(budget.state));
     if (req.method !== 'POST' || !/^\/v1\/(chat\/completions|embeddings)$/.test(req.url)) return res.writeHead(404).end();
-    let body, bound;
+    let body, bound, route, wire;
     try {
       const chunks = [];
       for await (const c of req) chunks.push(c);
       body = JSON.parse(Buffer.concat(chunks));
       const p = PRICES[body.model];
       if (!p) throw new Error('unapproved model');
-      body.provider = { allow_fallbacks: false, max_price: { prompt: p.prompt * 1e6, completion: p.completion * 1e6 } };
-      if (body.model === 'z-ai/glm-5.3-flash') {
-        body.provider.only = [glmProvider];
-        body.reasoning = { effort: 'low' };
+      route = routes[body.model];
+      if (route) {
+        // Another OpenAI-compatible provider serves this model (memory/.env):
+        // its own model id, no OpenRouter routing fields, usage on streams.
+        bound = requestBound(body, { allowTools, allowStream, price: route.prices });
+        wire = { ...body, model: route.model };
+        delete wire.provider; delete wire.usage; delete wire.reasoning;
+        if (route.reasoningEffort) wire.reasoning_effort = route.reasoningEffort;
+        if (wire.stream) wire.stream_options = { include_usage: true };
+      } else {
+        body.provider = { allow_fallbacks: false, max_price: { prompt: p.prompt * 1e6, completion: p.completion * 1e6 } };
+        if (body.model === 'z-ai/glm-5.3-flash') {
+          body.provider.only = [glmProvider];
+          body.reasoning = { effort: 'low' };
+        }
+        body.usage = { include: true };
+        bound = requestBound(body, { allowTools, allowStream });
+        wire = body;
       }
-      body.usage = { include: true };
-      bound = requestBound(body, { allowTools, allowStream });
       budget.reserve(bound);
     } catch (e) { return res.writeHead(402).end(JSON.stringify({ error: e.message })); }
     const started = Date.now();
     try {
-      const response = await fetchImpl(`${upstream}${req.url.slice(3)}`, {
-        method: 'POST', headers: { authorization: `Bearer ${key}`, 'content-type': 'application/json' },
-        body: JSON.stringify(body), signal: AbortSignal.timeout(240000),
+      const response = await fetchImpl(`${route ? route.upstream : upstream}${req.url.slice(3)}`, {
+        method: 'POST', headers: { authorization: `Bearer ${route ? route.key : key}`, 'content-type': 'application/json' },
+        body: JSON.stringify(wire), signal: AbortSignal.timeout(240000),
       });
       if (body.stream) {
         // Pass the stream through as it arrives, so the client's first-event
@@ -109,23 +131,23 @@ export async function startGateway({ dir, key, port = 0, upstream = 'https://ope
         for await (const chunk of response.body) { raw += decoder.decode(chunk, { stream: true }); res.write(chunk); }
         res.end();
         const usage = streamUsage(raw);
-        budget.settle(bound, usage?.cost);
+        budget.settle(bound, route ? routeCost(usage, route.prices) : usage?.cost);
         fs.appendFileSync(path.join(dir, 'meter.jsonl'), JSON.stringify({ at: new Date().toISOString(),
           phase: req.headers['x-bench-phase'] ?? 'memory-background', model: body.model,
-          route: req.url, status: response.status, wall_ms: Date.now() - started, stream: true,
-          reserved_usd: bound, usage, request: body, response_chars: raw.length,
+          route: req.url, provider: route?.name ?? 'openrouter', status: response.status, wall_ms: Date.now() - started, stream: true,
+          reserved_usd: bound, usage, request: wire, response_chars: raw.length,
         }) + '\n');
         return;
       }
       const raw = await response.text();
       let output;
       try { output = JSON.parse(raw); } catch { output = { raw }; }
-      const actual = output.usage?.cost;
+      const actual = route ? routeCost(output.usage, route.prices) : output.usage?.cost;
       budget.settle(bound, actual);
       fs.appendFileSync(path.join(dir, 'meter.jsonl'), JSON.stringify({ at: new Date().toISOString(),
         phase: req.headers['x-bench-phase'] ?? 'memory-background', model: body.model,
-        route: req.url, status: response.status, wall_ms: Date.now() - started,
-        reserved_usd: bound, usage: output.usage ?? null, request: body,
+        route: req.url, provider: route?.name ?? 'openrouter', status: response.status, wall_ms: Date.now() - started,
+        reserved_usd: bound, actual_usd: actual ?? null, usage: output.usage ?? null, request: wire,
         response: req.url.endsWith('embeddings') ? { model: output.model, vectors: output.data?.length, error: output.error } : output,
       }) + '\n');
       res.writeHead(response.status, { 'content-type': 'application/json' }).end(raw);

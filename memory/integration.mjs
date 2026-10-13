@@ -34,6 +34,7 @@ import { createHash, randomBytes } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { spawn } from 'node:child_process';
 import { startGateway } from './gateway.mjs';
+import { describeRoutes, glmRoutes, loadEnv } from './env.mjs';
 import { startCortex, CORTEX_API_KEY } from './cortex.mjs';
 import { DEFAULT_WAIT_MS, SYSTEM, coreConfig, nextQuiet, preTurnTimeouts, questionPrompt, replyText,
   threadId, threadMessages, unwrap } from './integration-lib.mjs';
@@ -83,8 +84,10 @@ if (opts.task && !manifest.tasks.some(t => t.id === opts.task)) throw new Error(
 
 // The budget ceiling is the cap recorded on the issue for this phase; it has
 // to be passed explicitly above the gateway's default $10.
+// memory/.env can route GLM 5.3 Flash to another provider (Surplus AI).
+const routes = glmRoutes(loadEnv(path.join(here, '.env')));
 const gateway = await startGateway({ dir: out, key: process.env.OPENROUTER_API_KEY, limit: opts.budget,
-  maxLimit: Math.max(10, opts.budget), glmProvider: opts.glmProvider, allowTools: true, allowStream: true });
+  maxLimit: Math.max(10, opts.budget), glmProvider: opts.glmProvider, allowTools: true, allowStream: true, routes });
 delete process.env.OPENROUTER_API_KEY; // Neither the core nor the scorers need it.
 const inference = `http://127.0.0.1:${gateway.port}/v1`;
 const write = (name, value) => fs.writeFileSync(path.join(out, name), JSON.stringify(value, null, 2) + '\n');
@@ -241,7 +244,8 @@ const rowsFile = path.join(out, 'answers.jsonl');
 const rows = fs.existsSync(rowsFile) ? fs.readFileSync(rowsFile, 'utf8').trim().split('\n').filter(Boolean).map(JSON.parse) : [];
 const done = q => rows.some(r => r.id === q.id && r.system === system);
 try {
-  write(`run-meta-${system}.json`, { system, model: MODEL, glm_provider: opts.glmProvider, reasoning: 'low', judge: JUDGE,
+  write(`run-meta-${system}.json`, { system, model: MODEL, glm_provider: routes[MODEL]?.name ?? opts.glmProvider,
+    routes: describeRoutes(routes), reasoning: 'low', judge: JUDGE,
     wait_ms: opts.waitMs, date_hint: opts.dateHint, budget_usd: opts.budget, task_filter: opts.task ?? null,
     core_binary: path.resolve(opts.core), core_sha256: createHash('sha256').update(fs.readFileSync(opts.core)).digest('hex'),
     mode: 'history via threads + memory_conversations_backfill_start; questions as live inference_agent_chat turns',

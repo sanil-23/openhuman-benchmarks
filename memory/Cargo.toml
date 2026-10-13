@@ -4,9 +4,9 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-tinymemory-api = { path = "../vendor/openhuman/vendor/tinymemory/crates/tinymemory-api", features = ["conformance"] }
-tinymemory-tools = { path = "../vendor/openhuman/vendor/tinymemory/crates/tinymemory-tools" }
-tinymemory-integrations = { path = "../vendor/openhuman/vendor/tinymemory/crates/tinymemory-integrations", features = ["cortex"] }
+tinymemory-api = { path = "../vendor/openhuman-memory/vendor/tinymemory/crates/tinymemory-api", features = ["conformance"] }
+tinymemory-tools = { path = "../vendor/openhuman-memory/vendor/tinymemory/crates/tinymemory-tools" }
+tinymemory-integrations = { path = "../vendor/openhuman-memory/vendor/tinymemory/crates/tinymemory-integrations", features = ["cortex"] }
 tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
 serde_json = "1"
 chrono = "0.4"

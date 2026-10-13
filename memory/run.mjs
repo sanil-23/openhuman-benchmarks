@@ -7,6 +7,7 @@ import { fileURLToPath } from 'node:url';
 import { execFile, spawn } from 'node:child_process';
 import { promisify } from 'node:util';
 import { startGateway } from './gateway.mjs';
+import { describeRoutes, glmRoutes, loadEnv } from './env.mjs';
 const exec = promisify(execFile);
 const here = path.dirname(fileURLToPath(import.meta.url));
 const root = path.dirname(here);
@@ -38,7 +39,12 @@ const refs = JSON.parse(fs.readFileSync(path.join(here, 'data/references.json'))
 const MODEL = 'z-ai/glm-5.3-flash';
 const JUDGE = 'openai/gpt-4o-mini-2024-07-18';
 const CORTEX_IMAGE = 'cortexdb/cortexdb@sha256:636e0ed0b8cd4ae2f307e3a90f99050f7879f73c556b1ccbbabf2d3a383398fc'; // v0.10.4
-const gateway = await startGateway({ dir: out, key: process.env.OPENROUTER_API_KEY });
+// GLM 5.3 Flash defaults to Z.AI, the audit's provider; an account without it
+// can route to another (MEMORY_GLM_PROVIDER=together), recorded in run-meta.
+const glmProvider = process.env.MEMORY_GLM_PROVIDER || 'z-ai';
+// memory/.env can route GLM 5.3 Flash to another provider (Surplus AI).
+const routes = glmRoutes(loadEnv(path.join(here, '.env')));
+const gateway = await startGateway({ dir: out, key: process.env.OPENROUTER_API_KEY, glmProvider, routes });
 delete process.env.OPENROUTER_API_KEY; // Scorer subprocesses need no inference credential.
 const base = `http://127.0.0.1:${gateway.port}/v1`;
 const network = `bench-${runId}`;
@@ -91,13 +97,13 @@ async function retrieve(engine, task) {
   }
 }
 try {
-  write('run-meta.json', { model: MODEL, provider: 'z-ai', reasoning: 'low', judge: JUDGE,
+  write('run-meta.json', { model: MODEL, provider: routes[MODEL]?.name ?? glmProvider, routes: describeRoutes(routes), reasoning: 'low', judge: JUDGE,
     native_task_limit: Number.isFinite(nativeTaskLimit) ? nativeTaskLimit : null,
     native_task_filter: nativeTaskFilter,
     embedding: 'openai/text-embedding-3-small', budget_usd: 10,
     mode: 'direct-ingest/pre-turn; text plus supplied captions; default RecallPolicy',
-    openhuman_sha: (await exec('git', ['-C', path.join(root, 'vendor/openhuman'), 'rev-parse', 'HEAD'])).stdout.trim(),
-    tinymemory_sha: (await exec('git', ['-C', path.join(root, 'vendor/openhuman/vendor/tinymemory'), 'rev-parse', 'HEAD'])).stdout.trim(), manifest });
+    openhuman_sha: (await exec('git', ['-C', path.join(root, 'vendor/openhuman-memory'), 'rev-parse', 'HEAD'])).stdout.trim(),
+    tinymemory_sha: (await exec('git', ['-C', path.join(root, 'vendor/openhuman-memory/vendor/tinymemory'), 'rev-parse', 'HEAD'])).stdout.trim(), manifest });
   // Reproduce the small-output extraction hazard separately from QA.
   if (!fs.existsSync(path.join(out, 'extraction-probe.json'))) {
     const probes = [];

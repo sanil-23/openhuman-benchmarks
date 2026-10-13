@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { Budget, requestBound, startGateway, streamUsage } from './gateway.mjs';
+import { Budget, requestBound, routeCost, startGateway, streamUsage } from './gateway.mjs';
 
 test('concurrent reservations and restart cannot exceed the global $10 cap', () => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'memory-budget-'));
@@ -100,4 +100,49 @@ test('streamed calls pass through and settle from the last usage event', async (
 test('stream usage comes from the last event that reports it', () => {
   assert.equal(streamUsage('data: {"usage":{"cost":1}}\n\ndata: {"usage":{"cost":2}}\n\ndata: [DONE]\n').cost, 2);
   assert.equal(streamUsage('data: {"choices":[]}\n\ndata: [DONE]\n'), null);
+});
+const surplus = { 'z-ai/glm-5.3-flash': { name: 'surplus', upstream: 'https://api.surplus.example/v1', key: 'surplus-key',
+  model: 'glm-5.3-flash', reasoningEffort: 'low', prices: { prompt: 0.1e-6, completion: 0.4e-6, cached: 0.02e-6 } } };
+test('a routed model goes to its provider with its key and id, and settles from tokens', async () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'memory-gateway-'));
+  const calls = [];
+  const g = await startGateway({ dir, key: 'openrouter-key', routes: surplus, fetchImpl: async (url, options) => {
+    calls.push({ url, auth: options.headers.authorization, body: JSON.parse(options.body) });
+    return new Response(JSON.stringify(url.includes('surplus')
+      ? { choices: [{ message: { content: 'ok' } }], usage: { prompt_tokens: 1000, completion_tokens: 100, prompt_tokens_details: { cached_tokens: 400 } } }
+      : { usage: { cost: 0.0001 }, data: [{ embedding: [1] }] }));
+  } });
+  try {
+    const glm = await fetch(`http://127.0.0.1:${g.port}/v1/chat/completions`, { method: 'POST',
+      body: JSON.stringify({ model: 'z-ai/glm-5.3-flash', max_tokens: 100, messages: [{ role: 'user', content: 'hi' }] }) });
+    assert.equal(glm.status, 200);
+    await fetch(`http://127.0.0.1:${g.port}/v1/embeddings`, { method: 'POST', body: JSON.stringify({ model: 'openai/text-embedding-3-small', input: 'x' }) });
+    assert.equal(calls[0].url, 'https://api.surplus.example/v1/chat/completions');
+    assert.equal(calls[0].auth, 'Bearer surplus-key');
+    assert.equal(calls[0].body.model, 'glm-5.3-flash');
+    assert.equal(calls[0].body.reasoning_effort, 'low');
+    for (const field of ['provider', 'usage', 'reasoning']) assert.equal(field in calls[0].body, false, `${field} is OpenRouter-only`);
+    assert.equal(calls[1].url, 'https://openrouter.ai/api/v1/embeddings', 'embeddings stay on OpenRouter');
+    assert.equal(calls[1].auth, 'Bearer openrouter-key');
+    const expected = 600 * 0.1e-6 + 400 * 0.02e-6 + 100 * 0.4e-6 + 0.0001;
+    assert.ok(Math.abs(g.budget.state.actual - expected) < 1e-12);
+    const log = fs.readFileSync(path.join(dir, 'meter.jsonl'), 'utf8');
+    assert.equal(log.includes('surplus-key') || log.includes('openrouter-key'), false, 'no key reaches the meter log');
+    assert.equal(JSON.parse(log.split('\n')[0]).provider, 'surplus');
+  } finally { await new Promise(r => g.server.close(r)); fs.rmSync(dir, { recursive: true }); }
+});
+test('routed streams ask for usage and settle from it; no usage keeps the reservation', async () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'memory-gateway-'));
+  let sent;
+  const sse = 'data: {"choices":[{"delta":{"content":"a"}}]}\n\ndata: {"choices":[],"usage":{"prompt_tokens":10,"completion_tokens":5}}\n\ndata: [DONE]\n\n';
+  const g = await startGateway({ dir, key: 'k', routes: surplus, allowTools: true, allowStream: true,
+    fetchImpl: async (_url, options) => { sent = JSON.parse(options.body); return new Response(sse, { headers: { 'content-type': 'text/event-stream' } }); } });
+  try {
+    const r = await fetch(`http://127.0.0.1:${g.port}/v1/chat/completions`, { method: 'POST',
+      body: JSON.stringify({ model: 'z-ai/glm-5.3-flash', max_tokens: 100, stream: true, tools: [], messages: [{ role: 'user', content: 'hi' }] }) });
+    assert.equal(await r.text(), sse);
+    assert.deepEqual(sent.stream_options, { include_usage: true });
+    assert.ok(Math.abs(g.budget.state.actual - (10 * 0.1e-6 + 5 * 0.4e-6)) < 1e-15);
+  } finally { await new Promise(r => g.server.close(r)); fs.rmSync(dir, { recursive: true }); }
+  assert.equal(routeCost(null, surplus['z-ai/glm-5.3-flash'].prices), undefined, 'no usage keeps the reservation');
 });
