@@ -146,3 +146,8 @@ test('routed streams ask for usage and settle from it; no usage keeps the reserv
   } finally { await new Promise(r => g.server.close(r)); fs.rmSync(dir, { recursive: true }); }
   assert.equal(routeCost(null, surplus['z-ai/glm-5.3-flash'].prices), undefined, 'no usage keeps the reservation');
 });
+test('a reported charge in microdollars wins over the configured prices', () => {
+  const prices = surplus['z-ai/glm-5.3-flash'].prices;
+  assert.equal(routeCost({ prompt_tokens: 1000, completion_tokens: 100, buyer_cost_micro: 42 }, prices), 0.000042);
+  assert.ok(Math.abs(routeCost({ prompt_tokens: 1000, completion_tokens: 100 }, prices) - (1000 * 0.1e-6 + 100 * 0.4e-6)) < 1e-15);
+});

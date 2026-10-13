@@ -63,10 +63,14 @@ export function requestBound(body, { allowTools = false, allowStream = false, pr
   return (Buffer.byteLength(JSON.stringify(body)) + 20000) * price.prompt + max * price.completion;
 }
 /**
- * What a call to a routed provider cost, from its token counts and the route's
- * prices (per token). `undefined` without usage, which keeps the reservation.
+ * What a call to a routed provider cost: the charge it reports when it does,
+ * else its token counts at the route's prices (per token). `undefined`
+ * without usage, which keeps the reservation.
  */
 export function routeCost(usage, prices) {
+  // Surplus Intelligence reports what it charged, in microdollars; a
+  // marketplace price can move away from the configured one, so that wins.
+  if (Number.isFinite(usage?.buyer_cost_micro)) return usage.buyer_cost_micro / 1e6;
   if (!usage || !Number.isFinite(usage.prompt_tokens) || !Number.isFinite(usage.completion_tokens)) return undefined;
   const cached = Math.min(usage.prompt_tokens_details?.cached_tokens ?? 0, usage.prompt_tokens);
   return (usage.prompt_tokens - cached) * prices.prompt + cached * prices.cached + usage.completion_tokens * prices.completion;
