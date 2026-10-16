@@ -16,11 +16,14 @@ export function loadEnv(file) {
 }
 
 const GLM = 'z-ai/glm-5.3-flash';
+export const DEEPSEEK = 'deepseek/deepseek-v4.1-flash';
 
 /**
  * Gateway routes from the Surplus AI settings: `{ 'z-ai/glm-5.3-flash': route }`,
  * or `{}` when the base URL and key are not both set (GLM then stays on
  * OpenRouter). A partly filled file is an error rather than a silent fallback.
+ * The optional SURPLUS_DEEPSEEK_* block adds DeepSeek V4.1 Flash on the same
+ * endpoint and key, for use as a reader.
  */
 export function glmRoutes(env) {
   const base = env.SURPLUS_BASE_URL, key = env.SURPLUS_API_KEY;
@@ -34,17 +37,26 @@ export function glmRoutes(env) {
     if (!(Number.isFinite(value) && value >= 0)) throw new Error(`memory/.env: ${name} must be a non-negative number`);
     return value / 1e6;
   };
-  return {
-    [GLM]: {
-      name: 'surplus',
-      upstream: base.replace(/\/+$/, ''),
-      key,
-      model: env.SURPLUS_GLM_MODEL,
-      reasoningEffort: env.SURPLUS_REASONING_EFFORT || null,
-      prices: { prompt: price('SURPLUS_PRICE_INPUT_PER_M'), completion: price('SURPLUS_PRICE_OUTPUT_PER_M'),
-        cached: price('SURPLUS_PRICE_CACHED_INPUT_PER_M') },
-    },
-  };
+  const route = prefix => ({
+    name: 'surplus',
+    upstream: base.replace(/\/+$/, ''),
+    key,
+    model: env[`${prefix}MODEL`],
+    reasoningEffort: env[`${prefix}REASONING_EFFORT`] || null,
+    prices: { prompt: price(`${prefix}PRICE_INPUT_PER_M`), completion: price(`${prefix}PRICE_OUTPUT_PER_M`),
+      cached: price(`${prefix}PRICE_CACHED_INPUT_PER_M`) },
+  });
+  // The GLM block predates the DeepSeek one and keeps its unprefixed names.
+  const glm = route('SURPLUS_');
+  glm.model = env.SURPLUS_GLM_MODEL;
+  const routes = { [GLM]: glm };
+  if (env.SURPLUS_DEEPSEEK_MODEL) {
+    const absent = ['PRICE_INPUT_PER_M', 'PRICE_OUTPUT_PER_M', 'PRICE_CACHED_INPUT_PER_M']
+      .map(k => `SURPLUS_DEEPSEEK_${k}`).filter(k => !env[k]);
+    if (absent.length) throw new Error(`memory/.env: set ${absent.join(', ')}`);
+    routes[DEEPSEEK] = route('SURPLUS_DEEPSEEK_');
+  }
+  return routes;
 }
 
 /** What run-meta records about a route: everything but the key. */

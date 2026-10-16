@@ -33,7 +33,21 @@ test('a full file routes GLM with per-token prices, and the record leaves out th
   for (const [k, v] of Object.entries({ prompt: 0.1e-6, completion: 0.4e-6, cached: 0.02e-6 })) {
     assert.ok(Math.abs(route.prices[k] - v) < 1e-18, `${k} per token`);
   }
+  assert.equal(glmRoutes(full)['deepseek/deepseek-v4.1-flash'], undefined, 'DeepSeek is opt-in');
   const described = JSON.stringify(describeRoutes(glmRoutes(full)));
   assert.equal(described.includes('sk-test'), false);
   assert.match(described, /api\.surplus\.example/);
+});
+
+test('the DeepSeek block adds a reader route on the same endpoint, and a partial one is refused', () => {
+  const ds = { ...full, SURPLUS_DEEPSEEK_MODEL: 'deepseek-v4.1-flash', SURPLUS_DEEPSEEK_PRICE_INPUT_PER_M: '0.05',
+    SURPLUS_DEEPSEEK_PRICE_OUTPUT_PER_M: '0.6', SURPLUS_DEEPSEEK_PRICE_CACHED_INPUT_PER_M: '0.005' };
+  const routes = glmRoutes(ds);
+  assert.equal(routes['z-ai/glm-5.3-flash'].model, 'glm-5.3-flash');
+  const route = routes['deepseek/deepseek-v4.1-flash'];
+  assert.equal(route.model, 'deepseek-v4.1-flash');
+  assert.equal(route.upstream, 'https://api.surplus.example/v1');
+  assert.equal(route.reasoningEffort, null);
+  assert.ok(Math.abs(route.prices.completion - 0.6e-6) < 1e-18);
+  assert.throws(() => glmRoutes({ ...ds, SURPLUS_DEEPSEEK_PRICE_OUTPUT_PER_M: '' }), /SURPLUS_DEEPSEEK_PRICE_OUTPUT_PER_M/);
 });
