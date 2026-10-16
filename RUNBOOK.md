@@ -241,3 +241,66 @@ polls. Audit completed indexing batches with `memory/diagnose.mjs`: readable
 receipts and aggregate enrichment counters do not certify every turn's
 derived-index readiness. These native results are snapshots of that policy;
 desktop replay and an independent memory competitor remain to be added.
+
+# Memory integration and long-history arms (issue #38)
+
+The integration arm runs the real `openhuman-core` (built from the
+`vendor/openhuman-memory` pin) against a local CortexDB: the history goes in
+through OpenHuman's own threads and past-chat sync, and each question is a
+live agent turn that reads memory through the agent's `memory` tool. Every
+model call passes the budget gateway, as in the smoke audit.
+
+```bash
+cargo build -p openhuman-cli --bin openhuman-core --manifest-path vendor/openhuman-memory/Cargo.toml
+CORE=vendor/openhuman-memory/target/debug/openhuman-core
+# LoCoMo, one conversation, CortexDB without enrichment:
+node memory/integration.mjs memory38-locomo --core $CORE --task locomo-0 --no-enrichment \
+  --reader-model deepseek/deepseek-v4.1-flash
+# LongMemEval_M: write the 13 tasks of memory/longmemeval-m-13.json under memory/data-m/
+python3 -I memory/prepare_lme_m.py $(python3 -c 'import json;print(" ".join(q["id"] for q in json.load(open("memory/longmemeval-m-13.json"))["questions"]))')
+# arm 1, OpenHuman + memory, one task (repeat per task):
+node memory/integration.mjs memory38-lmem13 --core $CORE --task-file memory/data-m/lmem-d7c942c3.json \
+  --task lmem-d7c942c3 --no-enrichment --reader-model deepseek/deepseek-v4.1-flash
+# the same questions without memory:
+node memory/integration.mjs memory38-lmem13-pasted --core $CORE --task-file … --task … --paste-history-tokens 110000 …
+node memory/integration.mjs memory38-lmem13-compaction --core $CORE --task-file … --task … \
+  --compaction-turn-tokens 20000 --compaction-strategy task_state …
+node memory/fullctx_m.mjs memory38-lmem13-fullctx
+# memory tool use per question, from the gateway log:
+python3 memory/tool_metrics.py results/memory38-lmem13 oh-integration-noenrich
+```
+
+- **A store is complete before it is asked.** After the past-chat sync
+  (whose end is read from the core's log), the harness waits for CortexDB's
+  indexer lag 0 with nothing in flight, then for `/v1/derivation/status` to
+  say `caught_up` on every scope, and records both in `snapshot.json` with
+  the layer counts. One 1.1M-token history takes about 4–5 minutes from the
+  first write.
+- **Build once, ask many times.** The finished store is a snapshot under
+  `results/<run>/snapshots/<task>/`; `--from-snapshot DIR` asks on a fresh
+  copy, and `--snapshot-only` builds without asking.
+- **`--no-enrichment`** starts CortexDB without its enrichment model: the
+  store keeps the messages, embedded, and builds no facts, beliefs or entity
+  graph from them.
+- **LongMemEval_M** gives every question its own history of about 500
+  sessions and 1.1M tokens, so no model window holds it. The 13 questions
+  (`memory/longmemeval-m-13.json`, seed 27, two per type plus an abstention)
+  have no answer session in their newest 120k tokens. Off-manifest tasks run
+  with `--task-file`; the run metadata records each file's sha256.
+- **No-memory arms** use the same agent, model, questions and judge:
+  `--paste-history-tokens N` pastes the newest history that fits in about N
+  tokens into the question's message (110000 fits OpenHuman's 115,200-token
+  trim; above it the message is dropped and the run stops);
+  `--compaction-turn-tokens N` feeds the whole history as user turns of about
+  N tokens and lets OpenHuman's own compaction handle it (`--compaction-strategy
+  task_state|summary`), resending a turn the prompt-injection guard rejects one
+  session at a time and recording any session it still rejects;
+  `fullctx_m.mjs` asks the bare model with the newest history that fits.
+- **The compaction arm needs `clampMaxTokens`.** OpenHuman's summarizer calls
+  carry no output bound, which the gateway refuses by default; this arm sends
+  them with a 16,384-token bound and logs what each asked for. The setting is
+  off everywhere else.
+- **A refusal is not a miss.** A prompt the provider's content filter refuses
+  is recorded with `provider_refused` and left unscored.
+- **Stalls end.** Every call to the core has a hard deadline, and a container
+  or network left by a stopped run is removed before the next start.

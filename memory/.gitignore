@@ -2,3 +2,5 @@
 /data/
 /target/
 /.venv/
+/data-m/
+/data-paging/

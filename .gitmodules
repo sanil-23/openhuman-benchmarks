@@ -1,3 +1,7 @@
 [submodule "vendor/openhuman"]
 	path = vendor/openhuman
 	url = https://github.com/tinyhumansai/openhuman.git
+[submodule "openhuman-memory"]
+	path = vendor/openhuman-memory
+	url = https://github.com/tinyhumansai/openhuman.git
+	update = none
