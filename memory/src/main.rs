@@ -1,5 +1,12 @@
 //! Direct ingestion into the pinned OH memory engine, followed by a fresh
 //! thread's real pre-turn lifecycle. This does not measure agent/tool selection.
+//!
+//! `MEMORY_BENCH_PHASE` splits the run so the store can be snapshotted
+//! between the two halves: `ingest` stores the history and waits for it,
+//! `probe` only recalls (the history is already in the engine), `all` (the
+//! default) does both. With `MEMORY_BENCH_IDLE_URL` (the budget gateway's
+//! `/idle`), the run also waits until the engine's model calls have gone
+//! quiet after ingesting and before each probe, as run.mjs's settle does.
 use serde_json::{Value, json};
 use std::{
     collections::HashSet,
@@ -11,9 +18,42 @@ use tinymemory_api::{MemoryEngine, MemoryMeta, Role, StoreItem, Turn};
 use tinymemory_integrations::cortex::{CortexCredential, CortexEngine};
 use tinymemory_tools::{AgentMemory, MemoryLayout, PreTurn, RecallPolicy};
 
+/// Waits until the gateway at `url` reports the engine quiet (see the
+/// module docs). An hour without quiet is an error.
+async fn wait_idle(url: &str, label: &str) -> Result<(), Box<dyn std::error::Error>> {
+    let client = reqwest::Client::new();
+    let deadline = Instant::now() + Duration::from_secs(3600);
+    let started = Instant::now();
+    loop {
+        let state: Value = client
+            .get(url)
+            .send()
+            .await?
+            .error_for_status()?
+            .json()
+            .await?;
+        if state["idle"].as_bool() == Some(true) {
+            eprintln!(
+                "idle before {label} after {} s",
+                started.elapsed().as_secs()
+            );
+            return Ok(());
+        }
+        if Instant::now() >= deadline {
+            return Err(format!("engine never went quiet before {label}: {state}").into());
+        }
+        tokio::time::sleep(Duration::from_secs(3)).await;
+    }
+}
+
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let args: Vec<String> = std::env::args().collect();
+    let phase = std::env::var("MEMORY_BENCH_PHASE").unwrap_or_else(|_| "all".to_string());
+    if !["all", "ingest", "probe"].contains(&phase.as_str()) {
+        return Err("MEMORY_BENCH_PHASE must be all, ingest or probe".into());
+    }
+    let idle_url = std::env::var("MEMORY_BENCH_IDLE_URL").ok();
     let task: Value = serde_json::from_slice(&std::fs::read(&args[2])?)?;
     let engine: Arc<dyn MemoryEngine> = match args[1].as_str() {
         "reference" => Arc::new(ReferenceEngine::new()),
@@ -28,144 +68,159 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let node = layout.conversations("benchmark")?;
     let started = Instant::now();
     let mut stored = 0;
-    let mut expected = HashSet::new();
-    for (i, session) in task["sessions"]
-        .as_array()
-        .ok_or("sessions")?
-        .iter()
-        .enumerate()
-    {
-        let date = session["date"].as_str().unwrap_or("");
-        let thread = format!("history-{i}");
-        let mut items = Vec::new();
-        // Store each turn independently, as the product lifecycle does. A
-        // whole-session item would make reference retrieval return full history.
-        for (j, row) in session["turns"]
+    let mut enrichment = Value::Null;
+    if phase != "probe" {
+        let mut expected = HashSet::new();
+        for (i, session) in task["sessions"]
             .as_array()
-            .ok_or("turns")?
+            .ok_or("sessions")?
             .iter()
             .enumerate()
         {
-            let role = if row["role"] == "assistant" {
-                Role::Assistant
-            } else {
-                Role::User
-            };
-            let mut turn = Turn::new(
-                role,
-                format!(
-                    "[session date: {date}] {}",
-                    row["text"].as_str().ok_or("text")?
-                ),
-            );
-            turn.at = session["timestamp"].as_str().and_then(|s| s.parse().ok());
-            let meta = MemoryMeta {
-                namespace: node.clone(),
-                agent_id: Some("benchmark".into()),
-                thread_id: Some(thread.clone()),
-                turns: Some(tinymemory_api::TurnRange {
-                    first: j as u32,
-                    last: j as u32,
-                }),
-                observed_at: turn.at,
-                ..Default::default()
-            };
-            items.push(StoreItem::Conversation {
-                turns: vec![turn],
-                meta,
-            });
-            stored += 1;
-        }
-        // Bound each bulk direct-ingest request to the engine's item limit.
-        // Readability and enrichment settling are checked after all writes.
-        for chunk in items.chunks(tinymemory_api::MAX_STORE_MANY) {
-            for receipt in engine
-                .store_many_with(chunk.to_vec(), tinymemory_api::WriteOptions::accepted())
-                .await?
+            let date = session["date"].as_str().unwrap_or("");
+            let thread = format!("history-{i}");
+            let mut items = Vec::new();
+            // Store each turn independently, as the product lifecycle does. A
+            // whole-session item would make reference retrieval return full history.
+            for (j, row) in session["turns"]
+                .as_array()
+                .ok_or("turns")?
+                .iter()
+                .enumerate()
             {
-                expected.insert(receipt.id);
+                let role = if row["role"] == "assistant" {
+                    Role::Assistant
+                } else {
+                    Role::User
+                };
+                let mut turn = Turn::new(
+                    role,
+                    format!(
+                        "[session date: {date}] {}",
+                        row["text"].as_str().ok_or("text")?
+                    ),
+                );
+                turn.at = session["timestamp"].as_str().and_then(|s| s.parse().ok());
+                let meta = MemoryMeta {
+                    namespace: node.clone(),
+                    agent_id: Some("benchmark".into()),
+                    thread_id: Some(thread.clone()),
+                    turns: Some(tinymemory_api::TurnRange {
+                        first: j as u32,
+                        last: j as u32,
+                    }),
+                    observed_at: turn.at,
+                    ..Default::default()
+                };
+                items.push(StoreItem::Conversation {
+                    turns: vec![turn],
+                    meta,
+                });
+                stored += 1;
             }
-        }
-        eprintln!(
-            "{} session {}/{}; {stored} turns",
-            task["id"],
-            i + 1,
-            task["sessions"].as_array().unwrap().len()
-        );
-    }
-    // Accepted writes are asynchronous. Require every exact receipt id to
-    // be readable before querying. Listing is not an indexing certificate:
-    // retain server logs and audit indexed batch counts as well.
-    let deadline = Instant::now() + Duration::from_secs(600);
-    loop {
-        let mut readable = HashSet::new();
-        let mut req =
-            tinymemory_api::ListRequest::new(layout.conversations_filter(Some("benchmark")), 100);
-        loop {
-            let page = engine.list(req.clone()).await?;
-            readable.extend(page.items.into_iter().map(|hit| hit.id));
-            req.cursor = page.next_cursor;
-            if req.cursor.is_none() {
-                break;
+            // Bound each bulk direct-ingest request to the engine's item limit.
+            // Readability and enrichment settling are checked after all writes.
+            for chunk in items.chunks(tinymemory_api::MAX_STORE_MANY) {
+                for receipt in engine
+                    .store_many_with(chunk.to_vec(), tinymemory_api::WriteOptions::accepted())
+                    .await?
+                {
+                    expected.insert(receipt.id);
+                }
             }
-        }
-        if expected.is_subset(&readable) {
-            break;
-        }
-        if Instant::now() >= deadline {
-            return Err(format!(
-                "only {} of {} ingested turn ids are readable",
-                expected.intersection(&readable).count(),
-                expected.len()
-            )
-            .into());
-        }
-        tokio::time::sleep(Duration::from_secs(2)).await;
-    }
-    let mut enrichment = Value::Null;
-    if args[1] == "cortex" {
-        let url = std::env::var("CORTEX_DB_URL")?;
-        let client = reqwest::Client::new();
-        let deadline = Instant::now() + Duration::from_secs(600);
-        let mut quiet = 0;
-        let mut last_queued = None;
-        loop {
-            let usage: Value = client
-                .get(format!("{url}/v1/admin/usage"))
-                .bearer_auth("memory-bench-local")
-                .send()
-                .await?
-                .error_for_status()?
-                .json()
-                .await?;
-            enrichment = usage["enrichment_backlog"].clone();
-            let pending = enrichment["jobs_pending"]
-                .as_u64()
-                .ok_or("missing enrichment pending count")?;
-            let queued = enrichment["jobs_queued_total"]
-                .as_u64()
-                .ok_or("missing enrichment queued count")?;
             eprintln!(
-                "{} enrichment at={} pending={pending} queued={queued}",
+                "{} session {}/{}; {stored} turns",
                 task["id"],
-                chrono::Utc::now().to_rfc3339()
+                i + 1,
+                task["sessions"].as_array().unwrap().len()
             );
-            quiet = if pending == 0 && last_queued == Some(queued) {
-                quiet + 1
-            } else {
-                0
-            };
-            last_queued = Some(queued);
-            if quiet >= 3 {
+        }
+        // Accepted writes are asynchronous. Require every exact receipt id to
+        // be readable before querying. Listing is not an indexing certificate:
+        // retain server logs and audit indexed batch counts as well.
+        let deadline = Instant::now() + Duration::from_secs(600);
+        loop {
+            let mut readable = HashSet::new();
+            let mut req = tinymemory_api::ListRequest::new(
+                layout.conversations_filter(Some("benchmark")),
+                100,
+            );
+            loop {
+                let page = engine.list(req.clone()).await?;
+                readable.extend(page.items.into_iter().map(|hit| hit.id));
+                req.cursor = page.next_cursor;
+                if req.cursor.is_none() {
+                    break;
+                }
+            }
+            if expected.is_subset(&readable) {
                 break;
             }
             if Instant::now() >= deadline {
-                return Err(format!("enrichment failed to drain: {enrichment}").into());
+                return Err(format!(
+                    "only {} of {} ingested turn ids are readable",
+                    expected.intersection(&readable).count(),
+                    expected.len()
+                )
+                .into());
             }
-            tokio::time::sleep(Duration::from_secs(3)).await;
+            tokio::time::sleep(Duration::from_secs(2)).await;
+        }
+        if args[1] == "cortex" {
+            let url = std::env::var("CORTEX_DB_URL")?;
+            let client = reqwest::Client::new();
+            let deadline = Instant::now() + Duration::from_secs(600);
+            let mut quiet = 0;
+            let mut last_queued = None;
+            loop {
+                let usage: Value = client
+                    .get(format!("{url}/v1/admin/usage"))
+                    .bearer_auth("memory-bench-local")
+                    .send()
+                    .await?
+                    .error_for_status()?
+                    .json()
+                    .await?;
+                enrichment = usage["enrichment_backlog"].clone();
+                let pending = enrichment["jobs_pending"]
+                    .as_u64()
+                    .ok_or("missing enrichment pending count")?;
+                let queued = enrichment["jobs_queued_total"]
+                    .as_u64()
+                    .ok_or("missing enrichment queued count")?;
+                eprintln!(
+                    "{} enrichment at={} pending={pending} queued={queued}",
+                    task["id"],
+                    chrono::Utc::now().to_rfc3339()
+                );
+                quiet = if pending == 0 && last_queued == Some(queued) {
+                    quiet + 1
+                } else {
+                    0
+                };
+                last_queued = Some(queued);
+                if quiet >= 3 {
+                    break;
+                }
+                if Instant::now() >= deadline {
+                    return Err(format!("enrichment failed to drain: {enrichment}").into());
+                }
+                tokio::time::sleep(Duration::from_secs(3)).await;
+            }
+            if let Some(url) = &idle_url {
+                wait_idle(url, "the end of ingest").await?;
+            }
         }
     }
     let ingest_ms = started.elapsed().as_millis();
+    if phase == "ingest" {
+        println!(
+            "{}",
+            json!({"engine": engine.descriptor().id, "mode": "direct-ingest", "phase": "ingest",
+            "stored_turns": stored, "enrichment": enrichment, "ingest_ms": ingest_ms, "probes": []})
+        );
+        return Ok(());
+    }
     let mut policy = RecallPolicy::default();
     if let Some(budget) = args.get(3) {
         policy.budget_tokens = budget.parse()?;
@@ -181,6 +236,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .iter()
         .enumerate()
     {
+        if let Some(url) = &idle_url {
+            wait_idle(url, q["id"].as_str().unwrap_or("a probe")).await?;
+        }
         let started = Instant::now();
         let text = format!(
             "{}{}",
@@ -216,7 +274,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
     println!(
         "{}",
-        json!({"engine": engine.descriptor().id, "mode": "direct-ingest/pre-turn",
+        json!({"engine": engine.descriptor().id, "mode": "direct-ingest/pre-turn", "phase": phase,
         "stored_turns": stored, "write_wait": "accepted; all receipt ids listed; enrichment quiet for three polls",
         "policy": policy, "enrichment": enrichment, "ingest_ms": ingest_ms, "probes": probes})
     );
