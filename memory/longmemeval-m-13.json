@@ -1,0 +1,193 @@
+{
+ "seed": 27,
+ "rule": "2 per question type (sorted ids, random.Random(27).sample), 1 abstention",
+ "questions": [
+  {
+   "id": "e5ba910e_abs",
+   "category": "abstention",
+   "task_id": "lmem-e5ba910e-abs",
+   "sha256": "d544c0e86081fbb43849ca1e9d05df0c77b738ce841c0a8dc16acae4022045c8",
+   "answer_sessions": [
+    42,
+    282
+   ],
+   "answer_tokens_from_end": [
+    916862,
+    438679
+   ],
+   "in_recent_120k": false
+  },
+  {
+   "id": "d7c942c3",
+   "category": "knowledge-update",
+   "task_id": "lmem-d7c942c3",
+   "sha256": "563b89f18e923f5273a2b6014f7bd27995f979f2b37656fb411dbb3a20b10d1a",
+   "answer_sessions": [
+    121,
+    431
+   ],
+   "answer_tokens_from_end": [
+    771459,
+    130901
+   ],
+   "in_recent_120k": false
+  },
+  {
+   "id": "6aeb4375",
+   "category": "knowledge-update",
+   "task_id": "lmem-6aeb4375",
+   "sha256": "d5b1c2800f8803a75fb569eabd990317e023988e0268302da589d70f7b82a9a7",
+   "answer_sessions": [
+    236,
+    471
+   ],
+   "answer_tokens_from_end": [
+    595470,
+    67352
+   ],
+   "in_recent_120k": false
+  },
+  {
+   "id": "5a7937c8",
+   "category": "multi-session",
+   "task_id": "lmem-5a7937c8",
+   "sha256": "50196a2fe3bcba82a4e3596ddf58307643a2a0f170afc1f3591dad78b465a986",
+   "answer_sessions": [
+    191,
+    206,
+    365
+   ],
+   "answer_tokens_from_end": [
+    627038,
+    589606,
+    275586
+   ],
+   "in_recent_120k": false
+  },
+  {
+   "id": "3a704032",
+   "category": "multi-session",
+   "task_id": "lmem-3a704032",
+   "sha256": "a10e7bf4414a80b9d6f0ac997dc6b126cd5d21a5babae218db737e2d711edb2e",
+   "answer_sessions": [
+    90,
+    234,
+    279
+   ],
+   "answer_tokens_from_end": [
+    903708,
+    596175,
+    486250
+   ],
+   "in_recent_120k": false
+  },
+  {
+   "id": "1903aded",
+   "category": "single-session-assistant",
+   "task_id": "lmem-1903aded",
+   "sha256": "f498600103cb613e344f85c3ad8dbd19e0fbaef69066e2f7c4c2e84e000cb626",
+   "answer_sessions": [
+    186
+   ],
+   "answer_tokens_from_end": [
+    675410
+   ],
+   "in_recent_120k": false
+  },
+  {
+   "id": "4baee567",
+   "category": "single-session-assistant",
+   "task_id": "lmem-4baee567",
+   "sha256": "8beb153b3b53dc4cc435c016821e1533bd798aa2e1c8cda5e167247b03873e28",
+   "answer_sessions": [
+    330
+   ],
+   "answer_tokens_from_end": [
+    354431
+   ],
+   "in_recent_120k": false
+  },
+  {
+   "id": "caf03d32",
+   "category": "single-session-preference",
+   "task_id": "lmem-caf03d32",
+   "sha256": "8f335f4fa836db553d18487e78d6f998e588e6234d6cddefaa71a7ff7d103b6d",
+   "answer_sessions": [
+    321
+   ],
+   "answer_tokens_from_end": [
+    364872
+   ],
+   "in_recent_120k": false
+  },
+  {
+   "id": "6b7dfb22",
+   "category": "single-session-preference",
+   "task_id": "lmem-6b7dfb22",
+   "sha256": "af1021f0601a1634e229d5b5551f6e8c3e875409a7c346da705f47813586c484",
+   "answer_sessions": [
+    290
+   ],
+   "answer_tokens_from_end": [
+    447040
+   ],
+   "in_recent_120k": false
+  },
+  {
+   "id": "a06e4cfe",
+   "category": "single-session-user",
+   "task_id": "lmem-a06e4cfe",
+   "sha256": "7f04718f700d0ce8584a3a1081cfed93825316b03888d461f9731c27616751a7",
+   "answer_sessions": [
+    316
+   ],
+   "answer_tokens_from_end": [
+    403130
+   ],
+   "in_recent_120k": false
+  },
+  {
+   "id": "76d63226",
+   "category": "single-session-user",
+   "task_id": "lmem-76d63226",
+   "sha256": "2c15bc48ecb1e6fa8e926d226184f49037b8f5b33596c1655900fcb76b31cd74",
+   "answer_sessions": [
+    428
+   ],
+   "answer_tokens_from_end": [
+    152103
+   ],
+   "in_recent_120k": false
+  },
+  {
+   "id": "gpt4_1d4ab0c9",
+   "category": "temporal-reasoning",
+   "task_id": "lmem-gpt4-1d4ab0c9",
+   "sha256": "82ac06f9f1a291092fe38751d27a3adbd698fed1c9487dd3ed96fdc1bd112248",
+   "answer_sessions": [
+    208,
+    410
+   ],
+   "answer_tokens_from_end": [
+    602836,
+    187733
+   ],
+   "in_recent_120k": false
+  },
+  {
+   "id": "gpt4_b4a80587",
+   "category": "temporal-reasoning",
+   "task_id": "lmem-gpt4-b4a80587",
+   "sha256": "3c541e2429e4ba748b9531f3a96af0e51c87927660f31fb0d85a7e793765087b",
+   "answer_sessions": [
+    434,
+    477
+   ],
+   "answer_tokens_from_end": [
+    142282,
+    50064
+   ],
+   "in_recent_120k": false
+  }
+ ]
+}
