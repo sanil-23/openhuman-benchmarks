@@ -9,6 +9,8 @@ export const PRICES = {
   'z-ai/glm-5.3-flash': { prompt: 0.30e-6, completion: 1e-6 },
   'openai/text-embedding-3-small': { prompt: 0.04e-6, completion: 0 },
   'openai/gpt-4o-mini-2024-07-18': { prompt: 0.30e-6, completion: 1.20e-6 },
+  // Reader only, and only through a memory/.env route (env.mjs).
+  'deepseek/deepseek-v4.1-flash': { prompt: 0.30e-6, completion: 1.20e-6 },
 };
 export class Budget {
   // `maxLimit` is the authorised ceiling. It stays $10 unless a caller passes
@@ -87,18 +89,51 @@ export function streamUsage(raw) {
   return usage;
 }
 export async function startGateway({ dir, key, port = 0, upstream = 'https://openrouter.ai/api/v1', fetchImpl = fetch,
-  limit = 10, maxLimit = 10, glmProvider = 'z-ai', allowTools = false, allowStream = false, routes = {} }) {
+  limit = 10, maxLimit = 10, glmProvider = 'z-ai', allowTools = false, allowStream = false, routes = {}, idleIgnore = [],
+  idleIgnoreEmbeddings = false, clampMaxTokens = 0 }) {
   const budget = new Budget(path.join(dir, 'budget.json'), limit, maxLimit);
+  // When the last model request started or finished, and how many are open:
+  // a memory engine is idle only when nothing has passed through for a while.
+  // Chat calls whose system prompt starts with an `idleIgnore` prefix, and
+  // every embedding call with `idleIgnoreEmbeddings`, are background work the
+  // caller has chosen not to wait for; they are counted separately and do not
+  // count as activity.
+  const activity = { last: Date.now(), inFlight: 0, ignored: 0 };
   const server = http.createServer(async (req, res) => {
     if (req.url === '/budget') return res.end(JSON.stringify(budget.state));
+    // memory-bench (MEMORY_BENCH_IDLE_URL) asks whether the engine has been
+    // quiet for `quiet_ms`, by the same rule as settle.mjs.
+    if (req.method === 'GET' && req.url.startsWith('/idle')) {
+      const quietMs = Number(new URL(req.url, 'http://gateway').searchParams.get('quiet_ms') ?? 90000);
+      const idleMs = Date.now() - activity.last;
+      return res.end(JSON.stringify({ idle: activity.inFlight === 0 && idleMs >= quietMs, in_flight: activity.inFlight, idle_ms: idleMs }));
+    }
     if (req.method !== 'POST' || !/^\/v1\/(chat\/completions|embeddings)$/.test(req.url)) return res.writeHead(404).end();
-    let body, bound, route, wire;
+    let body, bound, route, wire, clampedFrom;
     try {
       const chunks = [];
       for await (const c of req) chunks.push(c);
       body = JSON.parse(Buffer.concat(chunks));
+      const system = body.messages?.[0]?.role === 'system' && typeof body.messages[0].content === 'string' ? body.messages[0].content : '';
+      if ((idleIgnoreEmbeddings && req.url.endsWith('/embeddings')) || idleIgnore.some(prefix => system.startsWith(prefix))) activity.ignored++;
+      else {
+        activity.inFlight++; activity.last = Date.now();
+        res.on('close', () => { activity.inFlight--; activity.last = Date.now(); });
+      }
       const p = PRICES[body.model];
       if (!p) throw new Error('unapproved model');
+      // Opt-in (`clampMaxTokens`): a chat request with no output bound, or one
+      // above the cap, is sent with the cap instead of refused. For a client
+      // whose own calls carry no bound (OpenHuman's compaction summarizer);
+      // the meter row records the bound it asked for.
+      if (clampMaxTokens && !body.model.includes('embedding')) {
+        const asked = body.max_completion_tokens ?? body.max_tokens;
+        if (!(Number.isInteger(asked) && asked > 0 && asked <= clampMaxTokens)) {
+          clampedFrom = asked ?? null;
+          body.max_tokens = clampMaxTokens;
+          delete body.max_completion_tokens;
+        }
+      }
       route = routes[body.model];
       if (route) {
         // Another OpenAI-compatible provider serves this model (memory/.env):
@@ -140,6 +175,7 @@ export async function startGateway({ dir, key, port = 0, upstream = 'https://ope
           phase: req.headers['x-bench-phase'] ?? 'memory-background', model: body.model,
           route: req.url, provider: route?.name ?? 'openrouter', status: response.status, wall_ms: Date.now() - started, stream: true,
           reserved_usd: bound, usage, request: wire, response_chars: raw.length,
+          ...(clampedFrom !== undefined ? { max_tokens_clamped_from: clampedFrom } : {}),
         }) + '\n');
         return;
       }
@@ -153,6 +189,7 @@ export async function startGateway({ dir, key, port = 0, upstream = 'https://ope
         route: req.url, provider: route?.name ?? 'openrouter', status: response.status, wall_ms: Date.now() - started,
         reserved_usd: bound, actual_usd: actual ?? null, usage: output.usage ?? null, request: wire,
         response: req.url.endsWith('embeddings') ? { model: output.model, vectors: output.data?.length, error: output.error } : output,
+        ...(clampedFrom !== undefined ? { max_tokens_clamped_from: clampedFrom } : {}),
       }) + '\n');
       res.writeHead(response.status, { 'content-type': 'application/json' }).end(raw);
     } catch (e) {
@@ -161,5 +198,5 @@ export async function startGateway({ dir, key, port = 0, upstream = 'https://ope
     }
   });
   await new Promise(resolve => server.listen(port, '0.0.0.0', resolve));
-  return { server, budget, port: server.address().port };
+  return { server, budget, activity, port: server.address().port };
 }

@@ -151,3 +151,112 @@ test('a reported charge in microdollars wins over the configured prices', () => 
   assert.equal(routeCost({ prompt_tokens: 1000, completion_tokens: 100, buyer_cost_micro: 42 }, prices), 0.000042);
   assert.ok(Math.abs(routeCost({ prompt_tokens: 1000, completion_tokens: 100 }, prices) - (1000 * 0.1e-6 + 100 * 0.4e-6)) < 1e-15);
 });
+
+test('activity counts open requests and when the last one moved', async () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'gw-activity-'));
+  let release;
+  const fetchImpl = () => new Promise(r => { release = () => r(new Response(JSON.stringify({ data: [{ embedding: [0] }],
+    usage: { prompt_tokens: 1, total_tokens: 1, cost: 0 } }), { status: 200 })); });
+  const gw = await startGateway({ dir, key: 'k', fetchImpl });
+  try {
+    const before = gw.activity.last;
+    const pending = fetch(`http://127.0.0.1:${gw.port}/v1/embeddings`, { method: 'POST',
+      body: JSON.stringify({ model: 'openai/text-embedding-3-small', input: 'x' }) });
+    while (!release) await new Promise(r => setTimeout(r, 5));
+    assert.equal(gw.activity.inFlight, 1);
+    release(); await (await pending).text();
+    await new Promise(r => setTimeout(r, 20));
+    assert.equal(gw.activity.inFlight, 0);
+    assert.ok(gw.activity.last >= before);
+  } finally { await new Promise(r => gw.server.close(r)); fs.rmSync(dir, { recursive: true }); }
+});
+
+test('calls matching idleIgnore are counted apart and do not count as activity', async () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'gw-ignore-'));
+  const fetchImpl = async () => new Response(JSON.stringify({ choices: [{ message: { content: 'x' } }],
+    usage: { prompt_tokens: 1, completion_tokens: 1, cost: 0 } }), { status: 200 });
+  const gw = await startGateway({ dir, key: 'k', fetchImpl, idleIgnore: ['You are a concept'] });
+  try {
+    const call = system => fetch(`http://127.0.0.1:${gw.port}/v1/chat/completions`, { method: 'POST',
+      body: JSON.stringify({ model: 'z-ai/glm-5.3-flash', max_tokens: 5, messages: [{ role: 'system', content: system }, { role: 'user', content: 'u' }] }) })
+      .then(r => r.text());
+    const before = gw.activity.last;
+    await new Promise(r => setTimeout(r, 5));
+    await call('You are a concept abstraction engine.');
+    assert.equal(gw.activity.ignored, 1);
+    assert.equal(gw.activity.last, before, 'an ignored call leaves the idle clock alone');
+    await call('You are a precise knowledge extraction engine.');
+    await new Promise(r => setTimeout(r, 20));
+    assert.ok(gw.activity.last > before);
+    assert.equal(gw.activity.inFlight, 0);
+  } finally { await new Promise(r => gw.server.close(r)); fs.rmSync(dir, { recursive: true }); }
+});
+
+test('idleIgnoreEmbeddings leaves the idle clock to chat calls', async () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'gw-emb-'));
+  const fetchImpl = async () => new Response(JSON.stringify({ data: [{ embedding: [0] }], usage: { prompt_tokens: 1, total_tokens: 1, cost: 0 } }), { status: 200 });
+  const gw = await startGateway({ dir, key: 'k', fetchImpl, idleIgnoreEmbeddings: true });
+  try {
+    const before = gw.activity.last;
+    await new Promise(r => setTimeout(r, 5));
+    await (await fetch(`http://127.0.0.1:${gw.port}/v1/embeddings`, { method: 'POST',
+      body: JSON.stringify({ model: 'openai/text-embedding-3-small', input: 'x' }) })).text();
+    assert.equal(gw.activity.ignored, 1);
+    assert.equal(gw.activity.last, before);
+  } finally { await new Promise(r => gw.server.close(r)); fs.rmSync(dir, { recursive: true }); }
+});
+
+test('GET /idle reports quiet by the settle rule', async () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'gw-idle-'));
+  const gw = await startGateway({ dir, key: 'k', fetchImpl: async () => new Response('{}') });
+  try {
+    const idle = async ms => (await fetch(`http://127.0.0.1:${gw.port}/idle?quiet_ms=${ms}`)).json();
+    await new Promise(r => setTimeout(r, 30));
+    assert.equal((await idle(10)).idle, true);
+    assert.equal((await idle(600000)).idle, false);
+    gw.activity.inFlight = 1;
+    assert.equal((await idle(10)).idle, false, 'an open call is not quiet');
+    gw.activity.inFlight = 0;
+  } finally { await new Promise(r => gw.server.close(r)); fs.rmSync(dir, { recursive: true }); }
+});
+
+test('clampMaxTokens sends an unbounded chat call with the cap and logs what it asked for', async () => {
+  for (const clamp of [0, 16384]) {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'memory-gateway-'));
+    let sent;
+    const g = await startGateway({ dir, key: 'k', allowTools: true, clampMaxTokens: clamp, fetchImpl: async (_url, options) => {
+      sent = JSON.parse(options.body);
+      return new Response(JSON.stringify({ choices: [{ message: { content: 'ok' } }], usage: { prompt_tokens: 1, completion_tokens: 1, cost: 0 } }));
+    } });
+    try {
+      const r = await fetch(`http://127.0.0.1:${g.port}/v1/chat/completions`, { method: 'POST',
+        body: JSON.stringify({ model: 'deepseek/deepseek-v4.1-flash', messages: [{ role: 'user', content: 'hi' }] }) });
+      if (clamp === 0) {
+        assert.equal(r.status, 402, 'off by default: an unbounded call is refused');
+        assert.equal(sent, undefined);
+      } else {
+        assert.equal(r.status, 200);
+        assert.equal(sent.max_tokens, 16384);
+        const row = JSON.parse(fs.readFileSync(path.join(dir, 'meter.jsonl'), 'utf8').trim().split('\n').at(-1));
+        assert.equal(row.max_tokens_clamped_from, null, 'the call asked for no bound');
+      }
+    } finally { await new Promise(res => g.server.close(res)); fs.rmSync(dir, { recursive: true }); }
+  }
+});
+
+test('clampMaxTokens leaves a call that is already within the cap alone', async () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'memory-gateway-'));
+  let sent;
+  const g = await startGateway({ dir, key: 'k', clampMaxTokens: 16384, fetchImpl: async (_url, options) => {
+    sent = JSON.parse(options.body);
+    return new Response(JSON.stringify({ choices: [{ message: { content: 'ok' } }], usage: { prompt_tokens: 1, completion_tokens: 1, cost: 0 } }));
+  } });
+  try {
+    const r = await fetch(`http://127.0.0.1:${g.port}/v1/chat/completions`, { method: 'POST',
+      body: JSON.stringify({ model: 'deepseek/deepseek-v4.1-flash', messages: [{ role: 'user', content: 'hi' }], max_tokens: 200 }) });
+    assert.equal(r.status, 200);
+    assert.equal(sent.max_tokens, 200);
+    const row = JSON.parse(fs.readFileSync(path.join(dir, 'meter.jsonl'), 'utf8').trim().split('\n').at(-1));
+    assert.equal('max_tokens_clamped_from' in row, false);
+  } finally { await new Promise(res => g.server.close(res)); fs.rmSync(dir, { recursive: true }); }
+});
