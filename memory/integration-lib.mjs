@@ -14,7 +14,19 @@ export const DEFAULT_WAIT_MS = 10000;
  * test. Everything else keeps the product default, so the arm measures what a
  * user gets. Search is off: the benchmark asks about the history, not the web.
  */
-export function coreConfig({ endpoint, waitMs = DEFAULT_WAIT_MS, dateHint = false }) {
+export function coreConfig({ endpoint, waitMs = DEFAULT_WAIT_MS, dateHint = false, capture = true, memory = true }) {
+  if (!memory) {
+    // Memory off: no engine, nothing logged, nothing recalled (the
+    // history-in-thread arm, where the thread itself holds the history).
+    return [
+      'embeddings_provider = "none"', '',
+      '[memory]', 'engine = "none"', 'embedding_provider = "none"', '',
+      '[memory.conversations]', 'enabled = false', '',
+      '[memory.recall]', 'enabled = false', '',
+      '[search]', 'enabled = false', '',
+      '[runtime]', 'reasoning_effort = "low"', '',
+    ].join('\n');
+  }
   if (!/^http:\/\/127\.0\.0\.1:\d+$/.test(endpoint)) throw new Error('CortexDB endpoint must be the loopback relay');
   if (!(Number.isInteger(waitMs) && waitMs > 0)) throw new Error('waitMs must be a positive integer');
   return [
@@ -28,7 +40,7 @@ export function coreConfig({ endpoint, waitMs = DEFAULT_WAIT_MS, dateHint = fals
     `endpoint = "${endpoint}"`,
     '',
     '[memory.conversations]',
-    'enabled = true',
+    `enabled = ${capture ? 'true' : 'false'}`,
     '',
     '[memory.recall]',
     'enabled = true',
@@ -94,15 +106,21 @@ export function replyText(result) {
 
 /**
  * The question as the user sends it. The library arm's reader gets the same
- * question and current date; the instruction to answer briefly and to say
- * when the information is missing matches its system prompt, so the two
- * arms are scored on comparable answers.
+ * question and current date; the instruction (answer briefly, resolve relative
+ * dates, say when the information is missing) matches its system prompt
+ * (prompt v6), so the two arms are scored on comparable answers.
  */
 export function questionPrompt(q) {
   return `${q.question}${q.question_date ? `\nCurrent date: ${q.question_date}` : ''}\n\n` +
     'Answer briefly from what you remember of our earlier conversations. ' +
+    'For a question about when something happened, give the date, week, month or year it happened, ' +
+    'working out words such as "yesterday", "last week" or "this past weekend" from the date of the message that says them ' +
+    '(a message of 3 March 2023 saying "last week" means "the week before 3 March 2023"). ' +
     'If the information is missing, say "no information available".';
 }
+
+/** Which question instruction `questionPrompt` gives (see run.mjs ANSWER_PROMPT_VERSION). */
+export const QUESTION_PROMPT_VERSION = 'v6';
 
 /**
  * One step of the CortexDB enrichment barrier, the same rule the library arm
@@ -120,4 +138,41 @@ export function nextQuiet(state, usage) {
 /** Lines of the core log that mention a memory pre-turn timeout. */
 export function preTurnTimeouts(log) {
   return log.split('\n').filter(line => /pre_turn timed out/.test(line));
+}
+
+/** How long the gateway must see no model call before CortexDB counts as settled. */
+export const QUIET_MS = 90_000;
+
+/**
+ * Whether CortexDB has finished its background work. `jobs_pending` alone is
+ * not enough: CortexDB v0.10.4 also drains enrichment in scheduler cycles
+ * (16 events every ~30 s) that this counter does not show, and a restart
+ * re-queues work. Every model call CortexDB makes passes through the budget
+ * gateway, so settled means nothing pending, no call open at the gateway, and
+ * none for `quietMs` (longer than a drain cycle). integration.mjs counts only
+ * the GLM calls that change stored facts (see its gateway options).
+ */
+export function isSettled({ pending, inFlight, idleMs }, quietMs = QUIET_MS) {
+  if (!Number.isInteger(pending) || !Number.isInteger(inFlight) || !Number.isFinite(idleMs)) throw new Error('missing settle inputs');
+  return pending === 0 && inFlight === 0 && idleMs >= quietMs;
+}
+
+/** System-prompt prefixes of CortexDB v0.10.4's concept abstraction calls (see integration.mjs). */
+export const CONCEPT_ABSTRACTION_PREFIXES = ['You are a concept abstraction engine.'];
+
+/**
+ * The indexer's state in a `/v1/admin/metrics` body: `done` once nothing is
+ * waiting to be indexed and nothing is in flight. A body without an indexer
+ * lag is an error, never "done".
+ */
+export function indexerState(metrics) {
+  const indexer = metrics?.indexer;
+  if (!indexer || !Number.isInteger(indexer.lag)) throw new Error('CortexDB metrics carry no indexer lag');
+  const inflight = indexer.inflight ?? 0;
+  return { lag: indexer.lag, inflight, captured_head: indexer.captured_head, done: indexer.lag === 0 && inflight === 0 };
+}
+
+/** Whether every scope's `/v1/derivation/status` says `caught_up`. */
+export function derivationCaughtUp(scopes) {
+  return Object.values(scopes).every(status => status?.caught_up === true);
 }
