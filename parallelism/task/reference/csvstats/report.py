@@ -21,7 +21,7 @@ def render_table(rows, columns=None):
         return "| " + " | ".join(v.rjust(w[i]) if right[i] else v.ljust(w[i]) for i, v in enumerate(vals)) + " |"
 
     right = [num[c] for c in cols]
-    lines = [fmt(cols, [False] * len(cols))]
+    lines = [fmt(cols, right)]
     lines.append("| " + " | ".join(("-" * (w[i] - 1) + ":") if right[i] else (":" + "-" * (w[i] - 1)) for i in range(len(cols))) + " |")
     lines += [fmt(row, right) for row in cells]
     return "\n".join(lines) + "\n"

@@ -31,7 +31,7 @@ A small CSV statistics tool, standard library only (Python 3.10, no pip installs
 ### `csvstats/report.py`
 `render_table(rows, columns=None) -> str` renders a GitHub markdown table. Floats are shown with
 2 decimals, `None` as an empty cell, numbers right-aligned (`---:`), text left-aligned (`:---`).
-Column widths fit the widest cell. `columns` defaults to the keys of the first row.
+Header cells are aligned like their column. Column widths fit the widest cell (minimum 3). `columns` defaults to the keys of the first row.
 `render_json(rows) -> str` is `json.dumps(rows, indent=2, sort_keys=False)` plus a trailing newline.
 
 ### `csvstats/cli.py`
