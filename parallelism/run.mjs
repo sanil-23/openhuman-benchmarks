@@ -54,7 +54,8 @@ for (const n of levels) {
   for (let rep = 1; rep <= repeat; rep += 1) {
     const runId = `${group}-n${n}${repeat > 1 ? `-r${rep}` : ""}`;
     const dir = path.join(root, "results", runId, "openhuman", "par");
-    fs.rmSync(dir, { recursive: true, force: true });
+    // Files in here are written as root by the container, so a stale dir cannot be cleaned up from the host.
+    if (fs.existsSync(dir)) throw new Error(`${dir} exists: pick a new --group`);
     fs.mkdirSync(dir, { recursive: true });
     process.stdout.write(`[par] ${runId}: ${n} agents in ${mem} / ${cpus} cpus\n`);
     const r = sh("docker", [
