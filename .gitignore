@@ -19,3 +19,4 @@ onboarding-stress/ONBOARDING-TEST-RESULTS.md
 # Security timing raw evidence and isolated worktrees are local-only.
 .security-evidence/
 worktrees/
+parallelism/generated/
