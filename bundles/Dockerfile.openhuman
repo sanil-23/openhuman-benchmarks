@@ -22,7 +22,7 @@ ARG CARGO_BUILD_JOBS=4
 # this one to 200 for the benchmark. Set OH_MAX_ITERATIONS to the shipped value to reproduce the
 # product. The rewrite must change the file or the build fails.
 ARG OH_MAX_ITERATIONS=200
-RUN f=crates/openhuman-core/src/agent/registry/agents/orchestrator/agent.toml \
+RUN f=crates/openhuman-core/src/agent_registry/agents/orchestrator/agent.toml \
     && sed -i "s/^max_iterations = [0-9]*\$/max_iterations = ${OH_MAX_ITERATIONS}/" "$f" \
     && grep -q "^max_iterations = ${OH_MAX_ITERATIONS}\$" "$f"
 RUN --mount=type=cache,target=/root/.cargo/registry \
