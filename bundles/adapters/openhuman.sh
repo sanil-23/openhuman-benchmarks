@@ -99,10 +99,18 @@ export OPENHUMAN_KEYRING_BACKEND=encrypted_file
 # "module directory is owned by another user". Stage a root-owned copy instead.
 bundled=/opt/harness/openhuman/bundled-modules
 if [ -d "$bundled" ] && [ "$(id -u)" != "$(stat -c %u "$bundled")" ]; then
-  staged="/opt/oh-bundled-modules${BENCH_OH_PORT:+-$BENCH_OH_PORT}"
-  rm -rf "$staged"
-  cp -r "$bundled" "$staged"
-  chmod -R go-w "$staged"
+  staged=/opt/oh-bundled-modules
+  # Several agents can share one container (parallelism/): stage once, under a lock, and let the
+  # rest wait for the finished copy instead of racing on the same directory.
+  (
+    flock 9
+    if [ ! -e "$staged/.staged" ]; then
+      rm -rf "$staged"
+      cp -r "$bundled" "$staged"
+      chmod -R go-w "$staged"
+      touch "$staged/.staged"
+    fi
+  ) 9>/tmp/oh-bundled-modules.lock
   export OPENHUMAN_BUNDLED_MODULES="$staged"
   echo "[openhuman] staged bundled modules owned by uid $(id -u): $staged" >&2
 fi
