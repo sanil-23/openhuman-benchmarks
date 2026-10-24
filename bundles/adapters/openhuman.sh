@@ -99,7 +99,7 @@ export OPENHUMAN_KEYRING_BACKEND=encrypted_file
 # "module directory is owned by another user". Stage a root-owned copy instead.
 bundled=/opt/harness/openhuman/bundled-modules
 if [ -d "$bundled" ] && [ "$(id -u)" != "$(stat -c %u "$bundled")" ]; then
-  staged=/opt/oh-bundled-modules
+  staged="/opt/oh-bundled-modules${BENCH_OH_PORT:+-$BENCH_OH_PORT}"
   rm -rf "$staged"
   cp -r "$bundled" "$staged"
   chmod -R go-w "$staged"
