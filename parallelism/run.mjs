@@ -60,6 +60,7 @@ for (const n of levels) {
     const r = sh("docker", [
       "compose", "--profile", "task", "run", "--rm", "--no-deps",
       "-v", `${path.join(root, "parallelism")}:/opt/bench/par:ro`,
+      "-e", `PAR_N=${n}`, "-e", `PAR_RUN_ID=${runId}`, "-e", `PAR_STAGGER_S=${stagger}`,
       "--entrypoint", "/opt/harness/node/bin/node",
       "task", "/opt/bench/par/par-entry.mjs",
     ], {
@@ -74,9 +75,6 @@ for (const n of levels) {
         BENCH_MEM: mem,
         BENCH_CPUS: cpus,
         TASK_TIMEOUT_S: timeout,
-        PAR_N: String(n),
-        PAR_RUN_ID: runId,
-        PAR_STAGGER_S: stagger,
       },
     });
     fs.appendFileSync(path.join(groupDir, "levels.jsonl"), `${JSON.stringify({ run_id: runId, n, rep, compose_exit: r.status })}\n`);
