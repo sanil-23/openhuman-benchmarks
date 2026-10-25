@@ -3,7 +3,7 @@
 // at once over JSON-RPC, each with its own `cwd` and its own proxy tag, and writes
 // /results/<id>/reply.json + turn.json per agent. Replaces bundles/oh-turn.mjs via OH_TURN_SCRIPT.
 //
-// Env: OH_PORT OH_TOKEN INFERENCE_BASE (http://127.0.0.1:<fwd>) DUMMY_API_KEY BENCH_MODEL
+// Env: OH_PORT OH_TOKEN INFERENCE_URL (the forwarder, no tag) DUMMY_API_KEY BENCH_MODEL
 //      PAR_AGENTS (path to agents.json: [{id,dir,prompt_file,tag}]) PAR_STAGGER_S
 import fs from "node:fs";
 import http from "node:http";
@@ -12,6 +12,7 @@ import { verifyMemoryOff } from "/opt/harness/oh-memory.mjs";
 const base = `http://127.0.0.1:${process.env.OH_PORT}`;
 const token = process.env.OH_TOKEN;
 const agents = JSON.parse(fs.readFileSync(process.env.PAR_AGENTS, "utf8"));
+const inferenceBase = process.env.INFERENCE_URL.replace(/\/v1$/, "");
 const stagger = Number(process.env.PAR_STAGGER_S || 0) * 1000;
 
 const deadline = Date.now() + 60_000;
@@ -80,7 +81,7 @@ await Promise.all(
           params: {
             message: fs.readFileSync(a.prompt_file, "utf8"),
             cwd: a.dir,
-            inference_url: `${process.env.INFERENCE_BASE}${a.tag}/v1`,
+            inference_url: `${inferenceBase}${a.tag}/v1`,
             api_key: process.env.DUMMY_API_KEY,
             model_override: process.env.BENCH_MODEL,
           },
