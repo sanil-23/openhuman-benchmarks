@@ -22,7 +22,6 @@ class ReplTests(unittest.TestCase):
         self.assertEqual(run("x = 3; x * 2"), 6)
         self.assertEqual(run("1\n2\n3"), 3)
 
-    def test_run_empty_is_none(self):
         self.assertIsNone(run(""))
         self.assertIsNone(run(" ; \n"))
 
@@ -48,10 +47,8 @@ class CliTests(unittest.TestCase):
         self.assertEqual(cli(["1 < 2"]), (0, "true\n", ""))
         self.assertEqual(cli(["x = 4; x ** 2 / 8"]), (0, "2.0\n", ""))
 
-    def test_stdin(self):
         self.assertEqual(cli(["-"], "a = 2\nb = 3\na * b\n"), (0, "6\n", ""))
 
-    def test_empty_program_prints_nothing(self):
         self.assertEqual(cli([""]), (0, "", ""))
         self.assertEqual(cli(["-"], "\n\n"), (0, "", ""))
 
@@ -60,11 +57,9 @@ class CliTests(unittest.TestCase):
         self.assertEqual(cli(["1 < 2 < 3"]),
                          (2, "", "error: chained comparison is not supported (at 6)\n"))
 
-    def test_error_without_position(self):
         self.assertEqual(cli(["1 / 0"]), (2, "", "error: division by zero\n"))
         self.assertEqual(cli(["y"]), (2, "", "error: undefined variable 'y'\n"))
 
-    def test_usage(self):
         for argv in ([], ["1", "2"]):
             code, out, err = cli(argv)
             self.assertEqual((code, out), (2, ""))

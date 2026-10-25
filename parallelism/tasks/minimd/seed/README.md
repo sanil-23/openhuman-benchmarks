@@ -47,8 +47,6 @@ literal backticks (there are no empty code spans).
   whitespace. The url is used as written (no backslash processing) but HTML-attribute escaped:
   `[x](a?b=1&c="2")` -> `<a href="a?b=1&amp;c=&quot;2&quot;">x</a>`. An empty url or empty text is allowed.
 - Anything that does not fit this shape leaves the `[` as a literal character: `[x] (u)` -> `[x] (u)`.
-- Emphasis does not span a link boundary from the outside in: delimiters inside the link text only
-  pair with each other.
 
 ### `minimd/blocks.py`
 `parse_blocks(text: str) -> list` returns a list of blocks using the dataclasses already defined in the

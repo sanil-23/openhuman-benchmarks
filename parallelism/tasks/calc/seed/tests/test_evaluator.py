@@ -57,14 +57,12 @@ class EvaluatorTests(unittest.TestCase):
         self.assertEqual(ev("b = a + 1; b * 2", env), 22)
         self.assertEqual(env.variables["b"], 11)
 
-    def test_environment_copies_variables(self):
         src = {"a": 1}
         env = Environment(src)
         ev("a = 5; z = 1", env)
         self.assertEqual(src, {"a": 1})
         self.assertNotIn("z", Environment().variables)
 
-    def test_assignment_value(self):
         self.assertSame(ev("x = 2 * 3"), 6)
         self.assertIs(ev("x = 1 < 2"), True)
 
@@ -81,7 +79,6 @@ class EvaluatorTests(unittest.TestCase):
         self.assertSame(ev("round(3.14159, 2)"), 3.14)
         self.assertSame(ev("max(1, 2) + min(4)"), 6)
 
-    def test_function_and_variable_namespaces(self):
         env = Environment()
         self.assertEqual(ev("max = 3; max(1, 2) + max", env), 5)
 
@@ -128,7 +125,6 @@ class EvaluatorTests(unittest.TestCase):
                 self.assertEqual(cm.exception.message, msg)
                 self.assertIsNone(cm.exception.pos)
 
-    def test_domain_errors(self):
         with self.assertRaises(CalcTypeError) as cm:
             ev("sqrt(0 - 4)")
         self.assertEqual(cm.exception.message, "sqrt() argument must be non-negative")

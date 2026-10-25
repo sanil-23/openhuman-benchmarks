@@ -36,9 +36,9 @@ token whose text is `""` and whose pos is `len(source)`.
 - Spaces, tabs and `\r` between tokens are skipped. Newlines are never skipped: they are `SEP` tokens.
 - Number syntax: digits, optionally `.` followed by digits, optionally an exponent `e`/`E`, an optional
   sign and digits. Underscores are allowed only between two digits (`1_000`, `1_0.2_5`). There are no
-  leading-dot (`.5`) or trailing-dot (`1.`) numbers: `.5` fails on the `.` as an unexpected character.
+  leading-dot or trailing-dot numbers: `.5` fails on the `.` as an unexpected character, and `1.` is an invalid number (see next rule).
 - A number that is directly followed by a letter, `_` or `.` after the number has been matched (`2x`,
-  `1_`, `1__0`, `1e`, `1.5.2`) raises `CalcSyntaxError("invalid number", pos)` where `pos` is the start
+  `1_`, `1__0`, `1e`, `1.5.2`, `1.`) raises `CalcSyntaxError("invalid number", pos)` where `pos` is the start
   of the number.
 - Any other character raises `CalcSyntaxError("unexpected character '<c>'", pos)` where `<c>` is the
   character as formatted by Python's `%r` (so `$` gives `'$'`) and pos is its index. This includes a lone `!`.

@@ -16,45 +16,36 @@ class LexerTests(unittest.TestCase):
         self.assertEqual([t.pos for t in toks], [0, 3, 7, 11, 17])
         self.assertEqual(toks[-1], Token("EOF", "", 17))
 
-    def test_underscore_numbers(self):
         self.assertEqual(kt("1_000"), [("NUMBER", "1_000"), ("EOF", "")])
         self.assertEqual(kt("1_0.2_5")[0], ("NUMBER", "1_0.2_5"))
 
     def test_bad_underscores(self):
-        for src, pos in [("1_", 0), ("1__0", 0), ("  2x", 2), ("1e", 0), ("1.5.2", 0)]:
+        for src, pos in [("1_", 0), ("1__0", 0), ("  2x", 2), ("1e", 0), ("1.5.2", 0), ("1.", 0)]:
             with self.subTest(src=src):
                 with self.assertRaises(CalcSyntaxError) as cm:
                     tokenize(src)
                 self.assertEqual(cm.exception.message, "invalid number")
                 self.assertEqual(cm.exception.pos, pos)
 
-    def test_leading_and_trailing_dot(self):
         with self.assertRaises(CalcSyntaxError) as cm:
             tokenize("x + .5")
         self.assertEqual((cm.exception.message, cm.exception.pos), ("unexpected character '.'", 4))
-        with self.assertRaises(CalcSyntaxError) as cm:
-            tokenize("1.")
-        self.assertEqual(cm.exception.pos, 1)
 
     def test_operators_longest_match(self):
         src = "** // == != <= >= < > * / % + -"
         self.assertEqual([t.text for t in tokenize(src)][:-1], src.split())
         self.assertTrue(all(t.kind == "OP" for t in tokenize(src)[:-1]))
 
-    def test_assign_vs_equal(self):
         self.assertEqual(kt("a=b==c"), [("IDENT", "a"), ("ASSIGN", "="), ("IDENT", "b"),
                                          ("OP", "=="), ("IDENT", "c"), ("EOF", "")])
 
-    def test_punctuation_and_separators(self):
         self.assertEqual(kt("f(a,b);\n"), [("IDENT", "f"), ("LPAREN", "("), ("IDENT", "a"),
                                            ("COMMA", ","), ("IDENT", "b"), ("RPAREN", ")"),
                                            ("SEP", ";"), ("SEP", "\n"), ("EOF", "")])
 
-    def test_whitespace_skipped(self):
         self.assertEqual(len(tokenize(" \t\r 1 \t")), 2)
         self.assertEqual(tokenize("")[0], Token("EOF", "", 0))
 
-    def test_identifiers(self):
         self.assertEqual(kt("_x1 abc_9")[:2], [("IDENT", "_x1"), ("IDENT", "abc_9")])
 
     def test_unexpected_character(self):

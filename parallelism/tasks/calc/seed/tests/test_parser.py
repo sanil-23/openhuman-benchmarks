@@ -17,7 +17,6 @@ class ParserTests(unittest.TestCase):
         self.assertEqual(parse("(1 + 2) * 3"),
                          [Binary("*", Binary("+", Num(1), Num(2)), Num(3))])
 
-    def test_left_associativity(self):
         self.assertEqual(parse("8 - 3 - 2"),
                          [Binary("-", Binary("-", Num(8), Num(3)), Num(2))])
         self.assertEqual(parse("8 / 4 // 2"),
@@ -27,7 +26,6 @@ class ParserTests(unittest.TestCase):
         self.assertEqual(parse("-2**2"), [Unary("-", Binary("**", Num(2), Num(2)))])
         self.assertEqual(parse("(-2)**2"), [Binary("**", Unary("-", Num(2)), Num(2))])
 
-    def test_power_right_assoc_and_unary_exponent(self):
         self.assertEqual(parse("2**3**2"),
                          [Binary("**", Num(2), Binary("**", Num(3), Num(2)))])
         self.assertEqual(parse("2**-1"), [Binary("**", Num(2), Unary("-", Num(1)))])
@@ -40,7 +38,6 @@ class ParserTests(unittest.TestCase):
         self.assertIsInstance(parse("1e3")[0].value, float)
         self.assertEqual(parse("2.50"), [Num(2.5)])
 
-    def test_calls(self):
         self.assertEqual(parse("f()"), [Call("f", [])])
         self.assertEqual(parse("max(1, a + 2, g(3))"),
                          [Call("max", [Num(1), Binary("+", Var("a"), Num(2)), Call("g", [Num(3)])])])
@@ -49,13 +46,11 @@ class ParserTests(unittest.TestCase):
         self.assertEqual(parse("x = 1 + 2"), [Assign("x", Binary("+", Num(1), Num(2)))])
         self.assertEqual(parse("ok = 1 < 2"), [Assign("ok", Compare("<", Num(1), Num(2)))])
 
-    def test_statements(self):
         self.assertEqual(parse("1; 2\n3"), [Num(1), Num(2), Num(3)])
         self.assertEqual(parse(";;1;;\n\n2\n"), [Num(1), Num(2)])
         self.assertEqual(parse(""), [])
         self.assertEqual(parse("  \n ; "), [])
 
-    def test_comparison(self):
         self.assertEqual(parse("1 + 1 == 2"),
                          [Compare("==", Binary("+", Num(1), Num(1)), Num(2))])
 
@@ -77,10 +72,8 @@ class ParserTests(unittest.TestCase):
         self.assertEqual(err("* 2"), ("unexpected token '*'", 0))
         self.assertEqual(err("(x = 1)"), ("expected ')'", 3))
 
-    def test_expected_paren(self):
         self.assertEqual(err("(1 + 2"), ("expected ')'", 6))
         self.assertEqual(err("f(1 2)"), ("expected ')'", 4))
         self.assertEqual(err("(1 +\n2)"), ("unexpected end of input", 4))
 
-    def test_lexer_errors_propagate(self):
         self.assertEqual(err("1 + $"), ("unexpected character '$'", 4))
