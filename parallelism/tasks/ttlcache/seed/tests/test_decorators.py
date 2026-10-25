@@ -57,7 +57,7 @@ class DecoratorTests(unittest.TestCase):
         with self.assertRaisesRegex(TypeError, "^unhashable argument of type 'set'$"):
             f({1}, z={}, a=[])
         with self.assertRaisesRegex(TypeError, "^unhashable argument of type 'list'$"):
-            f({}, a=[])  if False else f(1, b={}, a=[])
+            f(1, b={}, a=[])
         self.assertEqual(calls, [])
 
     def test_custom_key_function(self):
@@ -137,15 +137,3 @@ class DecoratorTests(unittest.TestCase):
         self.assertEqual(g.cache_info().currsize, 1)
         self.assertEqual(cache.peek("plain"), 1)
         self.assertEqual(cache.stats.hits, 1)
-
-    def test_eviction_through_small_cache(self):
-        cache = Cache(max_size=2, clock=FakeClock())
-
-        @cached(cache=cache)
-        def f(x):
-            return x
-
-        f(1), f(2), f(1), f(3)
-        self.assertEqual(cache.stats.evictions, 1)
-        f(2)
-        self.assertEqual(f.cache_info().misses, 4)

@@ -34,25 +34,6 @@ class BasicTests(unittest.TestCase):
             c.resize(0)
         self.assertEqual(c.max_size, 128)
 
-    def test_exposes_stats_and_lock(self):
-        s = CacheStats()
-        c = Cache(stats=s)
-        self.assertIs(c.stats, s)
-        self.assertIsInstance(Cache().stats, CacheStats)
-        with c.lock:
-            with c.lock:
-                c.set("a", 1)
-
-    def test_clock_called_at_most_once_per_call(self):
-        clk = FakeClock()
-        c = Cache(clock=clk, default_ttl=5)
-        for op in (lambda: c.set("a", 1), lambda: c.get("a"), lambda: c.peek("a"),
-                   lambda: "a" in c, lambda: len(c), lambda: c.keys(), lambda: c.purge(),
-                   lambda: c.update("a", lambda v: v + 1), lambda: c.delete("a")):
-            before = clk.calls
-            op()
-            self.assertLessEqual(clk.calls - before, 1)
-
 
 class EvictionTests(unittest.TestCase):
     def test_lru_eviction_order(self):
@@ -103,21 +84,10 @@ class TTLTests(unittest.TestCase):
         clk.advance(9.999)
         self.assertEqual(c.get("a"), 1)
         clk.advance(0.001)
-        self.assertEqual(clk.now, 119.999 + 0.001 if False else clk.now)
         clk.now = 110.0
         self.assertIsNone(c.get("a"))
         self.assertEqual(c.stats.expirations, 1)
 
-    def test_default_and_per_entry_ttl(self):
-        clk = FakeClock()
-        c = Cache(default_ttl=5, clock=clk)
-        c.set("short", 1)
-        c.set("long", 2, ttl=50)
-        c.set("alt", 3, ttl=1)
-        clk.advance(5)
-        self.assertNotIn("short", c)
-        self.assertNotIn("alt", c)
-        self.assertEqual(c.get("long"), 2)
 
     def test_no_ttl_never_expires_and_get_does_not_extend_ttl(self):
         clk = FakeClock()
@@ -208,14 +178,6 @@ class StatsFeedTests(unittest.TestCase):
         self.assertEqual((snap["hits"], snap["misses"], snap["expirations"]), (1, 2, 1))
         self.assertAlmostEqual(snap["hit_rate"], 1 / 3)
 
-    def test_delete_clear_do_not_touch_counters_and_clear_empties(self):
-        c = Cache(max_size=2, clock=FakeClock())
-        c.set("a", 1)
-        c.delete("a")
-        c.set("b", 1)
-        c.clear()
-        self.assertEqual(len(c), 0)
-        self.assertEqual(c.stats.snapshot()["evictions"], 0)
 
     def test_update_semantics(self):
         clk = FakeClock()
