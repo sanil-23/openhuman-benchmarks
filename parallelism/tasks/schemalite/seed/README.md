@@ -10,8 +10,7 @@ float, bool, None).
 - `SchemaError(Exception)` is raised for a malformed or unresolvable schema.
 
 ## `schemalite/pointer.py` (RFC 6901)
-- `escape(token: str) -> str`: `~` becomes `~0`, `/` becomes `~1` (in that order of care: `~1` in
-  the input must come out as `~01`).
+- `escape(token: str) -> str`: `~` becomes `~0` and `/` becomes `~1`; the input `~1` must come out as `~01`.
 - `unescape(token: str) -> str`: `~1` becomes `/`, `~0` becomes `~`; `~01` is therefore `~1`. A `~`
   not followed by `0` or `1` raises `ValueError`.
 - `build(tokens) -> str`: `""` for no tokens, otherwise `/` + the escaped `str(token)` of each
