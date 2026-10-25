@@ -1,22 +1,38 @@
-// Materialises the benchmark task (a medium multi-file Python feature with a test suite) as a
-// bench task dir: prompt.txt, check.sh and seed/ (the starting working copy). The reference
-// solution under task/reference is never copied, it only proves the task is solvable.
+// Materialises the benchmark task pool as one bench task dir: <out>/<id>/{seed,check.sh,prompt.txt}
+// plus <out>/tasks.json (the assignment order). Agent i runs task `order[(i-1) % order.length]`.
+// Each task's reference/ overlay is never copied: it only proves the task is solvable (see
+// tasks/CONTRACT.md and task.test.mjs).
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
+export const TASKS_SRC = path.join(here, "tasks");
 
-export const PROMPT = `You are working in a Python project at the current working directory (a plain directory, standard library only, Python 3.10, no network or pip installs).
+/** Task ids in assignment order: every directory under tasks/ that has a seed/, sorted. */
+export function taskIds(src = TASKS_SRC) {
+  return fs
+    .readdirSync(src, { withFileTypes: true })
+    .filter((d) => d.isDirectory() && fs.existsSync(path.join(src, d.name, "seed")))
+    .map((d) => d.name)
+    .sort();
+}
 
-Read README.md: it specifies four small modules under csvstats/ that are currently stubs raising NotImplementedError. Implement all of them so that the specification is met and the whole test suite passes (\`python3 -m unittest discover -s tests\`). Do not modify the tests. Run the tests as you go and fix what fails. When the suite is green, stop.
-`;
+/** Which task agent `i` (1-based) gets. */
+export const taskFor = (order, i) => order[(i - 1) % order.length];
 
-export function writeTask(out) {
+export function writeTasks(out, only = null, src = TASKS_SRC) {
   fs.rmSync(out, { recursive: true, force: true });
   fs.mkdirSync(out, { recursive: true });
-  fs.cpSync(path.join(here, "task", "seed"), path.join(out, "seed"), { recursive: true });
-  fs.copyFileSync(path.join(here, "task", "check.sh"), path.join(out, "check.sh"));
-  fs.writeFileSync(path.join(out, "prompt.txt"), PROMPT);
-  return out;
+  const order = taskIds(src).filter((id) => !only || only.includes(id));
+  if (!order.length) throw new Error("no tasks selected");
+  for (const id of order) {
+    const d = path.join(out, id);
+    fs.mkdirSync(d, { recursive: true });
+    fs.cpSync(path.join(src, id, "seed"), path.join(d, "seed"), { recursive: true });
+    fs.copyFileSync(path.join(src, id, "check.sh"), path.join(d, "check.sh"));
+    fs.copyFileSync(path.join(src, id, "prompt.txt"), path.join(d, "prompt.txt"));
+  }
+  fs.writeFileSync(path.join(out, "tasks.json"), JSON.stringify(order));
+  return { dir: out, order };
 }

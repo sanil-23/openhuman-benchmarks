@@ -150,4 +150,5 @@ core_log="${RESULT_DIR:-/results}/core.log"
   > "$core_log" 2>&1 &
 core=$!
 trap 'kill $core $fwd 2>/dev/null || true' EXIT
-node /opt/harness/oh-turn.mjs
+# OH_TURN_SCRIPT swaps the turn driver (parallelism/ drives many turns through this one core).
+node "${OH_TURN_SCRIPT:-/opt/harness/oh-turn.mjs}"
