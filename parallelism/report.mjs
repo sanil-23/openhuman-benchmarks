@@ -66,13 +66,30 @@ export function summariseLevel({ n, rows, timeline, par, agents, memLimit }) {
     call_p95_ms: pct(ok.map((r) => r.total_ms), 95),
     peak_mem_mb: peakMem / 2 ** 20,
     peak_anon_mb: peakAnon / 2 ** 20,
+    // openhuman-core resident memory (summed over all core processes) at its peak, and how many ran.
+    core_rss_peak_mb: Math.max(0, ...t.map((s) => s.core_rss ?? 0)) / 2 ** 20,
+    core_procs_peak: Math.max(0, ...t.map((s) => s.cores ?? 0)),
     anon_per_agent_mb: peakAnon / 2 ** 20 / n,
+    by_task: byTask(agents, rows),
     mem_limit_mb: memLimit,
     avg_cpu_cores: dt && t.at(-1).cpu_usec != null ? (t.at(-1).cpu_usec - t[0].cpu_usec) / 1e6 / dt : null,
     cpu_throttled_s: t.length ? (t.at(-1).throttled_usec - t[0].throttled_usec) / 1e6 : null,
     peak_mem_pressure: Math.max(0, ...t.map((s) => s.mem_pressure_avg10 ?? 0)),
     oom_kills: t.length ? t.at(-1).oom_kill - t[0].oom_kill : null,
   };
+}
+
+/** Per-task pass rate, agent wall and LLM calls (rows are tagged .../a<i>). */
+export function byTask(agents, rows) {
+  const out = {};
+  for (const a of agents) {
+    const t = (out[a.task ?? "?"] ??= { agents: 0, passed: 0, walls: [], calls: 0 });
+    t.agents += 1;
+    if (a.check?.passed) t.passed += 1;
+    if (a.wall_ms) t.walls.push(a.wall_ms / 1000);
+    t.calls += rows.filter((r) => r.task === a.id).length;
+  }
+  return Object.fromEntries(Object.entries(out).map(([k, v]) => [k, { agents: v.agents, passed: v.passed, wall_p50_s: pct(v.walls, 50), calls_per_agent: v.agents ? v.calls / v.agents : null }]));
 }
 
 const fmt = (v, d = 1) => (v == null ? "n/a" : typeof v === "number" ? v.toFixed(d) : String(v));
@@ -96,13 +113,17 @@ export function renderMarkdown(group, config, levels) {
     ["$ / pass", (l) => fmt(l.cost_per_pass_usd, 3)],
     ["peak RAM MB (anon)", (l) => `${fmt(l.peak_mem_mb, 0)} (${fmt(l.peak_anon_mb, 0)})`],
     ["anon MB / agent", (l) => fmt(l.anon_per_agent_mb, 0)],
+    ["core RSS MB (procs)", (l) => `${fmt(l.core_rss_peak_mb, 0)} (${l.core_procs_peak})`],
     ["CPU cores", (l) => fmt(l.avg_cpu_cores, 2)],
     ["throttled s", (l) => fmt(l.cpu_throttled_s, 0)],
     ["OOM kills", (l) => l.oom_kills ?? "n/a"],
   ];
   const head = `| ${cols.map((c) => c[0]).join(" | ")} |\n|${cols.map(() => "---").join("|")}|\n`;
   const body = levels.map((l) => `| ${cols.map((c) => c[1](l)).join(" | ")} |`).join("\n");
-  return `# OpenHuman parallelism: ${group}\n\n${config.levels?.join(", ")} agents of the same medium task in ONE container, ${config.mem} RAM (no swap), ${config.cpus} CPUs, bundle \`${config.bundle}\`, stagger ${config.stagger}s.\n\n${head}${body}\n\nTokens/s are measured over the window in which at least one inference call was in flight; decode tok/s is per call (completion tokens over the time after the first token). RAM is the cgroup's \`memory.current\` (incl. page cache) and \`anon\` (process memory), sampled at 1 Hz.\n`;
+  const tasks = [...new Set(levels.flatMap((l) => Object.keys(l.by_task ?? {})))].sort();
+  const taskHead = `| agents | ${tasks.join(" | ")} |\n|---|${tasks.map(() => "---").join("|")}|\n`;
+  const taskBody = levels.map((l) => `| ${l.agents} | ${tasks.map((t) => (l.by_task?.[t] ? `${l.by_task[t].passed}/${l.by_task[t].agents}, ${fmt(l.by_task[t].wall_p50_s, 0)}s, ${fmt(l.by_task[t].calls_per_agent, 0)} calls` : "")).join(" | ")} |`).join("\n");
+  return `# OpenHuman parallelism: ${group}\n\n${config.levels?.join(", ")} agents per container (${config.mode ?? "isolated"} mode: ${config.mode === "shared" ? "ONE openhuman-core serving all agents" : "one openhuman-core per agent"}), task pool ${(config.tasks ?? ["csvstats"]).join(", ")} assigned round-robin, ${config.mem} RAM (no swap), ${config.cpus} CPUs, bundle \`${config.bundle}\`, stagger ${config.stagger}s.\n\n${head}${body}\n\nPer task (passed/agents, p50 agent wall, LLM calls per agent):\n\n${taskHead}${taskBody}\n\nTokens/s are measured over the window in which at least one inference call was in flight; decode tok/s is per call (completion tokens over the time after the first token). RAM is the cgroup's \`memory.current\` (incl. page cache) and \`anon\` (process memory), sampled at 1 Hz.\n`;
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {

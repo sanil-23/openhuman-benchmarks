@@ -2,11 +2,13 @@
 // parallelism/run.mjs: how many OpenHuman agents fit in one memory-capped container?
 //
 //   node parallelism/run.mjs [--levels 1,2,4,8,12,16] [--mem 4g] [--cpus 4] [--group ID]
-//        [--bundle openhuman-par] [--stagger 0] [--timeout 1500] [--repeat 1]
+//        [--mode isolated|shared] [--tasks csvstats,calc,...] [--bundle openhuman-par]
+//        [--stagger 0] [--timeout 1500] [--repeat 1]
 //
 // For each level N it starts ONE container (cgroup limits --mem/--cpus, no swap) that runs N
-// independent agents on the same medium task (parallelism/task), all inference through the metering
-// proxy. Then `node parallelism/report.mjs <group>` turns meter rows + the cgroup timeline into
+// agents on the task pool (parallelism/tasks, agent i gets task i mod K), all inference through the
+// metering proxy. --mode isolated gives every agent its own openhuman-core process; --mode shared
+// serves all N agents from a single core. Then `node parallelism/report.mjs <group>` turns meter rows + the cgroup timeline into
 // the table. Levels run one after another; the host is checked for quiet first.
 
 import { spawnSync } from "node:child_process";
@@ -14,7 +16,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { waitForQuietHost } from "../quiet-host.mjs";
-import { writeTask } from "./task.mjs";
+import { writeTasks } from "./task.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const args = process.argv.slice(2);
@@ -24,6 +26,9 @@ const mem = opt("--mem", "4g");
 const cpus = opt("--cpus", "4");
 const bundle = opt("--bundle", "openhuman-par");
 const stagger = opt("--stagger", "0");
+const mode = opt("--mode", "isolated");
+if (!["isolated", "shared"].includes(mode)) throw new Error("--mode is isolated or shared");
+const only = opt("--tasks", "")?.split(",").filter(Boolean);
 const timeout = opt("--timeout", "1500");
 const repeat = Number(opt("--repeat", "1"));
 const group = opt("--group", `par-${new Date().toISOString().replace(/[:.]/g, "-")}`);
@@ -40,7 +45,7 @@ if (!fs.existsSync(path.join(root, ".cache", "harness", bundle, "adapter.sh"))) 
   throw new Error(`no bundle ${bundle}: BUNDLE_NAME=${bundle} ./bundles/build.sh openhuman`);
 }
 await waitForQuietHost();
-const taskDir = writeTask(path.join(root, "parallelism", "generated", "task"));
+const { dir: taskDir, order } = writeTasks(path.join(root, "parallelism", "generated", "tasks"), only.length ? only : null);
 if (sh("docker", ["compose", "--profile", "build", "build", "micro-image"]).status !== 0) throw new Error("building bench-micro failed");
 fs.mkdirSync(path.join(root, "results"), { recursive: true });
 fs.mkdirSync(path.join(root, ".cache", "meter-sock", projectName), { recursive: true });
@@ -48,7 +53,7 @@ if (sh("docker", ["compose", "up", "-d", "--build", "--wait", "meter-proxy"]).st
 
 const groupDir = path.join(root, "results", group);
 fs.mkdirSync(groupDir, { recursive: true });
-fs.writeFileSync(path.join(groupDir, "parallelism.config.json"), JSON.stringify({ levels, mem, cpus, bundle, stagger, timeout, repeat, task: "csvstats", at: new Date().toISOString() }, null, 2));
+fs.writeFileSync(path.join(groupDir, "parallelism.config.json"), JSON.stringify({ levels, mem, cpus, bundle, stagger, timeout, repeat, mode, tasks: order, at: new Date().toISOString() }, null, 2));
 
 for (const n of levels) {
   for (let rep = 1; rep <= repeat; rep += 1) {
@@ -57,11 +62,11 @@ for (const n of levels) {
     // Files in here are written as root by the container, so a stale dir cannot be cleaned up from the host.
     if (fs.existsSync(dir)) throw new Error(`${dir} exists: pick a new --group`);
     fs.mkdirSync(dir, { recursive: true });
-    process.stdout.write(`[par] ${runId}: ${n} agents in ${mem} / ${cpus} cpus\n`);
+    process.stdout.write(`[par] ${runId}: ${n} agents (${mode}) in ${mem} / ${cpus} cpus\n`);
     const r = sh("docker", [
       "compose", "--profile", "task", "run", "--rm", "--no-deps",
       "-v", `${path.join(root, "parallelism")}:/opt/bench/par:ro`,
-      "-e", `PAR_N=${n}`, "-e", `PAR_RUN_ID=${runId}`, "-e", `PAR_STAGGER_S=${stagger}`,
+      "-e", `PAR_MODE=${mode}`, "-e", `PAR_N=${n}`, "-e", `PAR_RUN_ID=${runId}`, "-e", `PAR_STAGGER_S=${stagger}`,
       "--entrypoint", "/opt/harness/node/bin/node",
       "task", "/opt/bench/par/par-entry.mjs",
     ], {
