@@ -4,7 +4,11 @@ from schemalite import pointer
 
 
 class PointerTests(unittest.TestCase):
-    def test_escape_unescape_roundtrip(self):
+    def test_escape_rules(self):
+        self._h_escape_unescape_roundtrip()
+        self._h_unescape_rejects_bad_tilde()
+
+    def _h_escape_unescape_roundtrip(self):
         self.assertEqual(pointer.escape("a/b~c"), "a~1b~0c")
         self.assertEqual(pointer.escape("~1"), "~01")
         self.assertEqual(pointer.unescape("~01"), "~1")
@@ -12,19 +16,23 @@ class PointerTests(unittest.TestCase):
         for s in ["", "/", "~", "~~//~1~0", "plain"]:
             self.assertEqual(pointer.unescape(pointer.escape(s)), s)
 
-    def test_unescape_rejects_bad_tilde(self):
+    def _h_unescape_rejects_bad_tilde(self):
         for bad in ["~", "~2", "a~"]:
             with self.assertRaises(ValueError):
                 pointer.unescape(bad)
 
-    def test_build_and_append(self):
+    def test_build_parse(self):
+        self._h_build_and_append()
+        self._h_parse()
+
+    def _h_build_and_append(self):
         self.assertEqual(pointer.build([]), "")
         self.assertEqual(pointer.build(["a", 0, "b/c"]), "/a/0/b~1c")
         self.assertEqual(pointer.build([""]), "/")
         self.assertEqual(pointer.append("", "x~"), "/x~0")
         self.assertEqual(pointer.append("/a", 3), "/a/3")
 
-    def test_parse(self):
+    def _h_parse(self):
         self.assertEqual(pointer.parse(""), [])
         self.assertEqual(pointer.parse("/"), [""])
         self.assertEqual(pointer.parse("/a~1b/0//c"), ["a/b", "0", "", "c"])

@@ -17,14 +17,18 @@ class TypeTests(unittest.TestCase):
         self.assertTrue(kw.is_type(True, "boolean"))
         self.assertFalse(kw.is_type(1, "boolean"))
 
-    def test_integral_float_is_integer(self):
+    def _h_integral_float_is_integer(self):
         self.assertTrue(kw.is_type(1.0, "integer"))
         self.assertTrue(kw.is_type(-3, "integer"))
         self.assertFalse(kw.is_type(1.5, "integer"))
         self.assertFalse(kw.is_type(float("inf"), "integer"))
         self.assertTrue(kw.is_type(1, "number"))
 
-    def test_other_types_and_unknown(self):
+    def test_type_semantics(self):
+        self._h_other_types_and_unknown()
+        self._h_integral_float_is_integer()
+
+    def _h_other_types_and_unknown(self):
         self.assertTrue(kw.is_type(None, "null"))
         self.assertTrue(kw.is_type([], "array"))
         self.assertTrue(kw.is_type({}, "object"))
@@ -77,7 +81,11 @@ class NumericTests(unittest.TestCase):
         self.assertEqual(kws(kw.check_numeric(1, s)), ["minimum", "exclusiveMinimum"])
         self.assertEqual(kws(kw.check_numeric(9, s)), ["maximum", "exclusiveMaximum"])
 
-    def test_non_numbers_skipped_and_bad_bounds(self):
+    def test_numeric_edges(self):
+        self._h_non_numbers_skipped_and_bad_bounds()
+        self._h_multiple_of()
+
+    def _h_non_numbers_skipped_and_bad_bounds(self):
         self.assertEqual(kw.check_numeric(True, {"minimum": 5}), [])
         self.assertEqual(kw.check_numeric("a", {"minimum": 5}), [])
         with self.assertRaises(SchemaError):
@@ -85,19 +93,19 @@ class NumericTests(unittest.TestCase):
         with self.assertRaises(SchemaError):
             kw.check_numeric(1, {"exclusiveMaximum": True})
 
-    def test_multiple_of(self):
+    def _h_multiple_of(self):
         self.assertEqual(kw.check_numeric(0.3, {"multipleOf": 0.1}), [])
         self.assertEqual(kw.check_numeric(10, {"multipleOf": 2.5}), [])
         self.assertEqual(kws(kw.check_numeric(0.35, {"multipleOf": 0.1})), ["multipleOf"])
         self.assertEqual(kws(kw.check_numeric(7, {"multipleOf": 2})), ["multipleOf"])
-        self.assertEqual(kw.check_numeric(1e300, {"multipleOf": 1e-300}), [("multipleOf", kw.check_numeric(1e300, {"multipleOf": 1e-300})[0][1])])
+        self.assertEqual(kws(kw.check_numeric(1e300, {"multipleOf": 1e-300})), ["multipleOf"])
         for bad in (0, -1, "2", True):
             with self.assertRaises(SchemaError):
                 kw.check_numeric(4, {"multipleOf": bad})
 
 
 class StringArrayObjectTests(unittest.TestCase):
-    def test_string_keywords(self):
+    def _h_string_keywords(self):
         self.assertEqual(kw.check_string("\U0001F600\U0001F600", {"maxLength": 2}), [])
         self.assertEqual(kws(kw.check_string("\U0001F600", {"minLength": 2})), ["minLength"])
         self.assertEqual(kw.check_string("xxabcxx", {"pattern": "abc"}), [])
@@ -116,7 +124,11 @@ class StringArrayObjectTests(unittest.TestCase):
         self.assertEqual(kws(kw.check_array([1, 2, 3, 2.0], u)), ["uniqueItems"])
         self.assertEqual(kw.check_array([1, 1], {"uniqueItems": False}), [])
 
-    def test_array_counts_in_order(self):
+    def test_string_and_array_counts(self):
+        self._h_array_counts_in_order()
+        self._h_string_keywords()
+
+    def _h_array_counts_in_order(self):
         s = {"minItems": 3, "maxItems": 1, "uniqueItems": True}
         self.assertEqual(kws(kw.check_array([1, 1], s)), ["minItems", "maxItems", "uniqueItems"])
         self.assertEqual(kw.check_array("ab", {"minItems": 5}), [])
@@ -127,7 +139,6 @@ class StringArrayObjectTests(unittest.TestCase):
         s = {"minProperties": 3, "required": ["b", "a", "c"]}
         pairs = kw.check_object({"a": 1}, s)
         self.assertEqual(kws(pairs), ["minProperties", "required", "required"])
-        self.assertIn("'b'", pairs[1][1] + "'b'")
         self.assertEqual(kw.check_object([], s), [])
         with self.assertRaises(SchemaError):
             kw.check_object({}, {"required": "a"})

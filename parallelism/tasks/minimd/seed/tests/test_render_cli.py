@@ -21,7 +21,6 @@ class RenderTests(unittest.TestCase):
         out = render_blocks([Heading(2, "Hi *x*"), Paragraph("a & b\nc"), Rule()])
         self.assertEqual(out, "<h2>Hi <em>x</em></h2>\n<p>a &amp; b\nc</p>\n<hr>\n")
 
-    def test_no_blocks(self):
         self.assertEqual(render_blocks([]), "")
         self.assertEqual(convert(""), "")
 
@@ -31,7 +30,6 @@ class RenderTests(unittest.TestCase):
         self.assertEqual(render_blocks([CodeBlock("x\n"), CodeBlock("")]),
                          "<pre><code>x\n</code></pre>\n<pre><code></code></pre>\n")
 
-    def test_lang_attribute_escaped(self):
         self.assertEqual(render_blocks([CodeBlock("", 'a"b')]),
                          '<pre><code class="language-a&quot;b"></code></pre>\n')
 
@@ -54,7 +52,6 @@ class RenderTests(unittest.TestCase):
                          "<h1>T</h1>\n<p>hello\nworld</p>\n<blockquote>\n<p>q</p>\n</blockquote>\n"
                          '<pre><code class="language-sh">ls\n</code></pre>\n<ol>\n<li>x</li>\n</ol>\n')
 
-    def test_convert_unterminated_fence(self):
         self.assertEqual(convert("```\n<a>"), "<pre><code>&lt;a&gt;\n</code></pre>\n")
 
 
@@ -67,7 +64,6 @@ class CliTests(unittest.TestCase):
             res = run(path)
         self.assertEqual((res.returncode, res.stdout, res.stderr), (0, "<h1>h\u00e9</h1>\n", ""))
 
-    def test_stdin_with_dash_and_without_args(self):
         for args in (("-",), ()):
             res = run(*args, stdin="*x*\n")
             self.assertEqual((res.returncode, res.stdout), (0, "<p><em>x</em></p>\n"))
@@ -79,7 +75,6 @@ class CliTests(unittest.TestCase):
         self.assertTrue(res.stderr.startswith("error: "))
         self.assertIn("nope.md", res.stderr)
 
-    def test_too_many_arguments_exit_2(self):
         res = run("a", "b")
         self.assertEqual(res.returncode, 2)
         self.assertTrue(res.stderr.startswith("error: "))

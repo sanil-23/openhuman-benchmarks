@@ -29,7 +29,12 @@ class CliTests(unittest.TestCase):
             code = cli.main(list(args))
         return code, out.getvalue(), err.getvalue()
 
-    def test_valid_exit_zero_silent(self):
+    def test_exit_zero_and_one(self):
+        self._h_schema_error_exit_two()
+        self._h_valid_exit_zero_silent()
+        self._h_root_path_printed_as_slash()
+
+    def _h_valid_exit_zero_silent(self):
         s = self.write("s.json", {"type": "object"})
         i = self.write("i.json", {"a": 1})
         self.assertEqual(self.run_main(s, i), (0, "", ""))
@@ -45,7 +50,7 @@ class CliTests(unittest.TestCase):
         self.assertTrue(lines[1].startswith("/n type: "), lines[1])
         self.assertTrue(lines[1][len("/n type: "):].strip())
 
-    def test_root_path_printed_as_slash(self):
+    def _h_root_path_printed_as_slash(self):
         s = self.write("s.json", {"type": "string"})
         i = self.write("i.json", 5)
         code, out, _ = self.run_main(s, i)
@@ -71,7 +76,7 @@ class CliTests(unittest.TestCase):
             self.assertEqual(len(err.strip().splitlines()), 1, err)
         self.assertIn("usage:", self.run_main()[2])
 
-    def test_schema_error_exit_two(self):
+    def _h_schema_error_exit_two(self):
         s = self.write("s.json", {"$ref": "#/definitions/nope"})
         i = self.write("i.json", 1)
         code, out, err = self.run_main(s, i)
