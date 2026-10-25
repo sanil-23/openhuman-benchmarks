@@ -20,3 +20,5 @@ onboarding-stress/ONBOARDING-TEST-RESULTS.md
 .security-evidence/
 worktrees/
 parallelism/generated/
+# Parallelism sweep artifacts are kept out of git (large per-run logs); see parallelism/README.md.
+results/par-*/
