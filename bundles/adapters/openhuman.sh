@@ -2,15 +2,17 @@
 . "$(dirname "$0")/_common.sh"
 # Loopback hop to the metering proxy (see forward.mjs): its unix socket when PROXY_SOCKET is
 # set (Harbor), else PROXY_URL on the bench network.
+# BENCH_FWD_PORT / BENCH_OH_PORT / BENCH_HOME let several agents share one container (parallelism/).
+FWD_PORT="${BENCH_FWD_PORT:-18080}"
 if [ -n "${PROXY_SOCKET:-}" ]; then
-  node /opt/harness/forward.mjs 18080 "$PROXY_SOCKET" &
+  node /opt/harness/forward.mjs "$FWD_PORT" "$PROXY_SOCKET" &
 else
   proxy_host="${PROXY_URL#http://}"; proxy_host="${proxy_host%%:*}"
   proxy_port="${PROXY_URL##*:}"
-  node /opt/harness/forward.mjs 18080 "$proxy_host" "$proxy_port" &
+  node /opt/harness/forward.mjs "$FWD_PORT" "$proxy_host" "$proxy_port" &
 fi
 fwd=$!
-for _ in $(seq 1 50); do (echo > /dev/tcp/127.0.0.1/18080) 2>/dev/null && break; sleep 0.1; done
+for _ in $(seq 1 50); do (echo > /dev/tcp/127.0.0.1/$FWD_PORT) 2>/dev/null && break; sleep 0.1; done
 
 # Provider-native structured tool calls (JSON tool schemas in the API `tools` field), like
 # the other harnesses. The product's older `python` text dispatcher leaked tool calls into
@@ -98,9 +100,17 @@ export OPENHUMAN_KEYRING_BACKEND=encrypted_file
 bundled=/opt/harness/openhuman/bundled-modules
 if [ -d "$bundled" ] && [ "$(id -u)" != "$(stat -c %u "$bundled")" ]; then
   staged=/opt/oh-bundled-modules
-  rm -rf "$staged"
-  cp -r "$bundled" "$staged"
-  chmod -R go-w "$staged"
+  # Several agents can share one container (parallelism/): stage once, under a lock, and let the
+  # rest wait for the finished copy instead of racing on the same directory.
+  (
+    flock 9
+    if [ ! -e "$staged/.staged" ]; then
+      rm -rf "$staged"
+      cp -r "$bundled" "$staged"
+      chmod -R go-w "$staged"
+      touch "$staged/.staged"
+    fi
+  ) 9>/tmp/oh-bundled-modules.lock
   export OPENHUMAN_BUNDLED_MODULES="$staged"
   echo "[openhuman] staged bundled modules owned by uid $(id -u): $staged" >&2
 fi
@@ -120,10 +130,10 @@ export OPENHUMAN_RUNTIME_PYTHON_PREFER_SYSTEM=1
 export OPENHUMAN_RUNTIME_PYTHON_MINIMUM_VERSION=3.0.0
 
 # Headless core, the way a product host runs it; the turn goes over JSON-RPC.
-export OH_PORT=7788 OH_TOKEN=bench-core-token OPENHUMAN_CORE_TOKEN=bench-core-token
+export OH_PORT="${BENCH_OH_PORT:-7788}" OH_TOKEN=bench-core-token OPENHUMAN_CORE_TOKEN=bench-core-token
 # BENCH_PROXY_PREFIX (/__tag/<run>/<harness>/<task>) tags each call for the proxy, so trials can
 # run side by side; without it the proxy's global tag applies.
-export INFERENCE_URL="http://127.0.0.1:18080${BENCH_PROXY_PREFIX:-}/v1"
+export INFERENCE_URL="http://127.0.0.1:${FWD_PORT}${BENCH_PROXY_PREFIX:-}/v1"
 # Why the core's own log is kept: the JSON-RPC reply carries the harness's
 # SANITIZED failure string. `HostedError.message` is "a fixed, sanitized string
 # selected by `kind`" and never the underlying provider/middleware error, so a
@@ -140,4 +150,5 @@ core_log="${RESULT_DIR:-/results}/core.log"
   > "$core_log" 2>&1 &
 core=$!
 trap 'kill $core $fwd 2>/dev/null || true' EXIT
-node /opt/harness/oh-turn.mjs
+# OH_TURN_SCRIPT swaps the turn driver (parallelism/ drives many turns through this one core).
+node "${OH_TURN_SCRIPT:-/opt/harness/oh-turn.mjs}"

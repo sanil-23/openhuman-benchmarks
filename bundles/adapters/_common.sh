@@ -5,7 +5,7 @@
 # pins model + reasoning on every request regardless of what the harness asks for.
 set -euo pipefail
 export PATH=/opt/harness/node/bin:$PATH
-export HOME=/tmp/bench-home
+export HOME="${BENCH_HOME:-/tmp/bench-home}"
 mkdir -p "$HOME"
 PROMPT="$(cat "$PROMPT_FILE")"
 WORKDIR_ABS="$(pwd)"

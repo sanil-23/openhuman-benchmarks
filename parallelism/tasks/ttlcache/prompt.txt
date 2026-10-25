@@ -1,0 +1,3 @@
+You are working in a Python project at the current working directory (a plain directory, standard library only, Python 3.10, no network or pip installs).
+
+Read README.md: it specifies a small in-memory cache library under ttlcache/ (cache, decorators and stats modules) that is currently stubs raising NotImplementedError. Implement all of it so that the specification is met and the whole test suite passes (`python3 -m unittest discover -s tests`). Do not modify the tests. Run the tests as you go and fix what fails. When the suite is green, stop.
