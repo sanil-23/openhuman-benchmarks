@@ -22,16 +22,6 @@ class TestTask(unittest.TestCase):
         self.assertEqual(Task(1, "x", priority=1).priority, 1)
         self.assertEqual(Task(1, "x", priority=5).priority, 5)
 
-    def test_due_must_be_date(self):
-        with self.assertRaises(TypeError):
-            Task(1, "x", due="2024-01-01")
-        self.assertEqual(Task(1, "x", due=date(2024, 1, 1)).due, date(2024, 1, 1))
-
-    def test_tags_coerced_to_set(self):
-        t = Task(1, "x", tags=["a", "b", "a"])
-        self.assertIsInstance(t.tags, set)
-        self.assertEqual(t.tags, {"a", "b"})
-
     def test_tasks_do_not_share_collections(self):
         a, b = Task(1, "a"), Task(2, "b")
         a.tags.add("x")

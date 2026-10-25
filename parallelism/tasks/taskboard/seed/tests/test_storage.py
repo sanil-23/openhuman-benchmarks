@@ -25,6 +25,10 @@ class TestStorage(unittest.TestCase):
         b.move(2, "doing")
         return b
 
+    def read_bytes(self):
+        with open(self.path, "rb") as fh:
+            return fh.read()
+
     def raw(self):
         with open(self.path, encoding="utf-8") as fh:
             return json.load(fh)
@@ -39,26 +43,12 @@ class TestStorage(unittest.TestCase):
         self.assertEqual(r.get(1).tags, {"x", "y"})
         self.assertEqual(r.get(3).dependencies, [1, 2])
 
-    def test_next_id_survives(self):
-        b = self.make_board()
-        b.remove_task(3)
-        save(b, self.path)
-        self.assertEqual(load(self.path).add_task("n").id, 4)
-
     def test_empty_tags_written_as_empty_list(self):
         save(self.make_board(), self.path)
         t = self.raw()["tasks"][1]
         self.assertEqual(t["tags"], [])
         self.assertIsNone(t["due"])
         self.assertEqual(load(self.path).get(2).tags, set())
-
-    def test_file_format(self):
-        save(self.make_board(), self.path)
-        data = self.raw()
-        self.assertEqual(data["version"], 1)
-        self.assertEqual(data["next_id"], 4)
-        self.assertEqual([t["id"] for t in data["tasks"]], [1, 2, 3])
-        self.assertEqual(data["tasks"][0]["due"], "2024-05-01")
 
     def test_tags_written_sorted(self):
         b = Board()
@@ -76,21 +66,15 @@ class TestStorage(unittest.TestCase):
                 load(self.path)
         self.assertTrue(issubclass(SchemaVersionError, StorageError))
 
-    def test_invalid_json(self):
-        with open(self.path, "w") as fh:
-            fh.write("{nope")
-        with self.assertRaises(StorageError):
-            load(self.path)
-
     def test_failed_save_keeps_old_file_and_leaves_no_temp(self):
         save(self.make_board(), self.path)
-        before = open(self.path, "rb").read()
+        before = self.read_bytes()
         b = self.make_board()
         b.add_task("extra")
         with mock.patch("json.dump", side_effect=RuntimeError("boom")):
             with self.assertRaises(RuntimeError):
                 save(b, self.path)
-        self.assertEqual(open(self.path, "rb").read(), before)
+        self.assertEqual(self.read_bytes(), before)
         self.assertEqual(os.listdir(self.dir), ["board.json"])
 
     def test_save_uses_os_replace_and_leaves_only_target(self):

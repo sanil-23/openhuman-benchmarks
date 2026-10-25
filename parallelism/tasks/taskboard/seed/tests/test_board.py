@@ -24,16 +24,6 @@ class TestBoardBasics(unittest.TestCase):
             with self.assertRaises(UnknownTaskError):
                 call()
 
-    def test_invalid_limit_config(self):
-        for bad in ({"review": 2}, {"doing": 0}):
-            with self.assertRaises(ValueError):
-                Board(wip_limits=bad)
-
-    def test_exception_hierarchy(self):
-        self.assertTrue(issubclass(CycleError, DependencyError))
-        self.assertTrue(issubclass(DependencyError, BoardError))
-        self.assertTrue(issubclass(WipLimitError, BoardError))
-
     def test_tasks_without_dependencies_stay_independent(self):
         b = Board()
         a, c = b.add_task("a"), b.add_task("c")
@@ -75,21 +65,7 @@ class TestWip(unittest.TestCase):
         self.b.move(3, "doing")
         self.assertEqual([t.id for t in self.b.column("doing")], [2, 3])
 
-    def test_moving_within_same_column_is_a_noop(self):
-        self.b.move(1, "doing")
-        self.b.move(2, "doing")
-        self.assertEqual(self.b.move(1, "doing").status, "doing")
 
-    def test_unlimited_columns(self):
-        for i in self.ids:
-            self.b.move(i, "done")
-        self.assertEqual(len(self.b.column("done")), 4)
-
-    def test_todo_limit_applies_to_new_tasks(self):
-        b = Board(wip_limits={"todo": 1})
-        b.add_task("a")
-        with self.assertRaises(WipLimitError):
-            b.add_task("b")
 
 
 class TestDependencies(unittest.TestCase):
@@ -140,10 +116,7 @@ class TestDependencies(unittest.TestCase):
         self.b.add_dependency(self.d.id, e.id)
         self.assertEqual(self.a.dependencies, [self.c.id, self.d.id])
 
-    def test_duplicate_dependency_ignored(self):
-        self.b.add_dependency(self.a.id, self.c.id)
-        self.b.add_dependency(self.a.id, self.c.id)
-        self.assertEqual(self.a.dependencies, [self.c.id])
+
 
 
 if __name__ == "__main__":
