@@ -21,3 +21,27 @@ test("every task has what the container needs and nothing from reference/", () =
   }
   assert.deepEqual(JSON.parse(fs.readFileSync(path.join(out, "tasks.json"), "utf8")), order);
 });
+
+import { spawnSync } from "node:child_process";
+import { TASKS_SRC } from "./task.mjs";
+
+function runCheck(id, withReference) {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), `par-check-${id}-`));
+  fs.cpSync(path.join(TASKS_SRC, id, "seed"), dir, { recursive: true });
+  if (withReference) fs.cpSync(path.join(TASKS_SRC, id, "reference"), dir, { recursive: true });
+  const r = spawnSync("bash", [path.join(TASKS_SRC, id, "check.sh")], { cwd: dir, encoding: "utf8", timeout: 60_000 });
+  fs.rmSync(dir, { recursive: true, force: true });
+  return r;
+}
+
+for (const id of taskIds()) {
+  test(`task ${id}: seed fails its check, seed + reference passes it`, () => {
+    assert.notEqual(runCheck(id, false).status, 0, "seed must not already pass");
+    const solved = runCheck(id, true);
+    assert.equal(solved.status, 0, `${solved.stdout}\n${solved.stderr}`.slice(-1500));
+  });
+  test(`task ${id}: the prompt does not leak the reference`, () => {
+    const prompt = fs.readFileSync(path.join(TASKS_SRC, id, "prompt.txt"), "utf8");
+    assert.ok(prompt.trim().length > 40 && !/reference/i.test(prompt));
+  });
+}
