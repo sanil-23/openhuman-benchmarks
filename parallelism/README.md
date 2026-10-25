@@ -34,7 +34,7 @@ node parallelism/run.mjs --mode shared   --levels 1,6,12,24,36,48 --group par-po
 node parallelism/report.mjs par-pool-iso                    # results/<group>/parallelism.{md,json}
 node parallelism/report.mjs par-pool-shared
 node parallelism/compare.mjs par-pool-iso par-pool-shared   # the two modes side by side
-node --test parallelism/                                    # tasks are solvable, report maths
+node --test parallelism/*.test.mjs                                 # tasks are solvable, report maths
 ```
 
 `--tasks a,b` restricts the pool, `--mem`/`--cpus` set the container limits, `--stagger S` starts agents
