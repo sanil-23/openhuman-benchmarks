@@ -31,6 +31,7 @@ from pathlib import Path
 from urllib.parse import quote
 
 from harbor.agents.base import BaseAgent
+from harbor.agents.capabilities import AgentCapabilities
 from harbor.environments.base import BaseEnvironment
 from harbor.models.agent.context import AgentContext
 
@@ -112,6 +113,12 @@ def meter_totals(log: str, tag: dict) -> dict:
 
 
 class OpenHuman(BaseAgent):
+    # Terminal-Bench tasks that ship a skills_dir (baked into the task image) set
+    # task.environment.skills_dir; Harbor refuses to start the trial unless the agent
+    # declares this capability. OpenHuman has no native skill loader, so run() surfaces
+    # the in-container skills path to the model via the prompt (the sanctioned channel).
+    capabilities = AgentCapabilities(skills=True)
+
     @staticmethod
     def name() -> str:
         return HARNESS
@@ -134,13 +141,22 @@ class OpenHuman(BaseAgent):
         (self.logs_dir / "attempt.txt").write_text(tag["attempt"], encoding="utf8")
 
         # /logs/agent is the host's trial agent dir, mounted into the container.
-        (self.logs_dir / "prompt.txt").write_text(instruction, encoding="utf8")
+        skills_dir = getattr(self, "skills_dir", None)
+        prompt_text = instruction
+        if skills_dir:
+            prompt_text += (
+                "\n\n---\nReusable skill guides for this environment are available under "
+                f"{skills_dir} (each subdirectory holds a SKILL.md describing when and how to use it). "
+                "Read any that are relevant to this task before you begin.\n"
+            )
+        (self.logs_dir / "prompt.txt").write_text(prompt_text, encoding="utf8")
         workdir = (await environment.exec("pwd", timeout_sec=30)).stdout.strip() or "/"
         budget = task_budget_secs(key)
         turn_timeout = turn_timeout_setting(os.environ.get("OPENHUMAN_AGENT_TURN_TIMEOUT_SECS", ""), budget)
         env = {
             "BENCH_HARNESS": HARNESS,
             "BENCH_TASK_ID": key,
+            "BENCH_SKILLS_DIR": skills_dir or "",
             "WORKDIR": workdir,
             # Harbor enforces the task's own agent timeout; this is only a backstop.
             "TASK_TIMEOUT_S": os.environ.get("BENCH_TASK_TIMEOUT_S", "86400"),
